@@ -1,0 +1,38 @@
+{
+    "name": "theanh/tad-backend",
+    "description": "TAD CMS backend.",
+    "keywords": [],
+    "license": "MIT",
+    "authors": [
+        {
+          "name": "The Anh Dang",
+          "email": "dangtheanh16@gmail.com",
+          "role": "Developer",
+          "homepage": "https://fb.com/TheAnhDang.1996"
+        }
+    ],
+    "support": {
+        "email": "support@example.org",
+        "docs": "https://example.org/composer"
+    },
+    "require": {
+        "php": ">=7.2",
+        "theanh/tad-system": "dev-master"
+    },
+    "require-dev": {
+      "laravel/laravel": "^6.0 | ^7.0 | ^8.0",
+      "phpunit/phpunit": "6.0 | 7.0 | 7.5 | 8.4 | ^8.5"
+    },
+    "autoload": {
+        "psr-4": {
+          "Tadcms\\Backend\\": "src/"
+        }
+    },
+    "extra": {
+      "laravel": {
+        "providers": [
+          "Tadcms\\Backend\\BackendServiceProvider"
+        ]
+      }
+    }
+}
