@@ -6,7 +6,7 @@ class DashboardController extends BackendController
 {
     public function index()
     {
-        return view('tadcms::backend.dashboard', [
+        return view('tadcms::dashboard', [
             'title' => trans('tadcms::app.dashboard'),
         ]);
     }

@@ -1,5 +1,5 @@
 <?php
 
 Route::group(['middleware' => 'guest'], function () {
-    Route::get('/login', 'Auth\LoginController@index')->name('admin.login');
+    //Route::get('/login', 'Auth\LoginController@index')->name('admin.login');
 });

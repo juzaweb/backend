@@ -29,7 +29,7 @@ class TaxonomyController extends BackendController
     {
         $model = $this->taxonomyService->firstOrNew(['id' => null]);
         
-        return view('tadcms::backend.category.index', [
+        return view('tadcms::category.index', [
             'title' => 'Category',
             'type' => $type,
             'taxonomy' => $taxonomy,
@@ -48,7 +48,7 @@ class TaxonomyController extends BackendController
             'url' => route('admin.taxonomy', [$type, $taxonomy])
         ]);
         
-        return view('tadcms::backend.category.form', [
+        return view('tadcms::category.form', [
             'model' => $model,
             'title' => $title,
             'type' => $type,

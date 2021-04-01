@@ -7,6 +7,6 @@ use Tadcms\Backend\Controllers\BackendController;
 class LoginController extends BackendController
 {
     public function index() {
-        return view('tadcms::backend.auth.login');
+        return view('tadcms::auth.login');
     }
 }

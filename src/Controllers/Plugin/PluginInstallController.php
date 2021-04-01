@@ -12,7 +12,7 @@ class PluginInstallController extends BackendController
             'url' => route('admin.plugins'),
         ]);
         
-        return view('tadcms::backend.plugin.install', [
+        return view('tadcms::plugin.install', [
             'title' => trans('tadcms::app.install-plugins'),
         ]);
     }

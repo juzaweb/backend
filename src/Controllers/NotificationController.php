@@ -10,7 +10,7 @@ class NotificationController extends BackendController
     public function index() {
         
         
-        return view('tadcms::backend.notification.index', [
+        return view('tadcms::notification.index', [
             'title' => trans('tadcms::app.notification')
         ]);
     }
@@ -58,7 +58,7 @@ class NotificationController extends BackendController
         $model = TadNotify::firstOrNew(['id' => $id]);
         $users = User::whereIn('id', explode(',', $model->users))
             ->get(['id', 'name']);
-        return view('tadcms::backend.notification.form', [
+        return view('tadcms::notification.form', [
             'title' => $model->name ?: trans('app.add-new'),
             'model' => $model,
             'users' => $users,

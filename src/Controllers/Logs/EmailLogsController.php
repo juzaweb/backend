@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 class EmailLogsController extends Controller
 {
     public function index() {
-        return view('backend.logs.email');
+        return view('tadcms::logs.email');
     }
     
     public function getData(Request $request) {

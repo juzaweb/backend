@@ -8,7 +8,7 @@ use Tadcms\Backend\Controllers\BackendController;
 class ThemeInstallController extends BackendController
 {
     public function index() {
-        return view('tadcms::backend.theme.install', [
+        return view('tadcms::theme.install', [
             'title' => trans('tadcms::app.themes'),
         ]);
     }

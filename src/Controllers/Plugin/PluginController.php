@@ -20,7 +20,7 @@ class PluginController extends BackendController
     
     public function index()
     {
-        return view('tadcms::backend.plugin.index', [
+        return view('tadcms::plugin.index', [
             'title' => trans('tadcms::app.plugins'),
         ]);
     }

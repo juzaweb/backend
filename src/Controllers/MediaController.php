@@ -30,7 +30,7 @@ class MediaController extends BackendController
     }
     
     public function index() {
-        return view('tadcms::backend.media.index', [
+        return view('tadcms::media.index', [
             'title' => trans('tadcms::app.media')
         ]);
     }

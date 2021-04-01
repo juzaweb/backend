@@ -8,7 +8,7 @@ class SettingController extends BackendController
 {
     public function index()
     {
-        return view('tadcms::backend.setting.index', [
+        return view('tadcms::setting.index', [
             'title' => trans('tadcms::app.general-setting'),
         ]);
     }

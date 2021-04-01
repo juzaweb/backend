@@ -20,7 +20,7 @@ class PostController extends BackendController
     }
     
     public function index($post_type = 'posts') {
-        return view('tadcms::backend.post.index', [
+        return view('tadcms::post.index', [
             'title' => trans('tadcms::app.post'),
             'post_type' => $post_type,
         ]);
@@ -35,7 +35,7 @@ class PostController extends BackendController
             'url' => route('admin.post-type', [$post_type]),
         ]);
         
-        return view('tadcms::backend.post.form', [
+        return view('tadcms::post.form', [
             'model' => $model,
             'title' => $model->title ?: trans('tadcms::app.add-new'),
             'post_type' => $post_type,

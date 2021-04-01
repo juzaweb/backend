@@ -8,7 +8,7 @@ class MenuController extends BackendController
 {
     public function index($id = null) {
         
-        return view('tadcms::backend.menu.index', [
+        return view('tadcms::menu.index', [
             'title' => trans('tadcms::app.menus'),
         ]);
     }

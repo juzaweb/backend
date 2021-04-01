@@ -11,7 +11,7 @@ class ThemeController extends BackendController
     use ArrayPagination;
     
     public function index() {
-        return view('tadcms::backend.theme.index', [
+        return view('tadcms::theme.index', [
             'title' => trans('tadcms::app.themes'),
         ]);
     }

@@ -12,7 +12,7 @@ class TranslationController extends BackendController
         
         Language::where('key', '=', $lang)->firstOrFail();
         
-        return view('tadcms::backend.translation.index', [
+        return view('tadcms::translation.index', [
             'lang' => $lang
         ]);
     }

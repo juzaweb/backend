@@ -21,7 +21,7 @@ class UserController extends BackendController
     }
     
     public function index() {
-        return view('tadcms::backend.user.index', [
+        return view('tadcms::user.index', [
             'title' => trans('tadcms::app.users')
         ]);
     }
@@ -71,7 +71,7 @@ class UserController extends BackendController
         ]);
         
         $model = $this->userRepository->firstOrNew(['id' => $id]);
-        return view('tadcms::backend.user.form', [
+        return view('tadcms::user.form', [
             'model' => $model,
             'title' => $model->name ?: trans('tadcms::app.add-new')
         ]);

@@ -8,7 +8,7 @@ class CommentController extends BackendController
 {
     public function index()
     {
-        return view('tadcms::backend.comment.index', [
+        return view('tadcms::comment.index', [
             'title' => trans('tadcms::app.comments')
         ]);
     }

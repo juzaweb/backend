@@ -11,7 +11,7 @@ class LanguageController extends BackendController
 {
     public function index() {
         
-        return view('tadcms::backend.language.index', [
+        return view('tadcms::language.index', [
             'title' => trans('tadcms::app.languages'),
         ]);
     }
