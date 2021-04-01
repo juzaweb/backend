@@ -1,4 +1,4 @@
-@extends('tadcms::backend.auth')
+@extends('tadcms::auth')
 
 @section('content')
     <div class="cui__layout__content">
