@@ -1,4 +1,4 @@
-@extends('tadcms::backend.layout')
+@extends('tadcms::layouts.admin')
 
 @section('content')
 

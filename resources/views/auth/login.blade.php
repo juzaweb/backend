@@ -1,4 +1,4 @@
-@extends('tadcms::auth')
+@extends('tadcms::layouts.auth')
 
 @section('content')
     <div class="cui__layout__content">
@@ -25,7 +25,7 @@
                             <strong>Sign in to your account</strong>
                         </div>
 
-                        <form action="{{ route('auth.login') }}" method="post" class="mb-4 form-ajax">
+                        <form action="{{ route('admin.login.handle') }}" method="post" class="mb-4 form-ajax">
                             <input type="hidden" name="redirect" value="{{ route('admin.dashboard') }}">
 
                             <div class="form-group mb-4">

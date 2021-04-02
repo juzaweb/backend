@@ -1,4 +1,4 @@
-@extends('tadcms::backend.layout')
+@extends('tadcms::layouts.admin')
 
 @section('content')
     <form method="post" action="{{ route('admin.post-type.save', [$post_type]) }}" class="form-ajax">

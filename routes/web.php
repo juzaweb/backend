@@ -11,15 +11,15 @@ Route::group(['namespace' => $namespace], function () {
 Route::group(['namespace' => $namespace, 'middleware' => 'admin'], function () {
     //require (__DIR__ . '/taxonomy.route.php');
     
-    //require (__DIR__ . '/appearance.route.php');
+    require (__DIR__ . '/appearance.route.php');
     
     //require (__DIR__ . '/media.route.php');
     
-    //require (__DIR__ . '/plugin.route.php');
+    require (__DIR__ . '/plugin.route.php');
     
-    //require (__DIR__ . '/setting.route.php');
+    require (__DIR__ . '/setting.route.php');
     
-    //require (__DIR__ . '/user.route.php');
+    require (__DIR__ . '/user.route.php');
     
     Route::get('/', 'DashboardController@index')->name('admin.dashboard');
     
@@ -31,5 +31,7 @@ Route::group(['namespace' => $namespace, 'middleware' => 'admin'], function () {
     
     //Route::post('languages/set-default', 'LanguageController@setDefault')->name('admin.languages.default');
     
-    FileManagerRoutes::web();
+    Route::group(['prefix' => 'file-manager'], function () {
+        FileManagerRoutes::web();
+    });
 });

@@ -26,7 +26,10 @@
     "autoload": {
         "psr-4": {
           "Tadcms\\Backend\\": "src/"
-        }
+        },
+        "files": [
+            "src/Helpers/helpers.php"
+        ]
     },
     "extra": {
       "laravel": {

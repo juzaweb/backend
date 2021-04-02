@@ -2,13 +2,15 @@
 
 namespace Tadcms\Backend\Controllers\Auth;
 
-use Tadcms\Http\Controllers\FrontendController;
+use Theanh\Lararepo\Controller;
 use Illuminate\Http\Request;
-use App\User;
+use Tadcms\System\Models\User;
 
-class LoginController extends FrontendController
+class LoginController extends Controller
 {
-    public function index() {
+    public function index()
+    {
+        
         do_action('auth.login.index');
         
         //
@@ -16,7 +18,8 @@ class LoginController extends FrontendController
         return view('tadcms::auth.login');
     }
     
-    public function login(Request $request) {
+    public function login(Request $request)
+    {
         // Login handle action
         do_action('auth.login.handle', $request);
     
@@ -50,7 +53,8 @@ class LoginController extends FrontendController
         return $this->error('Email or password is incorrect');
     }
     
-    public function logout() {
+    public function logout()
+    {
         if (\Auth::check()) {
             \Auth::logout();
         }

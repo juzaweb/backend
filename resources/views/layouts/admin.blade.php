@@ -43,7 +43,7 @@
             </div>
 
             <div class="cui__menuLeft__scroll kit__customScroll">
-                @include('tadcms::backend.menu_left')
+                @include('tadcms::layouts.menu_left')
             </div>
         </div>
     </div>
@@ -51,7 +51,7 @@
 
     <div class="cui__layout">
         <div class="cui__layout__header">
-            @include('tadcms::backend.menu_top')
+            @include('tadcms::layouts.menu_top')
         </div>
 
         <div class="cui__layout__content">

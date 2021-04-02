@@ -1,4 +1,4 @@
-@extends('tadcms::backend.layout')
+@extends('tadcms::layouts.admin')
 
 @section('content')
 
@@ -14,7 +14,7 @@
 
     <div class="row mb-2">
         <div class="col-md-5">
-            @include('tadcms::backend.category.form-input')
+            @include('tadcms::category.form-input')
 
 
         </div>

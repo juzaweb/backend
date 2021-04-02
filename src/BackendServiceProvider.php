@@ -2,6 +2,8 @@
 
 namespace Tadcms\Backend;
 
+use Tadcms\Backend\Providers\MenuServiceProvider;
+use Tadcms\Backend\Providers\BladeServiceProvider;
 use Tadcms\Backend\Macros\RouterMacros;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
@@ -17,6 +19,8 @@ class BackendServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerRouteMacros();
+        $this->app->register(BladeServiceProvider::class);
+        $this->app->register(MenuServiceProvider::class);
     }
     
     protected function registerRouteMacros()

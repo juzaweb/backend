@@ -14,7 +14,7 @@
 
     <script type="text/javascript" src="{{ asset('vendor/tadcms/js/vendor.js') }}"></script>
 
-    @admin_header
+
 </head>
 
 <body class="cui__layout--cardsShadow cui__menuLeft--dark">
@@ -30,5 +30,5 @@
 </div>
 </body>
 
-@admin_footer
+
 </html>
