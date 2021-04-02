@@ -18,12 +18,12 @@ class TranslationController extends BackendController
     }
     
     public function getDataTable($lang) {
-        $search = $this->request->get('search');
+        $search = $request->get('search');
         
-        $sort = $this->request->get('sort', 'id');
-        $order = $this->request->get('order', 'desc');
-        $offset = $this->request->get('offset', 0);
-        $limit = $this->request->get('limit', 20);
+        $sort = $request->get('sort', 'id');
+        $order = $request->get('order', 'desc');
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 20);
     
         $translator = app('translator');
     
@@ -40,7 +40,7 @@ class TranslationController extends BackendController
     }
     
     public function save($lang) {
-        $this->request->validate([
+        $request->validate([
             'key' => 'required|string|exists:translation,key',
             'value' => 'required|max:250',
         ], [], [
@@ -48,8 +48,8 @@ class TranslationController extends BackendController
             'value' => trans('tadcms::app.translate'),
         ]);
         
-        $model = Translation::firstOrNew(['key' => $this->request->post('key')]);
-        $model->setAttribute($lang, $this->request->post('value'));
+        $model = Translation::firstOrNew(['key' => $request->post('key')]);
+        $model->setAttribute($lang, $request->post('value'));
         $model->save();
         
         return $this->success(

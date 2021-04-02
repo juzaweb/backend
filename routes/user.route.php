@@ -1,3 +1,3 @@
 <?php
 
-Route::tadResource('users', 'Backend\UserController');
+Route::tadResource('users', 'UserController');

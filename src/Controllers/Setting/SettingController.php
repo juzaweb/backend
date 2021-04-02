@@ -18,8 +18,8 @@ class SettingController extends BackendController
         $settings = $this->getSettings();
         
         foreach ($settings as $setting) {
-            if ($this->request->has($setting)) {
-                set_config($setting, $this->request->post($setting));
+            if ($request->has($setting)) {
+                set_config($setting, $request->post($setting));
             }
         }
         

@@ -43,13 +43,13 @@ class PostController extends BackendController
     }
     
     public function getDataTable($post_type = 'posts') {
-        $search = $this->request->get('search');
-        $status = $this->request->get('status');
+        $search = $request->get('search');
+        $status = $request->get('status');
         
-        $sort = $this->request->get('sort', 'id');
-        $order = $this->request->get('order', 'desc');
-        $offset = $this->request->get('offset', 0);
-        $limit = $this->request->get('limit', 20);
+        $sort = $request->get('sort', 'id');
+        $order = $request->get('order', 'desc');
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 20);
         
         $query = Post::query();
         
@@ -85,7 +85,7 @@ class PostController extends BackendController
     }
     
     public function save($post_type = 'posts') {
-        $this->validate($this->request, [
+        $this->validate($request, [
             'id' => 'nullable|exists:posts,id',
             'title' => 'required|string|max:250',
             'status' => 'required|string|in:0,1',
@@ -93,7 +93,7 @@ class PostController extends BackendController
             'categories' => 'nullable|string|max:200',
         ]);
         
-        $this->postService->save(array_merge($this->request->all(), [
+        $this->postService->save(array_merge($request->all(), [
             'type' => $post_type,
         ]));
         
@@ -101,13 +101,13 @@ class PostController extends BackendController
     }
     
     public function destroy() {
-        $this->validate($this->request, [
+        $this->validate($request, [
             'ids' => 'required',
         ], [], [
             'ids' => trans('tadcms::app.posts')
         ]);
         
-        $this->postService->delete($this->request->post('ids'));
+        $this->postService->delete($request->post('ids'));
         
         return $this->success('tadcms::app.deleted_successfully');
     }

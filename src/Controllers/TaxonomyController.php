@@ -58,7 +58,7 @@ class TaxonomyController extends BackendController
     
     public function getDataTable($type, $taxonomy)
     {
-        $table = (new DataTableService($this->request))
+        $table = (new DataTableService($request))
             ->setModel(Taxonomy::class)
             ->search(['name', 'description']);
     
@@ -77,7 +77,7 @@ class TaxonomyController extends BackendController
     
     public function save($type, $taxonomy)
     {
-        $this->validate($this->request, [
+        $this->validate($request, [
             'name' => 'required|string|max:250',
             'description' => 'nullable|string|max:300',
             'status' => 'required|in:0,1',
@@ -85,7 +85,7 @@ class TaxonomyController extends BackendController
         ]);
         
         $this->taxonomyService->save(
-            array_merge($this->request->all(), [
+            array_merge($request->all(), [
                 'taxonomy' => $taxonomy,
                 'post_type' => $type
             ])
@@ -96,19 +96,19 @@ class TaxonomyController extends BackendController
     
     public function bulkActions($type, $taxonomy)
     {
-        $this->validate($this->request, [
+        $this->validate($request, [
             'ids' => 'required|array',
         ]);
     
-        do_action('bulk_action_taxonomy', $this->request->post());
+        do_action('bulk_action_taxonomy', $request->post());
         
-        $action = $this->request->post('action');
+        $action = $request->post('action');
         
         switch ($action) {
             case 'delete':
     
                 $this->taxonomyService->delete(
-                    $this->request->post('ids')
+                    $request->post('ids')
                 );
                 
                 break;

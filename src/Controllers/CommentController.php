@@ -15,13 +15,13 @@ class CommentController extends BackendController
     
     public function getDataTable()
     {
-        $search = $this->request->get('search');
-        $status = $this->request->get('status');
+        $search = $request->get('search');
+        $status = $request->get('status');
         
-        $sort = $this->request->get('sort', 'id');
-        $order = $this->request->get('order', 'desc');
-        $offset = $this->request->get('offset', 0);
-        $limit = $this->request->get('limit', 20);
+        $sort = $request->get('sort', 'id');
+        $order = $request->get('order', 'desc');
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 20);
         
         $query = Comment::query();
         $query->select([
@@ -64,13 +64,13 @@ class CommentController extends BackendController
     
     public function destroy()
     {
-        $this->request->validate($this->request, [
+        $request->validate($request, [
             'ids' => 'required',
         ], [], [
             'ids' => trans('tadcms::app.comments')
         ]);
         
-        Comment::destroy($this->request->post('ids'));
+        Comment::destroy($request->post('ids'));
         
         return response()->json([
             'status' => 'success',
@@ -80,7 +80,7 @@ class CommentController extends BackendController
     
     public function publicis()
     {
-        $this->request->validate([
+        $request->validate([
             'ids' => 'required',
             'status' => 'required|in:0,1,2,3',
         ], [], [
@@ -88,9 +88,9 @@ class CommentController extends BackendController
             'status' => trans('tadcms::app.status'),
         ]);
         
-        $status = $this->request->post('status');
+        $status = $request->post('status');
         
-        Comment::whereIn('id', $this->request->post('ids'))
+        Comment::whereIn('id', $request->post('ids'))
             ->update([
                 'status' => $status,
             ]);

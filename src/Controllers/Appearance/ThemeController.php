@@ -17,8 +17,8 @@ class ThemeController extends BackendController
     }
     
     public function getAllThemes() {
-        $page = $this->request->get('page', 1);
-        $page_size = $this->request->get('page_size', 10);
+        $page = $request->get('page', 1);
+        $page_size = $request->get('page_size', 10);
         
         $themes = Theme::all();
         $data = $this->arrayPaginate($themes, $page_size, $page);

@@ -36,8 +36,8 @@ class MediaController extends BackendController
     }
     
     public function getDataTable() {
-        $page_size = $this->request->get('page_size', 10);
-        $folder_id = $this->request->get('folder_id');
+        $page_size = $request->get('page_size', 10);
+        $folder_id = $request->get('folder_id');
     
         //$files = $this->mediaService->getFiles($folder_id, null, $page_size);
         $directories = $this->folderRepository->getDirectories($folder_id, null);

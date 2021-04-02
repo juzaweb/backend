@@ -3,7 +3,7 @@
 namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Http\Request;
-use Tadcms\Http\Requests\SaveUserRequest;
+use Tadcms\Backend\Requests\SaveUserRequest;
 use Tadcms\System\Repositories\UserRepository;
 
 class UserController extends BackendController
@@ -11,12 +11,8 @@ class UserController extends BackendController
     protected $userRepository;
     
     public function __construct(
-        Request $request,
         UserRepository $userRepository
-    )
-    {
-        parent::__construct($request);
-        
+    ) {
         $this->userRepository = $userRepository;
     }
     
@@ -26,14 +22,14 @@ class UserController extends BackendController
         ]);
     }
     
-    public function getDataTable() {
-        $search = $this->request->get('search');
-        $status = $this->request->get('status');
+    public function getDataTable(Request $request) {
+        $search = $request->get('search');
+        $status = $request->get('status');
         
-        $sort = $this->request->get('sort', 'id');
-        $order = $this->request->get('order', 'desc');
-        $offset = $this->request->get('offset', 0);
-        $limit = $this->request->get('limit', 20);
+        $sort = $request->get('sort', 'id');
+        $order = $request->get('order', 'desc');
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 20);
         
         $query = $this->userRepository->query()
             ->select(['id', 'name', 'email', 'status', 'created_at']);
@@ -103,15 +99,15 @@ class UserController extends BackendController
         );
     }
     
-    public function bulkActions() {
-        $this->request->validate([
+    public function bulkActions(Request $request) {
+        $request->validate([
             'ids' => 'required',
         ], [], [
             'ids' => trans('tadcms::app.users')
         ]);
         
-        $ids = $this->request->post('ids');
-        $action = $this->request->post('action');
+        $ids = $request->post('ids');
+        $action = $request->post('action');
         
         switch ($action) {
             case 'delete':

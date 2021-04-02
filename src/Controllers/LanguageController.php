@@ -17,13 +17,13 @@ class LanguageController extends BackendController
     }
     
     public function getDataTable() {
-        $search = $this->request->get('search');
-        $status = $this->request->get('status');
+        $search = $request->get('search');
+        $status = $request->get('status');
         
-        $sort = $this->request->get('sort', 'id');
-        $order = $this->request->get('order', 'desc');
-        $offset = $this->request->get('offset', 0);
-        $limit = $this->request->get('limit', 20);
+        $sort = $request->get('sort', 'id');
+        $order = $request->get('order', 'desc');
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 20);
         
         $query = Language::query();
         
@@ -56,7 +56,7 @@ class LanguageController extends BackendController
     }
     
     public function save() {
-        $this->request->validate([
+        $request->validate([
             'key' => 'required|string|max:3|min:2|alpha|unique:languages,key',
             'name' => 'required|string|max:250|unique:languages,name',
         ], [], [
@@ -64,8 +64,8 @@ class LanguageController extends BackendController
             'name' => trans('app.name'),
         ]);
         
-        $model = Language::firstOrNew(['id' => $this->request->post('id')]);
-        $model->fill($this->request->all());
+        $model = Language::firstOrNew(['id' => $request->post('id')]);
+        $model->fill($request->all());
         if ($model->save()) {
             $new_col = $model->key;
             if (!\Schema::hasColumn('translation', $new_col)) {
@@ -85,11 +85,11 @@ class LanguageController extends BackendController
     public function remove() {
         $this->validateRequest([
             'ids' => 'required',
-        ], $this->request, [
+        ], $request, [
             'ids' => trans('app.genres')
         ]);
         
-        $ids = $this->request->post('ids');
+        $ids = $request->post('ids');
         foreach ($ids as $id) {
             $lang = Language::find($id);
             if ($lang->key == 'en') {
@@ -107,18 +107,18 @@ class LanguageController extends BackendController
     }
     
     public function setDefault() {
-        $this->request->validate([
+        $request->validate([
             'id' => 'required|exists:languages,id',
         ], [], [
             'id' => trans('app.language')
         ]);
         
-        Language::where('id', '=', $this->request->post('id'))
+        Language::where('id', '=', $request->post('id'))
             ->update([
                 'default' => 1,
             ]);
     
-        Language::where('id', '!=', $this->request->post('id'))
+        Language::where('id', '!=', $request->post('id'))
             ->update([
                 'default' => 0,
             ]);

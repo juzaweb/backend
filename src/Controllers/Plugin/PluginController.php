@@ -27,8 +27,8 @@ class PluginController extends BackendController
     
     public function getDataTable()
     {
-        $offset = $this->request->get('offset', 0);
-        $limit = $this->request->get('limit', 20);
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 20);
         
         $plugins = Plugin::all();
         $total = count($plugins);
@@ -53,15 +53,15 @@ class PluginController extends BackendController
     
     public function bulkActions()
     {
-        $this->request->validate([
+        $request->validate([
             'ids' => 'required',
         ], [], [
             'ids' => trans('tadcms::app.plugins')
         ]);
         
-        $ids = $this->request->post('ids');
+        $ids = $request->post('ids');
         foreach ($ids as $plugin) {
-            switch ($this->request->post('action')) {
+            switch ($request->post('action')) {
                 case 'delete':
                     Plugin::delete($plugin);
                     break;

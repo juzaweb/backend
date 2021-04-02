@@ -16,13 +16,13 @@ class NotificationController extends BackendController
     }
     
     public function getData() {
-        $search = $this->request->get('search');
-        $status = $this->request->get('status');
+        $search = $request->get('search');
+        $status = $request->get('status');
         
-        $sort = $this->request->get('sort', 'id');
-        $order = $this->request->get('order', 'desc');
-        $offset = $this->request->get('offset', 0);
-        $limit = $this->request->get('limit', 20);
+        $sort = $request->get('sort', 'id');
+        $order = $request->get('order', 'desc');
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 20);
         
         $query = TadNotify::query();
         
@@ -71,16 +71,16 @@ class NotificationController extends BackendController
             'subject' => 'required|string|max:300',
             'content' => 'required',
             'type' => 'required|in:1,2,3',
-        ], $this->request, [
+        ], $request, [
             'name' => trans('app.name'),
             'subject' => trans('app.subject'),
             'content' => trans('app.content'),
             'type' => trans('app.type'),
         ]);
         
-        $users = $this->request->post('users');
-        $model = TadNotify::firstOrNew(['id' => $this->request->post('id')]);
-        $model->fill($this->request->all());
+        $users = $request->post('users');
+        $model = TadNotify::firstOrNew(['id' => $request->post('id')]);
+        $model->fill($request->all());
         
         if (empty($users)) {
             $model->users = null;
@@ -101,11 +101,11 @@ class NotificationController extends BackendController
     public function remove() {
         $this->validateRequest([
             'ids' => 'required',
-        ], $this->request, [
+        ], $request, [
             'ids' => trans('app.notification')
         ]);
         
-        TadNotify::destroy($this->request->post('ids'));
+        TadNotify::destroy($request->post('ids'));
         
         return response()->json([
             'status' => 'success',

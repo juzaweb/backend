@@ -2,6 +2,7 @@
 
 namespace Tadcms\Backend\Controllers\Appearance;
 
+use Illuminate\Http\Request;
 use Tadcms\Backend\Controllers\BackendController;
 
 class MenuController extends BackendController

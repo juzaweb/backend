@@ -26,7 +26,7 @@ class ResourceController extends BackendController
     }
     
     public function save() {
-        $this->resource->save($this->request);
+        $this->resource->save($request);
         
         return $this->success('Updated');
     }
