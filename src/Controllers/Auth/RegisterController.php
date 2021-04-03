@@ -2,19 +2,21 @@
 
 namespace Tadcms\Backend\Controllers\Auth;
 
-use Tadcms\Http\Controllers\FrontendController;
 use Illuminate\Http\Request;
-use App\User;
+use Tadcms\System\Models\User;
+use Theanh\Lararepo\Controller;
 
-class RegisterController extends FrontendController
+class RegisterController extends Controller
 {
-    public function index() {
+    public function index()
+    {
         do_action('auth.register.index');
         
-        return view('auth.register');
+        return view('tadcms::auth.register');
     }
     
-    public function register(Request $request) {
+    public function register(Request $request)
+    {
         do_action('auth.register.handle', $request);
     
         // Validate register

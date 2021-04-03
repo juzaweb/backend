@@ -74,12 +74,12 @@
             <div class="cui__footer">
                 <div class="cui__footer__inner">
                     <a href="https://github.com/theanhk/tadcms" target="_blank" rel="noopener noreferrer" class="cui__footer__logo">
-                        TAD CMS
+                        Provided by TAD CMS
                         <span></span>
                     </a>
                     <br />
                     <p class="mb-0">
-                        Copyright © 2020 {{ get_config('sitename') }}
+                        Copyright © {{ date('Y') }} {{ get_config('sitename') }}
                     </p>
                 </div>
             </div>

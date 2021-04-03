@@ -9,6 +9,11 @@ class Routes
         require (__DIR__ . '/../routes/web.php');
     }
     
+    public static function auth()
+    {
+        require (__DIR__ . '/../routes/auth.php');
+    }
+    
     public static function api()
     {
     

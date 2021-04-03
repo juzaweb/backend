@@ -81,7 +81,7 @@
             </a>
 
             <div class="dropdown-divider"></div>
-            <a href="" class="dropdown-item" data-turbolinks="false">
+            <a href="{{ route('admin.logout') }}" class="dropdown-item" data-turbolinks="false">
                 <i class="dropdown-icon fe fe-log-out"></i> @lang('tadcms::app.logout')
             </a>
         </div>

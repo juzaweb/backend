@@ -5,7 +5,7 @@ namespace Tadcms\Backend\Controllers\Auth;
 use Tadcms\Http\Controllers\FrontendController;
 use Illuminate\Http\Request;
 
-class ForgotPasswordController extends FrontendController
+class ForgotPasswordController extends Controller
 {
     protected $request;
     

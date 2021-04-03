@@ -4,10 +4,6 @@ use Theanh\FileManager\Routes AS FileManagerRoutes;
 
 $namespace = '\\Tadcms\\Backend\\Controllers';
 
-Route::group(['namespace' => $namespace], function () {
-    require (__DIR__ . '/auth.route.php');
-});
-
 Route::group(['namespace' => $namespace, 'middleware' => 'admin'], function () {
     //require (__DIR__ . '/taxonomy.route.php');
     

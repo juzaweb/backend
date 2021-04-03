@@ -2,7 +2,7 @@
 
 namespace Tadcms\Backend\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
+use Theanh\Lararepo\Controller;
 
 class VerificationController extends Controller
 {
