@@ -2,6 +2,7 @@
 
 namespace Tadcms\Backend\Controllers\Setting;
 
+use Illuminate\Http\Request;
 use Tadcms\Backend\Controllers\BackendController;
 
 class SettingController extends BackendController
@@ -13,7 +14,7 @@ class SettingController extends BackendController
         ]);
     }
     
-    public function save()
+    public function save(Request $request)
     {
         $settings = $this->getSettings();
         

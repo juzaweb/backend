@@ -46,7 +46,7 @@
                     </div>
 
                     <div class="text-center pt-2 mb-auto">
-                        <span class="mr-2">@lang('tadcms::app.dont-have-an-account')</span>
+                        <span class="mr-2">@lang('tadcms::message.dont-have-an-account')</span>
                         <a href="" class="kit__utils__link font-size-16">
                             @lang('app.sign-up')
                         </a>

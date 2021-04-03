@@ -3,13 +3,11 @@
 Route::group(['prefix' => 'themes'], function () {
     Route::get('/', 'Appearance\ThemeController@index')->name('admin.themes');
     
-    Route::get('/get-data', 'Appearance\ThemeController@getAllThemes')->name('admin.themes.get-data');
+    Route::get('/get-data', 'Appearance\ThemeController@getDataTable')->name('admin.themes.get-data');
+    
+    Route::post('/activate', 'Appearance\ThemeController@activate')->name('admin.themes.activate');
     
     Route::get('/install', 'Appearance\ThemeInstallController@index')->name('admin.themes.install');
-    
-    Route::post('/save', 'Design\ThemeController@save')->name('admin.themes.save');
-    
-    Route::post('/active', 'Appearance\ThemeInstallController@index')->name('admin.themes.install.active');
 });
 
 Route::group(['prefix' => 'menus'], function () {

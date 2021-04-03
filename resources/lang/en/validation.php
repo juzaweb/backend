@@ -11,5 +11,6 @@ return [
         'status' => 'Status',
         'thumbnail' => 'Thumbnail',
         'categories' => 'Categories',
+        'theme' => 'Theme',
     ],
 ];

@@ -20,7 +20,6 @@ return [
     'setting' => 'Setting',
     'general-setting' => 'General Setting',
     'login' => 'Login',
-    'dont-have-an-account' => 'Don\'t have an account?',
     'sign-up' => 'Sign up',
     'forgot-password' => 'Forgot password?',
     'search' => 'Search',

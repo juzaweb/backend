@@ -66,7 +66,7 @@
         
         function statusFormatter(value, row, index) {
             switch (value) {
-                case 'inactive': return "<span class='text-success'>{{ trans('tadcms::app.inactive') }}</span>";
+                case 'inactive': return "<span class='text-disable'>{{ trans('tadcms::app.inactive') }}</span>";
             }
 
             return "<span class='text-success'>{{ trans('tadcms::app.active') }}</span>";

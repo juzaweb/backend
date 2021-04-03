@@ -1,7 +1,5 @@
 @extends('tadcms::layouts.admin')
 
-@section('title', $title)
-
 @section('content')
     <div class="cui__utils__content">
         <div class="row mb-4">
