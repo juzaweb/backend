@@ -95,4 +95,5 @@ return [
     'no' => 'No',
     'reset' => 'Reset',
     'email-setting' => 'Email setting',
+    'email-template' => 'Email Template',
 ];

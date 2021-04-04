@@ -20,6 +20,7 @@
                         'title' => trans('tadcms::validation.attributes.email_encryption'),
                         'name' => 'email_encryption',
                         'options' => [
+                            '' => 'none',
                             'tls' => 'tls',
                             'ssl' => 'ssl'
                         ],

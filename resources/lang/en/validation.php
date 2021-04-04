@@ -22,5 +22,6 @@ return [
         'email_from_address' => 'From address',
         'email_from_name' => 'From name',
         'email_setting' => 'Use above setting instead of env file setting',
+        'email_templates' => 'Email templates',
     ],
 ];
