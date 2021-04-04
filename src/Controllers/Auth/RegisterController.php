@@ -53,7 +53,7 @@ class RegisterController extends Controller
             ]);
     
             if (get_config('user_confirmation')) {
-                $verifyToken = Str::random(100);
+                $verifyToken = Str::random(32);
                 
                 $user->update([
                     'status' => 'verification',

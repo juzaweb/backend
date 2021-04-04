@@ -8,6 +8,9 @@ Route::group(['namespace' => $namespace, 'middleware' => 'guest'], function () {
     
     Route::get('/register', 'Auth\RegisterController@index')->name('auth.register');
     Route::post('/register', 'Auth\RegisterController@register')->name('auth.register.handle');
+    
+    Route::get('/forgot-password', 'Auth\ForgotPasswordController@index')->name('auth.forgot-password');
+    Route::post('/forgot-password', 'Auth\ForgotPasswordController@forgotPassword');
 });
 
 Route::group(['namespace' => $namespace, 'middleware' => 'auth'], function () {

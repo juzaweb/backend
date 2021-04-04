@@ -12,7 +12,7 @@ return [
     ],
     'register-form' => [
         'header' => 'Sign in to your account.',
-        'dont-have-an-account' => 'Don\'t have an account?',
+        'dont-have-an-account' => 'Already have an account?',
         'register-closed' => 'Registration has been closed.',
     ],
     

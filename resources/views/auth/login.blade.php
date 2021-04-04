@@ -35,10 +35,11 @@
                             <button type="submit" class="btn btn-primary text-center w-100" data-loading-text="@lang('tadcms::app.please-wait')"><i class="fa fa-sign-in"></i> @lang('tadcms::app.log-in')</button>
                         </form>
 
-                        <a href="" class="kit__utils__link font-size-16">
+                        <a href="{{ route('auth.forgot-password') }}" class="kit__utils__link font-size-16">
                             @lang('tadcms::app.forgot-password')
                         </a>
                     </div>
+
                     @if(get_config('users_can_register'))
                     <div class="text-center pt-2 mb-auto">
                         <span class="mr-2">@lang('tadcms::message.login-form.dont-have-an-account')</span>
