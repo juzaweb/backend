@@ -7,6 +7,13 @@ return [
         'description' => '',
         'header' => 'Sign in to your account.',
         'dont-have-an-account' => 'Don\'t have an account?',
+        'login-failed' => 'Email or password is incorrect',
+        'user-is-banned' => 'The account does not exist or has been banned',
+    ],
+    'register-form' => [
+        'header' => 'Sign in to your account.',
+        'dont-have-an-account' => 'Don\'t have an account?',
+        'register-closed' => 'Registration has been closed.',
     ],
     
 ];

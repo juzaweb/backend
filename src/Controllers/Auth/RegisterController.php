@@ -3,7 +3,11 @@
 namespace Tadcms\Backend\Controllers\Auth;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
 use Tadcms\System\Models\User;
+use Theanh\EmailTemplate\EmailService;
 use Theanh\Lararepo\Controller;
 
 class RegisterController extends Controller
@@ -12,13 +16,19 @@ class RegisterController extends Controller
     {
         do_action('auth.register.index');
         
-        return view('tadcms::auth.register');
+        return view('tadcms::auth.register', [
+            'title' => trans('tadcms::app.sign-up')
+        ]);
     }
     
     public function register(Request $request)
     {
         do_action('auth.register.handle', $request);
     
+        if (!get_config('users_can_register', 1)) {
+            return $this->error(trans('message.register-form.register-closed'));
+        }
+        
         // Validate register
         $request->validate([
             'email' => 'required|email|max:150|unique:users,email',
@@ -30,14 +40,42 @@ class RegisterController extends Controller
         $email = $request->post('email');
         $password = $request->post('password');
         
-        $user = User::create([
-            'name' => $name,
-            'email' => $email,
-            'password' => \Hash::make($password),
-        ]);
+        DB::beginTransaction();
+        try {
+            $user = User::create([
+                'name' => $name,
+                'email' => $email,
+                'password' => Hash::make($password),
+            ]);
     
+            if (get_config('user_confirmation')) {
+                $verifyToken = Str::random(100);
+                
+                $user->update([
+                    'status' => 'verification',
+                    'verification_token' => $verifyToken,
+                ]);
+                
+                EmailService::make()
+                    ->withTemplate('verification')
+                    ->setParams([
+                        'name' => $name,
+                        'email' => $email,
+                        'token' => $verifyToken,
+                    ])
+                    ->send();
+                
+                return $this->redirect(route('auth.register'));
+            }
+            
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
+        
         do_action('auth.register.success', $user);
         
-        return redirect()->route('home');
+        return $this->redirect(route('auth.login'));
     }
 }

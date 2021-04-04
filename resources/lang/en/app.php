@@ -64,6 +64,7 @@ return [
     'languages' => 'Languages',
     'profile' => 'Profile',
     'email' => 'Email',
+    'full-name' => 'Full Name',
     'email-address' => 'Email address',
     'password' => 'Password',
     'permission' => 'Permission',

@@ -41,7 +41,7 @@
                     <div class="tab-content">
                         <div class="height-300 kit__customScroll">
                             <ul class="list-unstyled">
-                                @php
+                                {{--@php
                                     $notifications = Auth::user()->unreadNotifications()
                                         ->orderBy('id', 'DESC')
                                         ->limit(5)
@@ -60,7 +60,7 @@
                                             </div>
                                         </li>
                                     @endforeach
-                                @endif
+                                @endif--}}
                             </ul>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
             </a>
 
             <div class="dropdown-divider"></div>
-            <a href="{{ route('admin.logout') }}" class="dropdown-item" data-turbolinks="false">
+            <a href="{{ route('auth.logout') }}" class="dropdown-item" data-turbolinks="false">
                 <i class="dropdown-icon fe fe-log-out"></i> @lang('tadcms::app.logout')
             </a>
         </div>

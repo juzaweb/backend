@@ -17,13 +17,13 @@
 
                         <form action="{{ route('auth.register') }}" method="post" class="mb-4 form-ajax">
                             <div class="form-group mb-4">
-                                <input type="text" class="form-control" placeholder="Full Name" autocomplete="off"/>
+                                <input type="text" name="name" class="form-control" placeholder="@lang('tadcms::app.full-name')" autocomplete="off"/>
                             </div>
                             <div class="form-group mb-4">
-                                <input type="text" class="form-control" placeholder="Email Address" autocomplete="off"/>
+                                <input type="text" name="email" class="form-control" placeholder="@lang('tadcms::app.email-address')" autocomplete="off"/>
                             </div>
                             <div class="form-group mb-4">
-                                <input type="password" class="form-control" placeholder="Password" autocomplete="off"/>
+                                <input type="password" name="password" class="form-control" placeholder="@lang('tadcms::app.password')" autocomplete="off"/>
                             </div>
                             <button type="submit" class="btn btn-primary text-center w-100" data-loading-text="@lang('tadcms::app.please-wait')">
                                 <strong>Sign Up</strong>

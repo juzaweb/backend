@@ -11,12 +11,13 @@ class LoginController extends Controller
 {
     public function index()
     {
-        
         do_action('auth.login.index');
         
         //
         
-        return view('tadcms::auth.login');
+        return view('tadcms::auth.login', [
+            'title' => trans('tadcms::app.sign-in')
+        ]);
     }
     
     public function login(Request $request)
@@ -32,13 +33,21 @@ class LoginController extends Controller
         
         $email = $request->post('email');
         $password = $request->post('password');
+        $user = User::whereEmail($email)->first(['status']);
         
-        if (!User::whereEmail($email)->exists()) {
-            return $this->error(trans('Email or password is incorrect'));
+        if (!$user) {
+            return $this->error(trans('tadcms::message.login-form.login-failed'));
         }
         
-        if (\Auth::attempt(['email' => $email, 'password' => $password])) {
-            do_action('auth.login.success', \Auth::user());
+        if ($user->status != 'active') {
+            return $this->error(trans('tadcms::message.login-form.user-is-banned'));
+        }
+        
+        if (Auth::attempt([
+            'email' => $email,
+            'password' => $password
+        ])) {
+            do_action('auth.login.success', Auth::user());
             
             if ($request->has('redirect')) {
                 return $this->redirect(
@@ -46,12 +55,12 @@ class LoginController extends Controller
                 );
             }
             
-            return $this->redirect(route('home'));
+            return $this->redirect('/');
         }
     
         do_action('auth.login.failed');
         
-        return $this->error('Email or password is incorrect');
+        return $this->error(trans('tadcms::message.login-form.login-failed'));
     }
     
     public function logout()
@@ -60,6 +69,6 @@ class LoginController extends Controller
             Auth::logout();
         }
         
-        return redirect()->route('home');
+        return redirect()->to('/');
     }
 }

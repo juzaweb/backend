@@ -20,13 +20,11 @@
     <script src="{{ asset('vendor/tadcms/js/vendor.js') }}" type="text/javascript"></script>
     <script src="{{ asset('js/list-view.js') }}" type="text/javascript"></script>
 
-
     @yield('header')
     <script src="{{ asset('vendor/tadcms/ckeditor/ckeditor.js') }}"></script>
     {{--<script src="https://www.gstatic.com/charts/loader.js"></script>--}}
 
     @admin_header
-
 </head>
 
 <body class="cui__layout--cardsShadow cui__menuLeft--dark cui__topbar--fixed cui__menuLeft--unfixed">
