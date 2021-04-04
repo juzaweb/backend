@@ -36,7 +36,7 @@
         <div class="cui__menuLeft__outer">
             <div class="cui__menuLeft__logo__container">
                 <div class="cui__menuLeft__logo">
-                    <img src="{{ asset('images/logo.png') }}" class="mr-2" alt="TAD Logo" />
+                    <img src="{{ asset('vendor/tadcms/images/logo.png') }}" class="mr-2" alt="TAD Logo" />
                 </div>
             </div>
 

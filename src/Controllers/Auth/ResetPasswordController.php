@@ -3,6 +3,7 @@
 namespace Tadcms\Backend\Controllers\Auth;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Tadcms\System\Models\PasswordReset;
 use Theanh\Lararepo\Controller;
 use Illuminate\Http\Request;
@@ -35,6 +36,15 @@ class ResetPasswordController extends Controller
             'password' => 'required|string|min:6|max:32',
             'password_confirmation' => 'required|string|max:32|min:6'
         ]);
+        
+        $user = User::whereEmail($email)
+            ->whereExists(function ($query) use ($email, $token) {
+                $query->select(['email'])
+                    ->from('password_resets')
+                    ->where('email', '=', $email)
+                    ->where('token', '=', $token);
+            })
+            ->firstOrFail();
     
         $passwordReset = PasswordReset::where('email', '=', $email)
             ->where('token', '=', $token)
@@ -42,6 +52,10 @@ class ResetPasswordController extends Controller
     
         DB::beginTransaction();
         try {
+            $user->update([
+                'password' => Hash::make($request->post('password'))
+            ]);
+            
             $passwordReset->delete();
         
             DB::commit();
