@@ -14,7 +14,7 @@ class ForgotPasswordController extends Controller
 {
     public function index()
     {
-        do_action('auth.register.index');
+        do_action('auth.forgot-password.index');
         
         return view('tadcms::auth.forgot_password');
     }

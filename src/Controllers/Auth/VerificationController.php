@@ -8,10 +8,12 @@ use Theanh\Lararepo\Controller;
 
 class VerificationController extends Controller
 {
-    public function verification($token)
+    public function verification($email, $token)
     {
-        $user = User::where('verification_token', '=', $token)
+        $user = User::whereEmail($email)
+            ->where('verification_token', '=', $token)
             ->first();
+        
         if ($user) {
             DB::beginTransaction();
     
