@@ -14,6 +14,10 @@ class RegisterController extends Controller
 {
     public function index()
     {
+        if (!get_config('users_can_register', 1)) {
+            return abort(403, trans('tadcms::message.register-form.register-closed'));
+        }
+        
         do_action('auth.register.index');
         
         return view('tadcms::auth.register', [
@@ -26,7 +30,7 @@ class RegisterController extends Controller
         do_action('auth.register.handle', $request);
     
         if (!get_config('users_can_register', 1)) {
-            return $this->error(trans('message.register-form.register-closed'));
+            return $this->error(trans('tadcms::message.register-form.register-closed'));
         }
         
         // Validate register
