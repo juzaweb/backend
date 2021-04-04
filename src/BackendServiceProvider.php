@@ -7,6 +7,7 @@ use Tadcms\Backend\Providers\BladeServiceProvider;
 use Tadcms\Backend\Macros\RouterMacros;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
+use Tadcms\Backend\Providers\MailConfigServiceProvider;
 
 class BackendServiceProvider extends ServiceProvider
 {
@@ -21,6 +22,7 @@ class BackendServiceProvider extends ServiceProvider
         $this->registerRouteMacros();
         $this->app->register(BladeServiceProvider::class);
         $this->app->register(MenuServiceProvider::class);
+        $this->app->register(MailConfigServiceProvider::class);
     }
     
     protected function registerRouteMacros()

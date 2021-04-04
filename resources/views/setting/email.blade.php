@@ -47,6 +47,11 @@
                     'name' => 'email_from_name',
                     ])@endcomponent
 
+                    <div class="form-group">
+                        <input type="checkbox" name="email_setting" id="email_setting" value="1" @if(get_config('email_setting', 1)) checked @endif>
+                        <label for="email_setting">{{ trans('tadcms::validation.attributes.email_setting') }}</label>
+                    </div>
+
                 </div>
 
             </div>

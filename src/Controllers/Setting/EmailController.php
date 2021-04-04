@@ -32,6 +32,7 @@ class EmailController extends BackendController
     protected function getSettings()
     {
         return [
+            'email_setting',
             'email_host',
             'email_port',
             'email_encryption',
