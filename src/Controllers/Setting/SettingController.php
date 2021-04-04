@@ -36,6 +36,8 @@ class SettingController extends BackendController
             'sitename',
             'sitedescription',
             'language',
+            'users_can_register',
+            'user_confirmation',
         ];
         
         return apply_filters('admin.general_settings', $items);

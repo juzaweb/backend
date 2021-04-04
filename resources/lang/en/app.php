@@ -91,4 +91,6 @@ return [
     'inactive' => 'Inactive',
     'site-name' => 'Site name',
     'site-description' => 'Site description',
+    'yes' => 'Yes',
+    'no' => 'No',
 ];

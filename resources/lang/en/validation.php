@@ -12,5 +12,7 @@ return [
         'thumbnail' => 'Thumbnail',
         'categories' => 'Categories',
         'theme' => 'Theme',
+        'anyone-can-register' => 'Anyone can register',
+        'user-confirmation' => 'User confirmation',
     ],
 ];
