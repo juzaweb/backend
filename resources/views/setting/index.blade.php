@@ -47,7 +47,7 @@
                             0 => trans('tadcms::app.no'),
                         ],
                     ])@endcomponent
-                    
+
                 </div>
             </div>
         </form>

@@ -39,13 +39,14 @@
                             @lang('tadcms::app.forgot-password')
                         </a>
                     </div>
-
+                    @if(get_config('users_can_register'))
                     <div class="text-center pt-2 mb-auto">
                         <span class="mr-2">@lang('tadcms::message.login-form.dont-have-an-account')</span>
                         <a href="{{ route('auth.register') }}" class="kit__utils__link font-size-16">
                             @lang('tadcms::app.sign-up')
                         </a>
                     </div>
+                    @endif
                 </div>
 
                 <div class="mt-auto pb-5 pt-5">
