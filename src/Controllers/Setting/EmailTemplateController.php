@@ -15,15 +15,6 @@ class EmailTemplateController extends BackendController
         ]);
     }
     
-    public function form($id = null)
-    {
-        $model = EmailTemplate::firstOrNew(['id' => $id]);
-        
-        return view('tadcms::email_template.form', [
-            'model' => $model
-        ]);
-    }
-    
     public function getDataTable(Request $request)
     {
         $search = $request->get('search');
@@ -33,14 +24,12 @@ class EmailTemplateController extends BackendController
         $limit = $request->get('limit', 20);
     
         $query = EmailTemplate::query();
-        $query->select([
-            'a.*',
-        ]);
+        
         
         if ($search) {
             $query->where(function ($subQuery) use ($search) {
-                $subQuery->orWhere('b.name', 'like', '%'. $search .'%');
-                
+                $subQuery->orWhere('name', 'like', '%'. $search .'%');
+                $subQuery->orWhere('subject', 'like', '%'. $search .'%');
             });
         }
         
@@ -54,11 +43,6 @@ class EmailTemplateController extends BackendController
             'total' => $count,
             'rows' => $rows
         ]);
-    }
-    
-    public function save(Request $request)
-    {
-    
     }
     
     public function bulkActions(Request $request) {

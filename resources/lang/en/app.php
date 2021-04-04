@@ -96,4 +96,5 @@ return [
     'reset' => 'Reset',
     'email-setting' => 'Email setting',
     'email-template' => 'Email Template',
+    'subject' => 'Subject',
 ];

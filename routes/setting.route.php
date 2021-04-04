@@ -7,6 +7,7 @@ Route::get('setting-email', 'Setting\EmailController@index')->name('admin.settin
 Route::post('setting-email', 'Setting\EmailController@save');
 
 Route::group(['prefix' => 'email-template'], function () {
-    Route::get('/', 'Setting\EmailTemplateController@index')->name('admin.setting');
-    Route::post('/', 'Setting\EmailTemplateController@save');
+    Route::get('/', 'Setting\EmailTemplateController@index')->name('admin.email-template');
+    Route::get('/get-data', 'Setting\EmailTemplateController@index')->name('admin.email-template.get-data');
+    Route::post('/bulk-actions', 'Setting\EmailTemplateController@bulkActions')->name('admin.email-template.bulk-actions');
 });
