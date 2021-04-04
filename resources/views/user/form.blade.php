@@ -4,7 +4,7 @@
 
     <form method="post" action="{{ route('admin.users.save') }}" class="form-ajax">
 
-        <div class="row">
+        <div class="row mb-2">
             <div class="col-md-6"></div>
 
             <div class="col-md-6">
@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <div class="row mt-2">
+        <div class="row">
             <div class="col-md-8">
                 <div class="form-group">
                     <label class="col-form-label" for="name">@lang('tadcms::app.name')</label>

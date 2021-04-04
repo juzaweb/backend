@@ -93,4 +93,6 @@ return [
     'site-description' => 'Site description',
     'yes' => 'Yes',
     'no' => 'No',
+    'reset' => 'Reset',
+    'email-setting' => 'Email setting',
 ];

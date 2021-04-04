@@ -18,7 +18,7 @@
         <div class="col-md-4">
             <div class="card">
                 <div class="height-200 d-flex flex-column kit__g13__head"
-                     style="background-image: url('{thumbnail}')">
+                     style="background-image: url('{screenshot}')">
                 </div>
 
                 <div class="card card-borderless mb-0">

@@ -14,5 +14,12 @@ return [
         'theme' => 'Theme',
         'anyone-can-register' => 'Anyone can register',
         'user-confirmation' => 'User confirmation',
+        'email_host' => 'Host',
+        'email_port' => 'Port',
+        'email_encryption' => 'Encryption',
+        'email_username' => 'Username',
+        'email_password' => 'Password',
+        'email_from_address' => 'From address',
+        'email_from_name' => 'From name',
     ],
 ];

@@ -138,5 +138,13 @@ class MenuServiceProvider extends ServiceProvider
             'setting',
             99
         );
+    
+        add_menu_page(
+            'tadcms::app.email-setting',
+            'setting-email',
+            'fa fa-cogs',
+            'setting',
+            99
+        );
     }
 }
