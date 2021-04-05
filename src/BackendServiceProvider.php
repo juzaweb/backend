@@ -2,6 +2,7 @@
 
 namespace Tadcms\Backend;
 
+use Tadcms\Backend\Providers\LivewireServiceProvider;
 use Tadcms\Backend\Providers\MenuServiceProvider;
 use Tadcms\Backend\Providers\BladeServiceProvider;
 use Tadcms\Backend\Macros\RouterMacros;
@@ -23,6 +24,7 @@ class BackendServiceProvider extends ServiceProvider
         $this->app->register(BladeServiceProvider::class);
         $this->app->register(MenuServiceProvider::class);
         $this->app->register(MailConfigServiceProvider::class);
+        $this->app->register(LivewireServiceProvider::class);
     }
     
     protected function registerRouteMacros()

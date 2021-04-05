@@ -24,6 +24,7 @@
     <script src="{{ asset('vendor/tadcms/ckeditor/ckeditor.js') }}"></script>
     {{--<script src="https://www.gstatic.com/charts/loader.js"></script>--}}
 
+    @livewireStyles
     @admin_header
 </head>
 
@@ -89,6 +90,7 @@
 
 @yield('footer')
 
+@livewireScripts
 @admin_footer
 
 {{--<script type="text/javascript">
