@@ -61,9 +61,10 @@ class PluginController extends BackendController
             'ids' => trans('tadcms::app.plugins')
         ]);
         
+        $action = $request->post('action');
         $ids = $request->post('ids');
         foreach ($ids as $plugin) {
-            switch ($request->post('action')) {
+            switch ($action) {
                 case 'delete':
                     Plugin::delete($plugin);
                     break;

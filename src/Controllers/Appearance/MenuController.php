@@ -7,14 +7,15 @@ use Tadcms\Backend\Controllers\BackendController;
 
 class MenuController extends BackendController
 {
-    public function index($id = null) {
-        
+    public function index($id = null)
+    {
         return view('tadcms::menu.index', [
             'title' => trans('tadcms::app.menus'),
         ]);
     }
     
-    public function addMenu(Request $request) {
+    public function addMenu(Request $request)
+    {
         $this->validateRequest([
             'name' => 'required|string|max:250',
         ], $request, [
@@ -32,13 +33,11 @@ class MenuController extends BackendController
         ]);
     }
     
-    public function save(Request $request) {
-        $this->validateRequest([
+    public function save(Request $request)
+    {
+        $request->validate([
             'name' => 'required|string|max:250',
             'content' => 'required',
-        ], $request, [
-            'name' => trans('app.name'),
-            'content' => trans('app.menu'),
         ]);
         
         $model = Menu::firstOrNew(['id' => $request->post('id')]);
@@ -52,7 +51,8 @@ class MenuController extends BackendController
         ]);
     }
     
-    public function getItems(Request $request) {
+    public function getItems(Request $request)
+    {
         $this->validateRequest([
             'type' => 'required',
         ], $request, [

@@ -2,7 +2,7 @@
 
 $namespace = '\\Tadcms\\Backend\\Controllers';
 
-Route::group(['namespace' => $namespace, 'middleware' => 'guest'], function () {
+Route::group(['middleware' => 'guest'], function () {
     Route::get('/login', 'Auth\LoginController@index')->name('auth.login');
     Route::post('/login', 'Auth\LoginController@login')->name('auth.login.handle');
     
@@ -13,6 +13,6 @@ Route::group(['namespace' => $namespace, 'middleware' => 'guest'], function () {
     Route::post('/forgot-password', 'Auth\ForgotPasswordController@forgotPassword');
 });
 
-Route::group(['namespace' => $namespace, 'middleware' => 'auth'], function () {
+Route::group(['middleware' => 'auth'], function () {
     Route::get('/logout', 'Auth\LoginController@logout')->name('auth.logout');
 });

@@ -103,13 +103,13 @@ class MenuServiceProvider extends ServiceProvider
             45
         );
         
-        /*add_menu_page(
+        add_menu_page(
             'tadcms::app.menus',
             'menus',
             'fa fa-cogs',
             'themes',
             46
-        );*/
+        );
     }
     
     protected function addPluginMenu() {

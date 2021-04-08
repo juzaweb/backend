@@ -97,4 +97,5 @@ return [
     'email-setting' => 'Email setting',
     'email-template' => 'Email Template',
     'subject' => 'Subject',
+    'sign-in' => 'Sign in',
 ];

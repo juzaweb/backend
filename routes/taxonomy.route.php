@@ -1,12 +1,12 @@
 <?php
 
-/*Route::tadResource('posts', 'Backend\PostController', [
+Route::tadResource('posts', 'Backend\PostController', [
     'name' => 'posts'
 ]);
 
 Route::tadResource('pages', 'Backend\PostController', [
     'name' => 'pages',
-]);*/
+]);
 
 Route::tadResource('comments', 'CommentController');
 

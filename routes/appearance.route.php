@@ -13,17 +13,17 @@ Route::group(['prefix' => 'themes'], function () {
 Route::group(['prefix' => 'menus'], function () {
     Route::get('/', 'Appearance\MenuController@index')->name('admin.menu');
     
-    Route::get('/{id}', 'Design\MenuController@index')->name('admin.menu.id');
+    Route::get('/{id}', 'Appearance\MenuController@index')->name('admin.menu.id');
     
-    Route::post('/add-menu', 'Design\MenuController@addMenu')->name('admin.menu.add');
+    Route::post('/add-menu', 'Appearance\MenuController@addMenu')->name('admin.menu.add');
     
-    Route::post('/save', 'Design\MenuController@save')->name('admin.menu.save');
+    Route::post('/save', 'Appearance\MenuController@save')->name('admin.menu.save');
     
-    Route::post('/get-data', 'Design\MenuController@getItems')->name('admin.menu.items');
+    Route::post('/get-data', 'Appearance\MenuController@getItems')->name('admin.menu.items');
 });
 
 Route::group(['prefix' => 'design/editor'], function () {
-    Route::get('/', 'Design\ThemeEditorController@index')->name('admin.design.editor');
+    Route::get('/', 'Appearance\ThemeEditorController@index')->name('admin.design.editor');
     
-    Route::post('/save', 'Design\ThemeEditorController@save')->name('admin.design.editor.save');
+    Route::post('/save', 'Appearance\ThemeEditorController@save')->name('admin.design.editor.save');
 });

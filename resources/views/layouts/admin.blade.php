@@ -10,6 +10,7 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:400,700,800&display=swap">
     <link rel="stylesheet" href="{{ asset('vendor/tadcms/css/vendor.css') }}">
+    <link rel="stylesheet" href="{{ asset('vendor/tadcms/css/menu.css') }}">
 
     <script type="text/javascript">
         var tadcms = {
@@ -18,13 +19,13 @@
     </script>
 
     <script src="{{ asset('vendor/tadcms/js/vendor.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('js/list-view.js') }}" type="text/javascript"></script>
 
     @yield('header')
     <script src="{{ asset('vendor/tadcms/ckeditor/ckeditor.js') }}"></script>
     {{--<script src="https://www.gstatic.com/charts/loader.js"></script>--}}
 
     @livewireStyles
+
     @admin_header
 </head>
 
@@ -33,7 +34,7 @@
 
     <div class="cui__menuLeft">
         <div class="cui__menuLeft__mobileTrigger"><span></span></div>
-        <div class="cui__menuLeft__trigger"></div>
+        {{--<div class="cui__menuLeft__trigger"></div>--}}
         <div class="cui__menuLeft__outer">
             <div class="cui__menuLeft__logo__container">
                 <div class="cui__menuLeft__logo">
@@ -91,6 +92,7 @@
 @yield('footer')
 
 @livewireScripts
+
 @admin_footer
 
 {{--<script type="text/javascript">

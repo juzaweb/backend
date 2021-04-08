@@ -2,10 +2,8 @@
 
 use Theanh\FileManager\Routes AS FileManagerRoutes;
 
-$namespace = '\\Tadcms\\Backend\\Controllers';
-
-Route::group(['namespace' => $namespace, 'middleware' => 'admin'], function () {
-    //require (__DIR__ . '/taxonomy.route.php');
+Route::group(['middleware' => 'admin'], function () {
+    require (__DIR__ . '/taxonomy.route.php');
     
     require (__DIR__ . '/appearance.route.php');
     

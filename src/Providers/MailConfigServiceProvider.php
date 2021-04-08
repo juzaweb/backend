@@ -3,34 +3,20 @@
 namespace Tadcms\Backend\Providers;
 
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
-use Tadcms\System\Models\Config as ModelConfig;
+use Tadcms\System\Models\Config as DataConfig;
 
 class MailConfigServiceProvider extends ServiceProvider
 {
-    /**
-     * Register services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-    }
-
-    /**
-     * Bootstrap services.
-     *
-     * @return void
-     */
     public function boot()
     {
-        if (!Schema::hasTable('configs'))
-        {
+        if (!$this->checkDbConnection()) {
             return;
         }
         
-        $mail = ModelConfig::getConfigEmail();
+        $mail = DataConfig::getConfigEmail();
         
         if ($mail['email_setting']) {
             $config = [
@@ -48,5 +34,21 @@ class MailConfigServiceProvider extends ServiceProvider
             
             Config::set('mail', $config);
         }
+    }
+    
+    protected function checkDbConnection()
+    {
+        try {
+            DB::connection()->getPdo();
+    
+            if (!Schema::hasTable('configs'))
+            {
+                return true;
+            }
+        } catch (\Exception $e) {
+            return false;
+        }
+    
+        return false;
     }
 }

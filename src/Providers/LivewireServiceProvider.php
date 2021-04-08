@@ -2,6 +2,8 @@
 
 namespace Tadcms\Backend\Providers;
 
+use Tadcms\Backend\Livewire\Menu\MenuIndex;
+use Tadcms\Backend\Livewire\Menu\MenuItem;
 use Tadcms\Backend\Livewire\Theme\ThemeItem;
 use Tadcms\Backend\Livewire\Theme\ThemeList;
 use Illuminate\Support\ServiceProvider;
@@ -13,5 +15,7 @@ class LivewireServiceProvider extends ServiceProvider
     {
         Livewire::component('tadcms::theme.theme-list', ThemeList::class);
         Livewire::component('tadcms::theme.theme-item', ThemeItem::class);
+        Livewire::component('tadcms::menu.menu-index', MenuIndex::class);
+        Livewire::component('tadcms::menu.menu-item', MenuItem::class);
     }
 }

@@ -7,9 +7,9 @@ use Theanh\MultiTheme\Facades\Theme;
 
 class ThemeList extends Component
 {
-    public $themes;
+    public $themes = [];
     
-    public function mount()
+    public function loadThemes()
     {
         $this->themes = Theme::all();
     }
