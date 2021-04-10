@@ -1,4 +1,8 @@
-<form action="{{ $action ?? '' }}" method="{{ $method ?? 'post' }}" class="form-ajax">
+<form action="{{ $action ?? '' }}" method="post" class="form-ajax">
+    @if(isset($method) && $method == 'put')
+        @method('PUT')
+    @endif
+
     <div class="row mb-2">
         <div class="col-md-6"></div>
 

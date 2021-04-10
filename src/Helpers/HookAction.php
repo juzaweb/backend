@@ -58,6 +58,12 @@ class HookAction
         });
     }
     
+    /**
+     * TAD CMS: Creates or modifies a taxonomy object.
+     * @param string $taxonomy (Required) Taxonomy key, must not exceed 32 characters.
+     * @param array $args (Optional) Array of arguments for registering a post type.
+     * @return bool
+     * */
     public function registerTaxonomy($taxonomy, $args = [])
     {
         $opts = [
@@ -79,7 +85,13 @@ class HookAction
         
         return true;
     }
-
+    
+    /**
+     * TAD CMS: Registers a post type.
+     * @param string $postType (Required) Post type key. Must not exceed 20 characters
+     * @param array $args (Optional) Array of arguments for registering a post type.
+     * @return bool
+     * */
     public function registerPostType($postType, $args = [])
     {
         $opts = [
@@ -98,7 +110,7 @@ class HookAction
         });
         
         if (in_array('category', $args['supports'])) {
-            $this->registerTaxonomy($postType . '_categories', [
+            $this->registerTaxonomy($postType . '-categories', [
                 'label' => 'tadcms::app.categories',
                 'parent' => 'post-type.' . $postType,
                 'menu_position' => $args['menu_position'] + 1
@@ -106,7 +118,7 @@ class HookAction
         }
     
         if (in_array('tag', $args['supports'])) {
-            $this->registerTaxonomy($postType . '_tags', [
+            $this->registerTaxonomy($postType . '-tags', [
                 'label' => 'tadcms::app.tags',
                 'parent' => 'post-type.' . $postType,
                 'menu_position' => $args['menu_position'] + 2

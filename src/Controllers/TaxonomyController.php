@@ -5,6 +5,7 @@ namespace Tadcms\Backend\Controllers;
 use Illuminate\Http\Request;
 use Tadcms\Backend\Controllers\BackendController;
 use Tadcms\Backend\Requests\TaxonomyRequest;
+use Tadcms\System\Models\Taxonomy;
 use Tadcms\System\Repositories\TaxonomyRepository;
 
 class TaxonomyController extends BackendController
@@ -28,9 +29,38 @@ class TaxonomyController extends BackendController
         ]);
     }
     
-    public function getDataTable($taxonomy)
+    public function getDataTable($taxonomy, Request $request)
     {
+        $search = $request->get('search');
+        $sort = $request->get('sort', 'id');
+        $order = $request->get('order', 'desc');
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 20);
     
+        $query = Taxonomy::query();
+        $query->where('taxonomy', '=', $taxonomy);
+    
+        if ($search) {
+            $query->where(function ($subquery) use ($search) {
+                $subquery->orWhere('name', 'like', '%'. $search .'%');
+                $subquery->orWhere('description', 'like', '%'. $search .'%');
+            });
+        }
+        
+        $count = $query->count();
+        $query->orderBy($sort, $order);
+        $query->offset($offset);
+        $query->limit($limit);
+        $rows = $query->get();
+    
+        foreach ($rows as $row) {
+            $row->edit_url = route('admin.taxonomy.edit', [$taxonomy, $row->id]);
+        }
+    
+        return response()->json([
+            'total' => $count,
+            'rows' => $rows
+        ]);
     }
     
     public function create($taxonomy)
@@ -52,7 +82,7 @@ class TaxonomyController extends BackendController
     public function edit($taxonomy, $id)
     {
         $model = $this->taxonomyRepository->findOrFail($id);
-        $title = $model->name;
+        $model->load('parent');
         
         $this->addBreadcrumb([
             'title' => trans('tadcms::app.category'),
@@ -61,7 +91,7 @@ class TaxonomyController extends BackendController
         
         return view('tadcms::taxonomy.form', [
             'model' => $model,
-            'title' => $title,
+            'title' => $model->name,
             'taxonomy' => $taxonomy,
         ]);
     }
@@ -70,17 +100,21 @@ class TaxonomyController extends BackendController
     {
         $this->taxonomyRepository->create($request->all());
         
-        return $this->success(trans('tadcms::app.successfully'));
+        return $this->success(trans('tadcms::app.successfully'),
+            route('admin.taxonomy.index', [$taxonomy])
+        );
     }
     
-    public function update($id, TaxonomyRequest $request)
+    public function update($taxonomy, $id, TaxonomyRequest $request)
     {
         $this->taxonomyRepository->update($id, $request->all());
     
-        return $this->success(trans('tadcms::app.successfully'));
+        return $this->success(trans('tadcms::app.successfully'),
+            route('admin.taxonomy.index', [$taxonomy])
+        );
     }
     
-    public function bulkActions($type, $taxonomy, Request $request)
+    public function bulkActions($taxonomy, Request $request)
     {
         $request->validate([
             'ids' => 'required|array',

@@ -3,8 +3,10 @@
 @section('content')
 
     @component('tadcms::components.form', [
-        'action' => '',
-        'method' => 'post'
+        'method' => 'put',
+        'action' => $model->id ?
+            route('admin.taxonomy.update', [$taxonomy, $model->id]) :
+            route('admin.taxonomy.store', [$taxonomy])
     ])
         <div class="row">
             <div class="col-md-8">
@@ -24,8 +26,10 @@
 
                 <div class="form-group">
                     <label class="col-form-label" for="parent_id">@lang('tadcms::app.parent')</label>
-                    <select name="parent_id" id="parent_id" class="form-control load-taxonomy" data-taxonomy="" data-placeholder="{{ trans('tadcms::app.parent') }}">
-
+                    <select name="parent_id" id="parent_id" class="form-control load-taxonomy" data-taxonomy="{{ $taxonomy }}" data-placeholder="{{ trans('tadcms::app.parent') }}">
+                        @if($model->parent)
+                            <option value="{{ $model->parent->id }}">{{ $model->parent->name }}</option>
+                        @endif
                     </select>
                 </div>
             </div>
@@ -38,7 +42,7 @@
                 ])@endcomponent
             </div>
 
-            <input type="hidden" name="id" value="{{ $model->id }}">
+            <input type="hidden" name="taxonomy" value="{{ $taxonomy }}">
         </div>
     @endcomponent
 

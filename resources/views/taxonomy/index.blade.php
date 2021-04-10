@@ -44,7 +44,7 @@
                         <tr>
                             <th data-width="3%" data-field="state" data-checkbox="true"></th>
                             <th data-field="name" data-formatter="name_formatter" data-sortable="true">@lang('tadcms::app.name')</th>
-                            <th data-width="15%" data-field="created" data-sortable="true">@lang('tadcms::app.created-at')</th>
+                            <th data-width="15%" data-field="created_at" data-sortable="true">@lang('tadcms::app.created-at')</th>
                         </tr>
                     </thead>
                 </table>

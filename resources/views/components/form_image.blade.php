@@ -1,16 +1,16 @@
 <div class="form-group">
     <label class="col-form-label">{{ $label ?? $name }}</label>
     <div class="form-image text-center">
-        <a href="javascript:void(0)" class="image-clear">
+        @php
+            $path = isset($value) ? $value : null;
+        @endphp
+        <a href="javascript:void(0)" class="image-clear image-hidden" @if($path) style="display: block" @endif>
             <i class="fa fa-times-circle fa-2x"></i>
         </a>
 
-        @php
-        $path = isset($value) ? $value : null;
-        @endphp
         <input type="hidden" name="{{ $name }}" class="input-path" value="{{ $path }}">
 
-        <div class="dropify-preview">
+        <div class="dropify-preview image-hidden" @if($path) style="display: block" @endif>
             <span class="dropify-render">
                 @if($path)
                 <img src="{{ upload_url($path) }}" alt="">

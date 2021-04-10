@@ -11,7 +11,6 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:400,700,800&display=swap">
     <link rel="stylesheet" href="{{ asset('vendor/tadcms/css/vendor.css') }}">
-    <link rel="stylesheet" href="{{ asset('vendor/tadcms/css/menu.css') }}">
 
     <script type="text/javascript">
         var tadcms = {
