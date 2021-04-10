@@ -1,5 +1,7 @@
 <?php
 
+use Tadcms\Backend\Helpers\Menu\Breadcrumb;
+
 function breadcrumb($name, $add_items = []) {
     $items = apply_filters($name . '_breadcrumb', []);
     
@@ -9,7 +11,7 @@ function breadcrumb($name, $add_items = []) {
         }
     }
     
-    return \Tadcms\Backend\Helpers\Menu\Breadcrumb::render($name, $items);
+    return Breadcrumb::render($name, $items);
 }
 
 function admin_header() {
@@ -18,54 +20,6 @@ function admin_header() {
 
 function admin_footer() {
     do_action('admin_footer');
-}
-
-/**
- * TAD CMS: Add a top-level menu page.
- *
- * This function takes a capability which will be used to determine whether
- * or not a page is included in the menu.
- *
- * The function which is hooked in to handle the output of the page must check
- * that the user has the required capability as well.
- *
- * @param string $menu_title The trans key to be used for the menu.
- * @param string $menu_slug The url name to refer to this menu by. not include admin-cp
- * @param string $icon Url icon or fa icon fonts
- * @param string $parent The parent of menu. Default null
- * @param int $position The position in the menu order this item should appear.
- * @return bool.
- */
-function add_menu_page($menu_title, $menu_slug, $icon = '', $parent = null, $position = 20) {
-    $newmenu = [
-        'title' => $menu_title,
-        'key' => $menu_slug,
-        'icon' => $icon,
-        'url' => $menu_slug,
-        'parent' => $parent,
-        'position' => $position,
-    ];
-    
-    return add_filters('admin_menu', function ($menu) use ($newmenu) {
-        if ($newmenu['parent']) {
-            $menu[$newmenu['parent']]['children'][$newmenu['key']] = $newmenu;
-        }
-        else {
-            if (isset($menu[$newmenu['key']])) {
-                
-                if (isset($menu[$newmenu['key']]['children'])) {
-                    $newmenu['children'] = $menu[$newmenu['key']]['children'];
-                }
-                
-                $menu[$newmenu['key']] = $newmenu;
-            }
-            else {
-                $menu[$newmenu['key']] = $newmenu;
-            }
-        }
-        
-        return $menu;
-    }, $position);
 }
 
 /**
@@ -117,7 +71,7 @@ function add_admin_script($handle, $src, $ver = '1.0', $in_footer = false) {
  * @param array $args (Optional) Array of arguments for registering a post type.
  * @return void
  * */
-function register_taxonomy($taxonomy, $object_type, $args = []) {
+function register_taxonomy($taxonomy, $parent = null, $args = []) {
     $default = [
         'label' => '',
         'description' => '',
@@ -128,35 +82,19 @@ function register_taxonomy($taxonomy, $object_type, $args = []) {
     
     $args = array_merge($default, $args);
     
-    if ($object_type) {
-        // Register taxonomy has post type
-        $taxonomy = 'taxonomy.' . $object_type . '.' . $taxonomy;
-        
-        /*$parent = in_array($object_type, ['posts', 'pages']) ? $object_type
-            : 'post-type.' . $object_type;*/
-        $parent = 'post-type.' . $object_type;
-        
-        add_menu_page(
-            $args['label'],
-            $taxonomy,
-            $args['menu_icon'],
-            $parent,
-            $args['menu_position']
-        );
-    }
+    $taxonomy = 'taxonomy.' . $taxonomy;
     
-    /*else {
+    /*$parent = in_array($object_type, ['posts', 'pages']) ? $object_type
+        : 'post-type.' . $object_type;*/
+    //$parent = 'post-type.' . $object_type;
     
-        $taxonomy = 'taxonomy.' . $taxonomy;
-        
-        add_menu_page(
-            $args['label'],
-            $taxonomy,
-            $args['menu_icon'],
-            null,
-            $args['menu_position']
-        );
-    }*/
+    add_menu_page(
+        $args['label'],
+        $taxonomy,
+        $args['menu_icon'],
+        $parent,
+        $args['menu_position']
+    );
 }
 
 /**
@@ -233,32 +171,12 @@ function register_notification($key, $name, $class) {
     });
 }
 
-function register_setting_page($setting, $args = []) {
-    return add_filters('setting_pages', function ($items) use ($setting, $args) {
-        $items[$setting] = [
-            'label' => $args['label'],
-        ];
-    });
-}
-
 /**
  * TAD CMS: Add general setting page
  * @param string $html_input // Html input/textarea/select tags input setting
- * */
+ **/
 function add_general_setting($html_input) {
     add_action('setting.form_general', function () use ($html_input) {
         echo $html_input;
-    });
-}
-
-/**
- * TAD CMS: Add setting page
- * @param string $tag
- * @param string $view // View form setting
- * */
-function add_setting_page($tag, $view) {
-    add_filters('setting_menu', function ($menu) use ($tag, $view) {
-        $menu[$tag] = $view;
-        return $menu;
     });
 }

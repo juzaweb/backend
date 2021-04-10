@@ -4,13 +4,11 @@ namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Http\Request;
 use Tadcms\Backend\Controllers\BackendController;
+use Tadcms\Backend\Requests\TaxonomyRequest;
 use Tadcms\System\Repositories\TaxonomyRepository;
 
 class TaxonomyController extends BackendController
 {
-    /**
-     * @var \Tadcms\Services\TaxonomyService $taxonomyService
-     * */
     protected $taxonomyRepository;
     
     public function __construct(
@@ -19,30 +17,27 @@ class TaxonomyController extends BackendController
         $this->taxonomyRepository = $taxonomyRepository;
     }
     
-    public function index($type = 'posts', $taxonomy = 'categories')
+    public function index($taxonomy)
     {
         $model = $this->taxonomyRepository->firstOrNew(['id' => null]);
         
-        return view('tadcms::category.index', [
+        return view('tadcms::taxonomy.index', [
             'title' => 'Category',
-            'type' => $type,
             'taxonomy' => $taxonomy,
             'model' => $model,
         ]);
     }
     
-    public function form($type = 'posts', $taxonomy = 'categories', $id = null)
+    public function getDataTable($taxonomy)
     {
-        $model = $this->taxonomyRepository->firstOrNew(['id' => $id]);
+    
+    }
+    
+    public function create()
+    {
+        $model = $this->taxonomyRepository->firstOrNew(['id' => null]);
         
-        $title = $model->name ?: trans('tadcms::app.add-new');
-        
-        $this->addBreadcrumb([
-            'title' => trans('tadcms::app.category'),
-            'url' => route('admin.taxonomy', [$type, $taxonomy])
-        ]);
-        
-        return view('tadcms::category.form', [
+        return view('tadcms::taxonomy.form', [
             'model' => $model,
             'title' => $title,
             'type' => $type,
@@ -50,47 +45,55 @@ class TaxonomyController extends BackendController
         ]);
     }
     
-    public function getDataTable($type, $taxonomy)
+    public function edit($taxonomy, $id)
     {
-    
-    }
-    
-    public function save($type, $taxonomy)
-    {
-        $this->validate($request, [
-            'name' => 'required|string|max:250',
-            'description' => 'nullable|string|max:300',
-            'status' => 'required|in:0,1',
-            'thumbnail' => 'nullable|string|max:250',
+        $model = $this->taxonomyRepository->findOrFail($id);
+        $title = $model->name ?? trans('tadcms::app.add-new');
+        
+        $this->addBreadcrumb([
+            'title' => trans('tadcms::app.category'),
+            'url' => route('admin.taxonomy', [$taxonomy])
         ]);
         
-        $this->taxonomyService->save(
-            array_merge($request->all(), [
-                'taxonomy' => $taxonomy,
-                'post_type' => $type
-            ])
-        );
-        
-        return $this->success(trans('tadcms::app.saved_successfully'));
+        return view('tadcms::taxonomy.form', [
+            'model' => $model,
+            'title' => $title,
+            'type' => $type,
+            'taxonomy' => $taxonomy,
+        ]);
     }
     
-    public function bulkActions($type, $taxonomy)
+    public function store($taxonomy, TaxonomyRequest $request)
     {
-        $this->validate($request, [
+        $this->taxonomyRepository->create($request->all());
+        
+        return $this->success(trans('tadcms::app.successfully'));
+    }
+    
+    public function update($id, TaxonomyRequest $request)
+    {
+        $this->taxonomyRepository->update($id, $request->all());
+    
+        return $this->success(trans('tadcms::app.successfully'));
+    }
+    
+    public function bulkActions($type, $taxonomy, Request $request)
+    {
+        $request->validate([
             'ids' => 'required|array',
+            'action' => 'required',
         ]);
     
-        do_action('bulk_action_taxonomy', $request->post());
+        do_action('bulk_action.taxonomy.' . $taxonomy, $request->post());
         
         $action = $request->post('action');
+        $ids = $request->post('ids');
         
         switch ($action) {
             case 'delete':
-    
-                $this->taxonomyService->delete(
-                    $request->post('ids')
-                );
-                
+                foreach ($ids as $id) {
+                    $this->taxonomyRepository->delete($id);
+                }
                 break;
         }
         

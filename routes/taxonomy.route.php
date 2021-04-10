@@ -14,6 +14,6 @@ Route::tadResource('post-type/{type}', 'PostController', [
     'name' => 'post-type'
 ]);
 
-Route::tadResource('taxonomy/{type}/{taxonomy}', 'TaxonomyController', [
+Route::tadResource('taxonomy/{taxonomy}', 'TaxonomyController', [
     'name' => 'taxonomy'
 ]);

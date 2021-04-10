@@ -9,12 +9,14 @@ use Tadcms\Backend\Macros\RouterMacros;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
 use Tadcms\Backend\Providers\MailConfigServiceProvider;
+use Tadcms\Backend\Supports\HookAction;
 
 class BackendServiceProvider extends ServiceProvider
 {
     public function boot()
     {
         $this->bootViews();
+        $this->bootMiddlewares();
         $this->bootTranslations();
     }
     
@@ -25,6 +27,10 @@ class BackendServiceProvider extends ServiceProvider
         $this->app->register(MenuServiceProvider::class);
         $this->app->register(MailConfigServiceProvider::class);
         $this->app->register(LivewireServiceProvider::class);
+    
+        $this->app->singleton('tadhook', function () {
+            return new HookAction();
+        });
     }
     
     protected function registerRouteMacros()
@@ -37,7 +43,12 @@ class BackendServiceProvider extends ServiceProvider
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'tadcms');
     }
     
-    protected function bootTranslations() {
+    protected function bootTranslations()
+    {
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'tadcms');
+    }
+    
+    protected function bootMiddlewares() {
+        $this->app['router']->aliasMiddleware('admin', \Tadcms\Backend\Middleware\Admin::class);
     }
 }
