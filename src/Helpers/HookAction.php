@@ -64,6 +64,7 @@ class HookAction
             'label' => '',
             'description' => '',
             'taxonomy' => $taxonomy,
+            'url' => 'taxonomy/' . str_replace('_', '-', $taxonomy),
             'parent' => null,
             'menu_position' => 20,
             'menu_icon' => 'fa fa-list-alt',

@@ -207,6 +207,7 @@ class BackendMenu
                 [
                     'icon' => $item['menu_icon'],
                     'parent' => $item['parent'],
+                    'url' => $item['url'],
                     'position' => $item['menu_position']
                 ]
             );
