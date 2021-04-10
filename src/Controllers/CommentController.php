@@ -3,6 +3,7 @@
 namespace Tadcms\Backend\Controllers;
 
 use Tadcms\System\Models\Comment;
+use Illuminate\Http\Request;
 
 class CommentController extends BackendController
 {
@@ -13,7 +14,7 @@ class CommentController extends BackendController
         ]);
     }
     
-    public function getDataTable()
+    public function getDataTable(Request $request)
     {
         $search = $request->get('search');
         $status = $request->get('status');
@@ -31,8 +32,8 @@ class CommentController extends BackendController
         ]);
         
         $query->from('comments AS a');
-        $query->join('users AS b', 'b.id', '=', 'a.user_id');
         $query->join('posts AS c', 'c.id', '=', 'a.post_id');
+        $query->leftJoin('users AS b', 'b.id', '=', 'a.user_id');
         
         if ($search) {
             $query->where(function ($subquery) use ($search) {
@@ -60,41 +61,5 @@ class CommentController extends BackendController
             'total' => $count,
             'rows' => $rows
         ]);
-    }
-    
-    public function destroy()
-    {
-        $request->validate($request, [
-            'ids' => 'required',
-        ], [], [
-            'ids' => trans('tadcms::app.comments')
-        ]);
-        
-        Comment::destroy($request->post('ids'));
-        
-        return response()->json([
-            'status' => 'success',
-            'message' => trans('tadcms::app.deleted_successfully'),
-        ]);
-    }
-    
-    public function publicis()
-    {
-        $request->validate([
-            'ids' => 'required',
-            'status' => 'required|in:0,1,2,3',
-        ], [], [
-            'ids' => trans('tadcms::app.post_comments'),
-            'status' => trans('tadcms::app.status'),
-        ]);
-        
-        $status = $request->post('status');
-        
-        Comment::whereIn('id', $request->post('ids'))
-            ->update([
-                'status' => $status,
-            ]);
-        
-        return $this->success('tadcms::app.updated_status_successfully');
     }
 }

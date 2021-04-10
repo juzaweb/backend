@@ -33,6 +33,8 @@ class LoginController extends Controller
         
         $email = $request->post('email');
         $password = $request->post('password');
+        $remember = filter_var($request->post('remember'), FILTER_VALIDATE_BOOLEAN);
+        
         $user = User::whereEmail($email)->first(['status']);
         
         if (!$user) {
@@ -46,7 +48,7 @@ class LoginController extends Controller
         if (Auth::attempt([
             'email' => $email,
             'password' => $password
-        ])) {
+        ], $remember)) {
             do_action('auth.login.success', Auth::user());
             
             if ($request->has('redirect')) {

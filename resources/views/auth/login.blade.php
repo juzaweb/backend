@@ -29,10 +29,12 @@
                             </div>
 
                             <div class="form-group mb-4">
-                                <input type="password" name="password" class="form-control" placeholder="Password" />
+                                <input type="password" name="password" class="form-control" placeholder="@lang('app.password')" />
                             </div>
 
-                            <button type="submit" class="btn btn-primary text-center w-100" data-loading-text="@lang('tadcms::app.please-wait')"><i class="fa fa-sign-in"></i> @lang('tadcms::app.log-in')</button>
+                            <button type="submit" class="btn btn-primary text-center w-100 mb-2" data-loading-text="@lang('tadcms::app.please-wait')"><i class="fa fa-sign-in"></i> @lang('tadcms::app.log-in')</button>
+
+                            <input type="checkbox" name="remember" value="1" checked> @lang('tadcms::app.remember-me')
                         </form>
 
                         <a href="{{ route('auth.forgot-password') }}" class="kit__utils__link font-size-16">

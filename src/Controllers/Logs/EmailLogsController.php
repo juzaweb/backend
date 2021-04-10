@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Logs;
 
 use Illuminate\Http\Request;
-use Tadcms\System\Models\EmailList;
+use Theanh\EmailTemplate\Models\EmailList;
 use App\Http\Controllers\Controller;
 
 class EmailLogsController extends Controller

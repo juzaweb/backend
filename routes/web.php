@@ -17,6 +17,8 @@ Route::group(['middleware' => 'admin'], function () {
     
     Route::get('/', 'DashboardController@index')->name('admin.dashboard');
     
+    Route::get('/load-data/{func}', 'LoadDataController@loadData')->name('admin.load_data');
+    
     //Route::tadResource('notification', 'NotificationController');
     
     //Route::tadResource('languages', 'LanguageController');

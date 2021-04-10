@@ -98,4 +98,7 @@ return [
     'email-template' => 'Email Template',
     'subject' => 'Subject',
     'sign-in' => 'Sign in',
+    'add' => 'Add',
+    'remember-me' => 'Remember me',
+    'click-here-to-select-file' => 'Click here to select file',
 ];

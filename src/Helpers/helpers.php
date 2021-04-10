@@ -192,7 +192,7 @@ function register_post_type($post_type, $args = []) {
     );
     
     add_menu_page(
-        'tadcms::app.all' . '-' . $args['label'],
+        $args['label'],
         $menu_slug,
         $args['menu_icon'],
         $menu_slug,

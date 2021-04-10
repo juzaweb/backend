@@ -14,7 +14,8 @@
 
     <script type="text/javascript">
         var tadcms = {
-            'admin_url': '{{ config('tadcms.admin-prefix') }}',
+            'adminPrefix': "{{ config('tadcms.admin-prefix') }}",
+            'adminUrl': '{{ url(config('tadcms.admin-prefix')) }}',
         };
     </script>
 

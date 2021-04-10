@@ -4,30 +4,24 @@ namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Http\Request;
 use Tadcms\Backend\Controllers\BackendController;
-use Tadcms\System\Models\Taxonomy;
-use Tadcms\Services\TaxonomyService;
-use Tadcms\Services\DataTableService;
+use Tadcms\System\Repositories\TaxonomyRepository;
 
 class TaxonomyController extends BackendController
 {
     /**
      * @var \Tadcms\Services\TaxonomyService $taxonomyService
      * */
-    protected $taxonomyService;
+    protected $taxonomyRepository;
     
     public function __construct(
-        Request $request,
-        TaxonomyService $taxonomyService)
-    {
-        
-        parent::__construct($request);
-        
-        $this->taxonomyService = $taxonomyService;
+        TaxonomyRepository $taxonomyRepository
+    ) {
+        $this->taxonomyRepository = $taxonomyRepository;
     }
     
     public function index($type = 'posts', $taxonomy = 'categories')
     {
-        $model = $this->taxonomyService->firstOrNew(['id' => null]);
+        $model = $this->taxonomyRepository->firstOrNew(['id' => null]);
         
         return view('tadcms::category.index', [
             'title' => 'Category',
@@ -39,7 +33,7 @@ class TaxonomyController extends BackendController
     
     public function form($type = 'posts', $taxonomy = 'categories', $id = null)
     {
-        $model = $this->taxonomyService->firstOrNew(['id' => $id]);
+        $model = $this->taxonomyRepository->firstOrNew(['id' => $id]);
         
         $title = $model->name ?: trans('tadcms::app.add-new');
         
@@ -58,21 +52,7 @@ class TaxonomyController extends BackendController
     
     public function getDataTable($type, $taxonomy)
     {
-        $table = (new DataTableService($request))
-            ->setModel(Taxonomy::class)
-            ->search(['name', 'description']);
     
-        $table->where('taxonomy', '=', $taxonomy);
-        
-        $rows = $table->offsetAndLimit()
-            ->getRows();
-        
-        foreach ($rows as $row) {
-            $row->created = $row->created_at->format('H:i Y-m-d');
-            $row->edit_url = route('admin.taxonomy.edit', [$type, $taxonomy, $row->id]);
-        }
-        
-        return $table->jsonResponse($rows);
     }
     
     public function save($type, $taxonomy)

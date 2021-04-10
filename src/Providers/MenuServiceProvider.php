@@ -21,7 +21,7 @@ class MenuServiceProvider extends ServiceProvider
             1
         );
         
-        /*if (config('tadcms.use_post')) {
+        if (config('tadcms.use_post')) {
             register_post_type('posts', [
                 'label' => 'tadcms::app.posts',
                 'menu_icon' => 'fa fa-edit',
@@ -37,15 +37,15 @@ class MenuServiceProvider extends ServiceProvider
                 'menu_position' => 20,
                 'supports' => ['tag']
             ]);
-        }*/
+        }
         
-        /*add_menu_page(
+        add_menu_page(
             'tadcms::app.comments',
             'comments',
             'fa fa-comments',
             null,
             30
-        );*/
+        );
         
         /*add_menu_page(
             'tadcms::app.media',

@@ -3,20 +3,16 @@
 namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Http\Request;
-use Tadcms\System\Models\Post;
-use Tadcms\Services\PostService;
+use Tadcms\System\Repositories\PostRepository;
 
 class PostController extends BackendController
 {
-    protected $postService;
+    protected $postRepository;
     
     public function __construct(
-        Request $request,
-        PostService $postService)
-    {
-        parent::__construct($request);
-        
-        $this->postService = $postService;
+        PostRepository $postRepository
+    ) {
+        $this->postRepository = $postRepository;
     }
     
     public function index($post_type = 'posts') {
@@ -27,7 +23,7 @@ class PostController extends BackendController
     }
     
     public function form($post_type = 'posts', $id = null) {
-        $model = Post::firstOrNew(['id' => $id]);
+        $model = $this->postRepository->firstOrNew(['id' => $id]);
         //$categories = Category::where('status', '=', 1)->get();
         
         $this->addBreadcrumb([
@@ -42,7 +38,7 @@ class PostController extends BackendController
         ]);
     }
     
-    public function getDataTable($post_type = 'posts') {
+    public function getDataTable(Request $request, $post_type = 'posts') {
         $search = $request->get('search');
         $status = $request->get('status');
         
@@ -51,7 +47,7 @@ class PostController extends BackendController
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', 20);
         
-        $query = Post::query();
+        $query = $this->postRepository->query();
         
         if ($search) {
             $query->where(function ($subquery) use ($search) {
@@ -84,31 +80,19 @@ class PostController extends BackendController
         ]);
     }
     
-    public function save($post_type = 'posts') {
+    public function save(Request $request, $post_type = 'posts') {
         $this->validate($request, [
             'id' => 'nullable|exists:posts,id',
             'title' => 'required|string|max:250',
             'status' => 'required|string|in:0,1',
-            'thumbnail' => 'nullable|string|max:250',
+            'thumbnail' => 'nullable|string|max:150',
             'categories' => 'nullable|string|max:200',
         ]);
         
-        $this->postService->save(array_merge($request->all(), [
+        $this->postRepository->save(array_merge($request->all(), [
             'type' => $post_type,
         ]));
         
         return $this->success('tadcms::app.saved_successfully');
-    }
-    
-    public function destroy() {
-        $this->validate($request, [
-            'ids' => 'required',
-        ], [], [
-            'ids' => trans('tadcms::app.posts')
-        ]);
-        
-        $this->postService->delete($request->post('ids'));
-        
-        return $this->success('tadcms::app.deleted_successfully');
     }
 }

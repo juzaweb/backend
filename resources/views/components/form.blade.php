@@ -11,9 +11,11 @@
         </div>
     </div>
 
+
     {{ $slot ?? '' }}
 
-    <div class="row mt-2">
+
+    <div class="row mt-3">
         <div class="col-md-12">
             <div class="btn-group">
                 <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> @lang('tadcms::app.save')</button>
