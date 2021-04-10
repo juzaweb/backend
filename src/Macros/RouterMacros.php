@@ -20,7 +20,7 @@ class RouterMacros
             $this->get($uri . '/create', $controller . '@create')->name($uriName . '.create');
             $this->get($uri . '/{id}/edit', $controller . '@edit')->name($uriName . '.edit')->where('id', '[0-9]+');
             $this->post($uri, $controller . '@store')->name($uriName . '.store');
-            $this->put($uri . '/{id}', $controller . '@update')->name($uriName . '.store');
+            $this->put($uri . '/{id}', $controller . '@update')->name($uriName . '.update');
             $this->delete($uri . '/{id}', $controller . '@destroy')->name($uriName . '.destroy');
             $this->get($uri . '/get-data', $controller . '@getDataTable')->name($uriName . '.get-data');
             

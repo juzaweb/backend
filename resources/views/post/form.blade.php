@@ -1,9 +1,9 @@
 @extends('tadcms::layouts.admin')
 
 @section('content')
-
+    
     @component('tadcms::components.form', [
-        'action' => route('admin.post-type.save', [$post_type])
+        'action' => route('admin.post-type.store', [$post_type])
     ])
         <div class="row">
             <div class="col-md-8">
@@ -60,6 +60,5 @@
             </div>
         </div>
 
-        <input type="hidden" name="id" value="{{ $model->id }}">
     @endcomponent
 @endsection

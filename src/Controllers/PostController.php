@@ -15,32 +15,47 @@ class PostController extends BackendController
         $this->postRepository = $postRepository;
     }
     
-    public function index($post_type = 'posts')
+    public function index($postType)
     {
-        
         return view('tadcms::post.index', [
             'title' => trans('tadcms::app.post'),
-            'post_type' => $post_type,
+            'post_type' => $postType,
         ]);
     }
     
-    public function form($post_type = 'posts', $id = null) {
-        $model = $this->postRepository->firstOrNew(['id' => $id]);
+    public function create($postType)
+    {
+        $model = $this->postRepository->newModel();
+        
+        $this->addBreadcrumb([
+            'title' => trans('tadcms::app.posts'),
+            'url' => route('admin.post-type.index', [$postType]),
+        ]);
+    
+        return view('tadcms::post.form', [
+            'model' => $model,
+            'title' => trans('tadcms::app.add-new'),
+            'post_type' => $postType,
+        ]);
+    }
+    
+    public function edit($postType, $id) {
+        $model = $this->postRepository->findOrFail($id);
         //$categories = Category::where('status', '=', 1)->get();
         
         $this->addBreadcrumb([
             'title' => trans('tadcms::app.posts'),
-            'url' => route('admin.post-type', [$post_type]),
+            'url' => route('admin.post-type', [$postType]),
         ]);
         
         return view('tadcms::post.form', [
             'model' => $model,
             'title' => $model->title ?: trans('tadcms::app.add-new'),
-            'post_type' => $post_type,
+            'post_type' => $postType,
         ]);
     }
     
-    public function getDataTable(Request $request, $post_type = 'posts') {
+    public function getDataTable(Request $request, $postType) {
         $search = $request->get('search');
         $status = $request->get('status');
         
@@ -58,7 +73,7 @@ class PostController extends BackendController
             });
         }
         
-        $query->where('type', '=', $post_type);
+        $query->where('type', '=', $postType);
         
         if (!is_null($status)) {
             $query->where('status', '=', $status);
@@ -73,7 +88,7 @@ class PostController extends BackendController
         foreach ($rows as $row) {
             $row->thumb_url = $row->getThumbnail();
             $row->created = $row->created_at->format('H:i Y-m-d');
-            $row->edit_url = route('admin.post-type.edit', [$post_type, $row->id]);
+            $row->edit_url = route('admin.post-type.edit', [$postType, $row->id]);
         }
         
         return response()->json([
@@ -82,7 +97,7 @@ class PostController extends BackendController
         ]);
     }
     
-    public function save(Request $request, $post_type = 'posts') {
+    public function store($postType, Request $request) {
         $this->validate($request, [
             'id' => 'nullable|exists:posts,id',
             'title' => 'required|string|max:250',
@@ -91,10 +106,22 @@ class PostController extends BackendController
             'categories' => 'nullable|string|max:200',
         ]);
         
-        $this->postRepository->save(array_merge($request->all(), [
-            'type' => $post_type,
-        ]));
+        $this->postRepository->create($request->all());
         
-        return $this->success('tadcms::app.saved_successfully');
+        return $this->success('tadcms::app.saved-successfully');
+    }
+    
+    public function update($postType, $id, Request $request) {
+        $this->validate($request, [
+            'id' => 'nullable|exists:posts,id',
+            'title' => 'required|string|max:250',
+            'status' => 'required|string|in:0,1',
+            'thumbnail' => 'nullable|string|max:150',
+            'categories' => 'nullable|string|max:200',
+        ]);
+        
+        $this->postRepository->update($id, $request->all());
+        
+        return $this->success('tadcms::app.saved-successfully');
     }
 }
