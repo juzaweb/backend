@@ -4,7 +4,7 @@ namespace Tadcms\Backend\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SaveUserRequest extends FormRequest
+class UserRequest extends FormRequest
 {
     public function rules()
     {

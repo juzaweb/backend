@@ -3,7 +3,7 @@
 namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Http\Request;
-use Tadcms\Backend\Requests\SaveUserRequest;
+use Tadcms\Backend\Requests\UserRequest;
 use Tadcms\System\Repositories\UserRepository;
 
 class UserController extends BackendController
@@ -16,13 +16,15 @@ class UserController extends BackendController
         $this->userRepository = $userRepository;
     }
     
-    public function index() {
+    public function index()
+    {
         return view('tadcms::user.index', [
             'title' => trans('tadcms::app.users')
         ]);
     }
     
-    public function getDataTable(Request $request) {
+    public function getDataTable(Request $request)
+    {
         $search = $request->get('search');
         $status = $request->get('status');
         
@@ -60,24 +62,36 @@ class UserController extends BackendController
         ]);
     }
     
-    public function form($id = null) {
+    public function create()
+    {
         $this->addBreadcrumb([
             'title' => trans('tadcms::app.users'),
-            'url' => route('admin.users'),
+            'url' => route('admin.users.index'),
         ]);
-        
-        $model = $this->userRepository->firstOrNew(['id' => $id]);
+    
+        $model = $this->userRepository->newModel();
         return view('tadcms::user.form', [
             'model' => $model,
-            'title' => $model->name ?: trans('tadcms::app.add-new')
+            'title' => trans('tadcms::app.add-new')
         ]);
     }
     
-    public function save(SaveUserRequest $request) {
-        $user = $this->userRepository->updateOrCreate([
-            'id' => $request->post('id')
-        ], $request->all());
+    public function edit($id) {
+        $this->addBreadcrumb([
+            'title' => trans('tadcms::app.users'),
+            'url' => route('admin.users.index'),
+        ]);
         
+        $model = $this->userRepository->findOrFail($id);
+        return view('tadcms::user.form', [
+            'model' => $model,
+            'title' => $model->name
+        ]);
+    }
+    
+    public function store(UserRequest $request)
+    {
+        $user = $this->userRepository->create($request->all());
         $this->userRepository
             ->setAdmin($user, $request->post('is_admin'));
         
@@ -95,11 +109,36 @@ class UserController extends BackendController
         
         return $this->success(
             trans('tadcms::app.save-successfully'),
-            route('admin.users')
+            route('admin.users.index')
         );
     }
     
-    public function bulkActions(Request $request) {
+    public function update($id, UserRequest $request)
+    {
+        $user = $this->userRepository->update($id, $request->all());
+        $this->userRepository
+            ->setAdmin($user, $request->post('is_admin'));
+    
+        if ($request->hasFile('avatar')) {
+            $avatar = $request->file('avatar');
+            $extention = $avatar->getClientOriginalExtension();
+            $newname = $user->id . '.' . $extention;
+            $upload = $avatar->storeAs('avatars', $newname, config('file-manager.upload_disk'));
+        
+            if ($upload) {
+                $this->userRepository
+                    ->setAvatar($user, $newname);
+            }
+        }
+    
+        return $this->success(
+            trans('tadcms::app.save-successfully'),
+            route('admin.users.index')
+        );
+    }
+    
+    public function bulkActions(Request $request)
+    {
         $request->validate([
             'ids' => 'required',
         ], [], [

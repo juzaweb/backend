@@ -3,7 +3,7 @@
 @section('content')
 
     @component('tadcms::components.form', [
-        'method' => 'put',
+        'method' => $model->id ? 'put' : 'post',
         'action' => $model->id ?
             route('admin.taxonomy.update', [$taxonomy, $model->id]) :
             route('admin.taxonomy.store', [$taxonomy])
