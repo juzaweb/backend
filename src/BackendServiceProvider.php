@@ -9,7 +9,7 @@ use Tadcms\Backend\Macros\RouterMacros;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
 use Tadcms\Backend\Providers\MailConfigServiceProvider;
-use Tadcms\Backend\Supports\HookAction;
+use Tadcms\Backend\Helpers\HookAction;
 
 class BackendServiceProvider extends ServiceProvider
 {

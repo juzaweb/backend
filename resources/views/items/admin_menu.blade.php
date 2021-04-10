@@ -1,18 +1,17 @@
 @foreach($items as $item)
-    @if(isset($item['children']))
-        <li class="cui__menuLeft__item cui__menuLeft__submenu cui__menuLeft__item-{{ $item['url'] }}">
+    @if($item->hasChildren())
+        <li class="cui__menuLeft__item cui__menuLeft__submenu cui__menuLeft__item-{{ $item->get('url') }}">
             <span class="cui__menuLeft__item__link">
-                <i class="cui__menuLeft__item__icon {{ $item['icon'] }}"></i>
+                <i class="cui__menuLeft__item__icon {{ $item->get('icon') }}"></i>
 
-                <span class="cui__menuLeft__item__title">{{ trans($item['title']) }}</span>
-
+                <span class="cui__menuLeft__item__title">{{ trans($item->get('title')) }}</span>
             </span>
 
             <ul class="cui__menuLeft__navigation">
-            @foreach($item['children'] as $child)
-                <li class="cui__menuLeft__item cui__menuLeft__item-{{ $child['url'] }}">
-                    <a class="cui__menuLeft__item__link" href="{{ url('admin-cp/' . str_replace('.', '/', $child['url'])) }}">
-                        <span class="cui__menuLeft__item__title">{{ trans($child['title']) }}</span>
+            @foreach($item->getChildrens() as $child)
+                <li class="cui__menuLeft__item cui__menuLeft__item-{{ $child->get('url') }}">
+                    <a class="cui__menuLeft__item__link" href="{{ url('admin-cp/' . $child->get('url')) }}">
+                        <span class="cui__menuLeft__item__title">{{ trans($child->get('title')) }}</span>
                         {{--<i class="cui__menuLeft__item__icon fe fe-film"></i>--}}
                     </a>
                 </li>
@@ -20,10 +19,10 @@
             </ul>
         </li>
     @else
-        <li class="cui__menuLeft__item cui__menuLeft__item-{{ $item['url'] }}">
-            <a class="cui__menuLeft__item__link" href="{{ url('admin-cp/' . str_replace('.', '/', $item['url'])) }}">
-                <i class="cui__menuLeft__item__icon {{ $item['icon'] }}"></i>
-                <span class="cui__menuLeft__item__title">{{ trans($item['title']) }}</span>
+        <li class="cui__menuLeft__item cui__menuLeft__item-{{ $item->get('url') }}">
+            <a class="cui__menuLeft__item__link" href="{{ url('admin-cp/' . $item->get('url')) }}">
+                <i class="cui__menuLeft__item__icon {{ $item->get('icon') }}"></i>
+                <span class="cui__menuLeft__item__title">{{ trans($item->get('title')) }}</span>
 
             </a>
         </li>

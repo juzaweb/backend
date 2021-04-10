@@ -1,6 +1,6 @@
 <?php
 
-namespace Tadcms\Backend\Supports;
+namespace Tadcms\Backend\Helpers;
 
 class HookAction
 {
@@ -18,42 +18,44 @@ class HookAction
      * The function which is hooked in to handle the output of the page must check
      * that the user has the required capability as well.
      *
-     * @param string $menu_title The trans key to be used for the menu.
-     * @param string $menu_slug The url name to refer to this menu by. not include admin-cp
-     * @param string $icon Url icon or fa icon fonts
-     * @param string $parent The parent of menu. Default null
-     * @param int $position The position in the menu order this item should appear.
+     * @param string $menuTitle The trans key to be used for the menu.
+     * @param string $menuSlug The url name to refer to this menu by. not include admin-cp
+     * @param array $args
+     * - string $icon Url icon or fa icon fonts
+     * - string $parent The parent of menu. Default null
+     * - int $position The position in the menu order this item should appear.
      * @return bool.
      */
-    public function addMenuPage($menu_title, $menu_slug, $icon = '', $parent = null, $position = 20) {
-        $newmenu = [
-            'title' => $menu_title,
-            'key' => $menu_slug,
-            'icon' => $icon,
-            'url' => $menu_slug,
-            'parent' => $parent,
-            'position' => $position,
+    public function addMenuPage($menuTitle, $menuSlug, $args = []) {
+        $opts = [
+            'title' => $menuTitle,
+            'key' => $menuSlug,
+            'icon' => 'fa fa-list-alt',
+            'url' => str_replace('.', '/', $menuSlug),
+            'parent' => null,
+            'position' => 20,
         ];
+        $item = array_merge($opts, $args);
         
-        return add_filters('admin_menu', function ($menu) use ($newmenu) {
-            if ($newmenu['parent']) {
-                $menu[$newmenu['parent']]['children'][$newmenu['key']] = $newmenu;
+        return add_filters('admin_menu', function ($menu) use ($item) {
+            if ($item['parent']) {
+                $menu[$item['parent']]['children'][$item['key']] = $item;
             }
             else {
-                if (isset($menu[$newmenu['key']])) {
-                    if (isset($menu[$newmenu['key']]['children'])) {
-                        $newmenu['children'] = $menu[$newmenu['key']]['children'];
+                if (isset($menu[$item['key']])) {
+                    if (isset($menu[$item['key']]['children'])) {
+                        $item['children'] = $menu[$item['key']]['children'];
                     }
                     
-                    $menu[$newmenu['key']] = $newmenu;
+                    $menu[$item['key']] = $item;
                 }
                 else {
-                    $menu[$newmenu['key']] = $newmenu;
+                    $menu[$item['key']] = $item;
                 }
             }
             
             return $menu;
-        }, $position);
+        });
     }
     
     public function registerTaxonomy($taxonomy, $args = [])
