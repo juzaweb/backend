@@ -15,7 +15,9 @@ class PostController extends BackendController
         $this->postRepository = $postRepository;
     }
     
-    public function index($post_type = 'posts') {
+    public function index($post_type = 'posts')
+    {
+        
         return view('tadcms::post.index', [
             'title' => trans('tadcms::app.post'),
             'post_type' => $post_type,

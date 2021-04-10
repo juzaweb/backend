@@ -11,9 +11,7 @@
         </div>
     </div>
 
-
     {{ $slot ?? '' }}
-
 
     <div class="row mt-3">
         <div class="col-md-12">

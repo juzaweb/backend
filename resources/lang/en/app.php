@@ -99,6 +99,7 @@ return [
     'subject' => 'Subject',
     'sign-in' => 'Sign in',
     'add' => 'Add',
+    'parent' => 'Parent',
     'remember-me' => 'Remember me',
     'click-here-to-select-file' => 'Click here to select file',
 ];

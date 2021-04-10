@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="turbolinks-cache-control" content="no-cache">
     <link rel="icon" type="image/png" href="{{ asset('images/icon.png') }}" />
     <title>{{ $title }}</title>
 
@@ -19,6 +20,7 @@
         };
     </script>
 
+    <script src="{{ asset('vendor/tadcms/js/turbolinks.min.js') }}"></script>
     <script src="{{ asset('vendor/tadcms/js/vendor.js') }}" type="text/javascript"></script>
 
     @yield('header')

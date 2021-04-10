@@ -23,7 +23,7 @@ Route::group(['prefix' => 'menus'], function () {
 });
 
 Route::group(['prefix' => 'design/editor'], function () {
-    Route::get('/', 'Appearance\ThemeEditorController@index')->name('admin.design.editor');
+    //Route::get('/', 'Appearance\ThemeEditorController@index')->name('admin.design.editor');
     
-    Route::post('/save', 'Appearance\ThemeEditorController@save')->name('admin.design.editor.save');
+    //Route::post('/save', 'Appearance\ThemeEditorController@save')->name('admin.design.editor.save');
 });

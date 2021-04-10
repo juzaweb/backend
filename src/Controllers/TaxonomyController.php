@@ -33,14 +33,18 @@ class TaxonomyController extends BackendController
     
     }
     
-    public function create()
+    public function create($taxonomy)
     {
-        $model = $this->taxonomyRepository->firstOrNew(['id' => null]);
+        $model = $this->taxonomyRepository->newModel();
+    
+        $this->addBreadcrumb([
+            'title' => trans('tadcms::app.category'),
+            'url' => route('admin.taxonomy.index', [$taxonomy])
+        ]);
         
         return view('tadcms::taxonomy.form', [
             'model' => $model,
-            'title' => $title,
-            'type' => $type,
+            'title' => trans('tadcms::app.add-new'),
             'taxonomy' => $taxonomy,
         ]);
     }
@@ -48,17 +52,16 @@ class TaxonomyController extends BackendController
     public function edit($taxonomy, $id)
     {
         $model = $this->taxonomyRepository->findOrFail($id);
-        $title = $model->name ?? trans('tadcms::app.add-new');
+        $title = $model->name;
         
         $this->addBreadcrumb([
             'title' => trans('tadcms::app.category'),
-            'url' => route('admin.taxonomy', [$taxonomy])
+            'url' => route('admin.taxonomy.index', [$taxonomy])
         ]);
         
         return view('tadcms::taxonomy.form', [
             'model' => $model,
             'title' => $title,
-            'type' => $type,
             'taxonomy' => $taxonomy,
         ]);
     }

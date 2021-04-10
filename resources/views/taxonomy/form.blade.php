@@ -2,30 +2,44 @@
 
 @section('content')
 
-    <form method="post" action="{{ route('admin.taxonomy.save', [$type, $taxonomy]) }}" class="form-ajax">
-
+    @component('tadcms::components.form', [
+        'action' => '',
+        'method' => 'post'
+    ])
         <div class="row">
-            <div class="col-md-6"></div>
+            <div class="col-md-8">
+                @component('tadcms::components.form_input', [
+                    'name' => 'name',
+                    'label' => trans('tadcms::app.name'),
+                    'value' => $model->name
+                ])
+                @endcomponent
 
-            <div class="col-md-6">
-                <div class="btn-group float-right">
-                    <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> @lang('tadcms::app.save')</button>
+                @component('tadcms::components.form_textarea', [
+                    'name' => 'description',
+                    'label' => trans('tadcms::app.description'),
+                    'value' => $model->description
+                ])
+                @endcomponent
 
-                    <a href="{{ route('admin.taxonomy', [$type, $taxonomy]) }}" class="btn btn-warning"><i class="fa fa-times-circle"></i> @lang('tadcms::app.cancel')</a>
+                <div class="form-group">
+                    <label class="col-form-label" for="parent_id">@lang('tadcms::app.parent')</label>
+                    <select name="parent_id" id="parent_id" class="form-control load-taxonomy" data-taxonomy="" data-placeholder="{{ trans('tadcms::app.parent') }}">
+
+                    </select>
                 </div>
             </div>
-        </div>
 
-        <div class="row">
-            <div class="col-md-12">
-                @include('tadcms::category.form-input')
-
-                @include('tadcms::category.form-image')
+            <div class="col-md-4">
+                @component('tadcms::components.form_image', [
+                    'name' => 'thumbnail',
+                    'label' => trans('tadcms::app.thumbnail'),
+                    'value' => $model->thumbnail
+                ])@endcomponent
             </div>
+
+            <input type="hidden" name="id" value="{{ $model->id }}">
         </div>
-
-        <input type="hidden" name="id" value="{{ $model->id }}">
-
-    </form>
+    @endcomponent
 
 @endsection

@@ -12,21 +12,19 @@ class RouterMacros
             ];
     
             $options = array_merge($default, $options);
-            
-            $uri_name = $options['name'] ? $options['name'] :
+            $uriName = $options['name'] ? $options['name'] :
                 str_replace('/', '.', $uri);
+            $uriName = 'admin.' . $uriName;
             
-            $this->get($uri, $controller . '@index')->name('admin.' . $uri_name);
+            $this->get($uri, $controller . '@index')->name($uriName .'.index');
+            $this->get($uri . '/create', $controller . '@create')->name($uriName . '.create');
+            $this->get($uri . '/{id}/edit', $controller . '@edit')->name($uriName . '.edit')->where('id', '[0-9]+');
+            $this->post($uri, $controller . '@store')->name($uriName . '.store');
+            $this->put($uri . '/{id}', $controller . '@update')->name($uriName . '.store');
+            $this->delete($uri . '/{id}', $controller . '@destroy')->name($uriName . '.destroy');
+            $this->get($uri . '/get-data', $controller . '@getDataTable')->name($uriName . '.get-data');
             
-            $this->get($uri . '/create', $controller . '@form')->name('admin.' . $uri_name . '.create');
-    
-            $this->get($uri . '/edit/{id}', $controller . '@form')->name('admin.' . $uri_name . '.edit')->where('id', '[0-9]+');
-            
-            $this->get($uri . '/get-data', $controller . '@getDataTable')->name('admin.' . $uri_name . '.get-data');
-            
-            $this->post($uri . '/save', $controller . '@save')->name('admin.' . $uri_name . '.save');
-            
-            $this->post($uri . '/bulk-actions', $controller . '@bulkActions')->name('admin.' . $uri_name . '.bulk-actions');
+            $this->post($uri . '/bulk-actions', $controller . '@bulkActions')->name($uriName . '.bulk-actions');
         };
     }
 }
