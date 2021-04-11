@@ -17,16 +17,4 @@ class UserRequest extends FormRequest
             'password_confirmation' => 'required_if:password,!=,null|nullable|string|max:32|min:6'
         ];
     }
-    
-    public function attributes()
-    {
-        return [
-            'name' => trans('tadcms::app.name'),
-            'email' => trans('tadcms::app.email'),
-            'password' => trans('tadcms::app.password'),
-            'password_confirmation' => trans('tadcms::app.password_confirmation'),
-            'avatar' => trans('tadcms::app.avatar'),
-            'status' => trans('tadcms::app.status'),
-        ];
-    }
 }

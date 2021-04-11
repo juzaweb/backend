@@ -26,7 +26,7 @@
 
                 <div class="form-group">
                     <label class="col-form-label" for="parent_id">@lang('tadcms::app.parent')</label>
-                    <select name="parent_id" id="parent_id" class="form-control load-taxonomy" data-taxonomy="{{ $taxonomy }}" data-placeholder="{{ trans('tadcms::app.parent') }}">
+                    <select name="parent_id" id="parent_id" class="form-control load-taxonomy" data-taxonomy="{{ $taxonomy }}" data-placeholder="{{ trans('tadcms::app.parent') }}" data-explodes="{{ $model->id }}">
                         @if($model->parent)
                             <option value="{{ $model->parent->id }}">{{ $model->parent->name }}</option>
                         @endif

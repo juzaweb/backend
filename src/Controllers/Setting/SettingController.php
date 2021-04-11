@@ -9,8 +9,10 @@ class SettingController extends BackendController
 {
     public function index()
     {
+        $languages = trans('tadcms::languages');
         return view('tadcms::setting.index', [
             'title' => trans('tadcms::app.general-setting'),
+            'languages' => $languages
         ]);
     }
     

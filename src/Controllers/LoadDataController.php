@@ -32,7 +32,7 @@ class LoadDataController extends BackendController
         }
         
         if ($explodes) {
-            $query->whereNotIn('id', $explodes);
+            $query->whereNotIn('id', explode(',', $explodes));
         }
         
         $paginate = $query->paginate(10);

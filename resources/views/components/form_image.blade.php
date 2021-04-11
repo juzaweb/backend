@@ -1,10 +1,11 @@
 <div class="form-group">
+    @php
+        $path = isset($value) ? $value : null;
+    @endphp
     <label class="col-form-label">{{ $label ?? $name }}</label>
-    <div class="form-image text-center">
-        @php
-            $path = isset($value) ? $value : null;
-        @endphp
-        <a href="javascript:void(0)" class="image-clear image-hidden" @if($path) style="display: block" @endif>
+    <div class="form-image text-center @if($path) previewing @endif">
+
+        <a href="javascript:void(0)" class="image-clear">
             <i class="fa fa-times-circle fa-2x"></i>
         </a>
 

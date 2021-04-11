@@ -6,7 +6,7 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="turbolinks-cache-control" content="no-cache">
-    <link rel="icon" type="image/png" href="{{ asset('images/icon.png') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('vendor/tadcms/images/icon.png') }}" />
     <title>{{ $title }}</title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:400,700,800&display=swap">
