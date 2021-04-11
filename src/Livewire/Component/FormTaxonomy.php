@@ -25,8 +25,9 @@ class FormTaxonomy extends Component
     
     public function loadItems()
     {
-        $this->items = Taxonomy::query()
+        $this->items = Taxonomy::with(['childrens'])
             ->where('taxonomy', '=', $this->taxonomy)
+            ->whereNull('parent_id')
             ->limit(10)
             ->get();
     }

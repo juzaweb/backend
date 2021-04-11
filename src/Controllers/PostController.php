@@ -3,6 +3,8 @@
 namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Tadcms\Backend\Requests\PostRequest;
 use Tadcms\System\Repositories\PostRepository;
 
 class PostController extends BackendController
@@ -35,23 +37,23 @@ class PostController extends BackendController
         return view('tadcms::post.form', [
             'model' => $model,
             'title' => trans('tadcms::app.add-new'),
-            'post_type' => $postType,
+            'postType' => $postType,
         ]);
     }
     
     public function edit($postType, $id) {
         $model = $this->postRepository->findOrFail($id);
-        //$categories = Category::where('status', '=', 1)->get();
+        $model->load(['taxonomies']);
         
         $this->addBreadcrumb([
             'title' => trans('tadcms::app.posts'),
-            'url' => route('admin.post-type', [$postType]),
+            'url' => route('admin.post-type.index', [$postType]),
         ]);
         
         return view('tadcms::post.form', [
             'model' => $model,
-            'title' => $model->title ?: trans('tadcms::app.add-new'),
-            'post_type' => $postType,
+            'title' => $model->title,
+            'postType' => $postType,
         ]);
     }
     
@@ -97,30 +99,34 @@ class PostController extends BackendController
         ]);
     }
     
-    public function store($postType, Request $request) {
-        $this->validate($request, [
-            'id' => 'nullable|exists:posts,id',
-            'title' => 'required|string|max:250',
-            'status' => 'required|string|in:0,1',
-            'thumbnail' => 'nullable|string|max:150',
-            'categories' => 'nullable|string|max:200',
-        ]);
+    public function store($postType, PostRequest $request) {
+        DB::beginTransaction();
+        try {
+            $this->postRepository->create(array_merge($request->all(), [
+                'type' => $postType
+            ]));
         
-        $this->postRepository->create($request->all());
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return $this->error($exception->getMessage());
+        }
         
         return $this->success('tadcms::app.saved-successfully');
     }
     
-    public function update($postType, $id, Request $request) {
-        $this->validate($request, [
-            'id' => 'nullable|exists:posts,id',
-            'title' => 'required|string|max:250',
-            'status' => 'required|string|in:0,1',
-            'thumbnail' => 'nullable|string|max:150',
-            'categories' => 'nullable|string|max:200',
-        ]);
-        
-        $this->postRepository->update($id, $request->all());
+    public function update($postType, $id, PostRequest $request) {
+        DB::beginTransaction();
+        try {
+            $this->postRepository->update($id, array_merge($request->all(), [
+                'type' => $postType
+            ]));
+            
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
         
         return $this->success('tadcms::app.saved-successfully');
     }

@@ -101,5 +101,6 @@ return [
     'add' => 'Add',
     'parent' => 'Parent',
     'remember-me' => 'Remember me',
+    'saved-successfully' => 'Saved successfully',
     'click-here-to-select-file' => 'Click here to select file',
 ];

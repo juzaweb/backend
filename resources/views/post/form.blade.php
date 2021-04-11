@@ -3,7 +3,10 @@
 @section('content')
     
     @component('tadcms::components.form', [
-        'action' => route('admin.post-type.store', [$post_type])
+        'method' => $model->id ? 'put' : 'post',
+        'action' =>  $model->id ?
+            route('admin.post-type.update', [$postType, $model->id]) :
+            route('admin.post-type.store', [$postType])
     ])
         <div class="row">
             <div class="col-md-8">
@@ -22,7 +25,7 @@
                 ])
                 @endcomponent
 
-                @do_action('post_type.' . $post_type . '.form.left')
+                @do_action('post_type.' . $postType . '.form.left')
             </div>
 
             <div class="col-md-4">
@@ -56,7 +59,7 @@
                     //'value' => $model->thumbnail,
                 ])@endcomponent
 
-                @do_action('post_type.' . $post_type . '.form.right')
+                @do_action('post_type.' . $postType . '.form.right')
             </div>
         </div>
 

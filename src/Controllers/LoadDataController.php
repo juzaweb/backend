@@ -7,7 +7,8 @@ use Tadcms\System\Models\Taxonomy;
 
 class LoadDataController extends BackendController
 {
-    public function loadData($func, Request $request) {
+    public function loadData($func, Request $request)
+    {
         if (method_exists($this, $func)) {
             return $this->{$func}($request);
         }
@@ -15,7 +16,18 @@ class LoadDataController extends BackendController
         return $this->error('Function not found');
     }
     
-    protected function loadTaxonomy(Request $request) {
+    protected function loadAllLanguage(Request $request)
+    {
+        $search = $request->get('search');
+        $languages = collect(trans('tadcms::languages'));
+        
+        if ($search) {
+            //$languages = $languages->where('');
+        }
+    }
+    
+    protected function loadTaxonomy(Request $request)
+    {
         $search = $request->get('search');
         $explodes = $request->get('explodes');
         $taxonomy = $request->get('taxonomy');

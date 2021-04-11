@@ -1,1 +1,1 @@
-@livewire('tadcms::component.form-taxonomy', ['taxonomy' => 'category'])
+@livewire('tadcms::component.form-taxonomies', ['taxonomy' => 'category'])

@@ -18,6 +18,6 @@ class LivewireServiceProvider extends ServiceProvider
         Livewire::component('tadcms::theme.theme-item', ThemeItem::class);
         Livewire::component('tadcms::menu.menu-index', MenuIndex::class);
         Livewire::component('tadcms::menu.menu-item', MenuItem::class);
-        Livewire::component('tadcms::component.form-taxonomy', FormTaxonomy::class);
+        Livewire::component('tadcms::component.form-taxonomies', FormTaxonomy::class);
     }
 }
