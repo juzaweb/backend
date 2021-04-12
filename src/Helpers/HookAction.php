@@ -103,27 +103,40 @@ class HookAction
             'supports' => [],
         ];
         $args = array_merge($opts, $args);
-    
-        add_filters('post_types', function ($items) use ($args) {
-            $items[$args['post_type']] = $args;
-            return $items;
-        });
         
+        $supports = [];
         if (in_array('category', $args['supports'])) {
-            $this->registerTaxonomy($postType . '-categories', [
+            $supports['category'] = [
                 'label' => 'tadcms::app.categories',
+                'taxonomy' => $postType . '-categories'
+            ];
+            
+            $this->registerTaxonomy($supports['category']['taxonomy'], [
+                'label' => $supports['category']['label'],
                 'parent' => 'post-type.' . $postType,
                 'menu_position' => $args['menu_position'] + 1
             ]);
         }
     
         if (in_array('tag', $args['supports'])) {
-            $this->registerTaxonomy($postType . '-tags', [
+            $supports['tag'] = [
                 'label' => 'tadcms::app.tags',
+                'taxonomy' => $postType . '-tags'
+            ];
+            
+            $this->registerTaxonomy($supports['tag']['taxonomy'], [
+                'label' => $supports['tag']['label'],
                 'parent' => 'post-type.' . $postType,
                 'menu_position' => $args['menu_position'] + 2
             ]);
         }
+    
+        $args['supports'] = $supports;
+    
+        add_filters('post_types', function ($items) use ($args) {
+            $items[$args['post_type']] = $args;
+            return $items;
+        });
         
         return true;
     }

@@ -2,9 +2,9 @@
 
 namespace Tadcms\Backend\Livewire\Component;
 
-use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Tadcms\System\Models\Taxonomy;
+use Tadcms\System\Repositories\TaxonomyRepository;
 
 class FormTaxonomy extends Component
 {
@@ -12,10 +12,12 @@ class FormTaxonomy extends Component
     public $addNewForm = false;
     public $name;
     public $taxonomy;
+    private $taxonomyRepository;
     
     public function mount($taxonomy)
     {
         $this->taxonomy = $taxonomy;
+        $this->taxonomyRepository = app()->make(TaxonomyRepository::class);
     }
     
     public function showAddNewForm()
@@ -38,13 +40,13 @@ class FormTaxonomy extends Component
             'name' => 'required',
         ]);
         
-        Taxonomy::create([
+        $model = $this->taxonomyRepository->create([
             'name' => $this->name,
-            'taxonomy' => $this->taxonomy
+            'taxonomy' => $this->taxonomy['taxonomy']
         ]);
         
         $this->resetForm();
-        $this->loadItems();
+        $this->items->push($model);
     }
     
     public function render()

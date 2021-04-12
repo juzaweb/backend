@@ -27,33 +27,37 @@ class PostController extends BackendController
     
     public function create($postType)
     {
-        $model = $this->postRepository->newModel();
-        
+        $config = $this->postRepository->getConfig($postType);
         $this->addBreadcrumb([
-            'title' => trans('tadcms::app.posts'),
+            'title' => trans($config->get('label')),
             'url' => route('admin.post-type.index', [$postType]),
         ]);
     
+        $model = $this->postRepository->newModel();
+        
         return view('tadcms::post.form', [
             'model' => $model,
             'title' => trans('tadcms::app.add-new'),
             'postType' => $postType,
+            'config' => $config
         ]);
     }
     
     public function edit($postType, $id) {
-        $model = $this->postRepository->findOrFail($id);
-        $model->load(['taxonomies']);
-        
+        $config = $this->postRepository->getConfig($postType);
         $this->addBreadcrumb([
-            'title' => trans('tadcms::app.posts'),
+            'title' => trans($config->get('label')),
             'url' => route('admin.post-type.index', [$postType]),
         ]);
+    
+        $model = $this->postRepository->findOrFail($id);
+        $model->load(['taxonomies']);
         
         return view('tadcms::post.form', [
             'model' => $model,
             'title' => $model->title,
             'postType' => $postType,
+            'config' => $config
         ]);
     }
     
