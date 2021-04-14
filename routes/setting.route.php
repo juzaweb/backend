@@ -5,6 +5,7 @@ Route::post('setting', 'Setting\SettingController@save');
 
 Route::get('setting-email', 'Setting\EmailController@index')->name('admin.setting.email');
 Route::post('setting-email', 'Setting\EmailController@save');
+Route::post('setting-email/send-test', 'Setting\EmailController@sendTestMail')->name('admin.setting.test-email');
 
 Route::group(['prefix' => 'email-template'], function () {
     Route::get('/', 'Setting\EmailTemplateController@index')->name('admin.email-template');

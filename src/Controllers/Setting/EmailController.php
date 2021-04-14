@@ -2,8 +2,10 @@
 
 namespace Tadcms\Backend\Controllers\Setting;
 
+use Illuminate\Support\Facades\Auth;
 use Tadcms\Backend\Controllers\BackendController;
 use Illuminate\Http\Request;
+use Theanh\EmailTemplate\EmailService;
 
 class EmailController extends BackendController
 {
@@ -27,6 +29,21 @@ class EmailController extends BackendController
             trans('tadcms::app.save-successfully'),
             route('admin.setting.email')
         );
+    }
+    
+    public function sendTestMail(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email'
+        ]);
+        
+        $email = $request->post('email');
+        EmailService::make()
+            ->setEmails($email)
+            ->setSubject('Send email test for {name}')
+            ->setBody('Hello {name}, This is the test email')
+            ->setParams(['name' => Auth::user()->name])
+            ->send();
     }
     
     protected function getSettings()

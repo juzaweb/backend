@@ -8,7 +8,7 @@ use Tadcms\Backend\Providers\BladeServiceProvider;
 use Tadcms\Backend\Macros\RouterMacros;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
-use Tadcms\Backend\Providers\MailConfigServiceProvider;
+use Tadcms\Backend\Providers\DbConfigServiceProvider;
 use Tadcms\Backend\Helpers\HookAction;
 
 class BackendServiceProvider extends ServiceProvider
@@ -25,7 +25,7 @@ class BackendServiceProvider extends ServiceProvider
         $this->registerRouteMacros();
         $this->app->register(BladeServiceProvider::class);
         $this->app->register(MenuServiceProvider::class);
-        $this->app->register(MailConfigServiceProvider::class);
+        $this->app->register(DbConfigServiceProvider::class);
         $this->app->register(LivewireServiceProvider::class);
     
         $this->app->singleton('tadhook', function () {

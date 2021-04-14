@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Tadcms\System\Models\Config as DataConfig;
 
-class MailConfigServiceProvider extends ServiceProvider
+class DbConfigServiceProvider extends ServiceProvider
 {
     public function boot()
     {
