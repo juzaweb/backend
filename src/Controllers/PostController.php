@@ -6,15 +6,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Tadcms\Backend\Requests\PostRequest;
 use Tadcms\System\Repositories\PostRepository;
+use Tadcms\System\Repositories\TaxonomyRepository;
 
 class PostController extends BackendController
 {
     protected $postRepository;
+    protected $taxonomyRepository;
     
     public function __construct(
-        PostRepository $postRepository
+        PostRepository $postRepository,
+        TaxonomyRepository $taxonomyRepository
     ) {
         $this->postRepository = $postRepository;
+        $this->taxonomyRepository = $taxonomyRepository;
     }
     
     public function index($postType)
@@ -32,14 +36,19 @@ class PostController extends BackendController
             'title' => trans($config->get('label')),
             'url' => route('admin.post-type.index', [$postType]),
         ]);
-    
+        
+        $taxonomyConfig = $this->taxonomyRepository->getConfig();
+        $taxonomies = $taxonomyConfig->filter(function ($item) use ($postType) {
+            return in_array('post-type.' . $postType, $item['object_types']);
+        });
+        
         $model = $this->postRepository->newModel();
         
         return view('tadcms::post.form', [
             'model' => $model,
             'title' => trans('tadcms::app.add-new'),
             'postType' => $postType,
-            'config' => $config
+            'taxonomies' => $taxonomies
         ]);
     }
     

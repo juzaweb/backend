@@ -4,6 +4,7 @@ namespace Tadcms\Backend\Helpers\Menu;
 
 use Tadcms\Backend\Facades\HookAction;
 use Tadcms\Backend\Helpers\MenuCollection;
+use Theanh\LaravelHooks\Facades\Events;
 
 /**
  * Class Tadcms\Backend\Helpers\Menu\BackendMenu
@@ -16,7 +17,7 @@ use Tadcms\Backend\Helpers\MenuCollection;
 class BackendMenu
 {
     public static function render() {
-        $items = MenuCollection::make(HookAction::getFilter('admin_menu', []));
+        $items = MenuCollection::make(Events::filter('admin_menu', []));
         return view('tadcms::items.admin_menu', [
             'items' => $items,
         ]);
@@ -161,7 +162,7 @@ class BackendMenu
     
     public static function tadPostTypeMenu()
     {
-        $items = HookAction::getFilter('post_types', []);
+        $items = Events::filter('post_types', []);
         foreach ($items as $item) {
             $menuSlug = 'post-type.' . $item['post_type'];
             HookAction::addMenuPage(
@@ -198,7 +199,7 @@ class BackendMenu
     
     public static function tadTaxonomyMenu()
     {
-        $items = HookAction::getFilter('taxonomies', []);
+        $items = Events::filter('taxonomies', []);
         foreach ($items as $item) {
             $taxonomy = 'taxonomy.' . $item['taxonomy'];
             HookAction::addMenuPage(
@@ -207,7 +208,7 @@ class BackendMenu
                 [
                     'icon' => $item['menu_icon'],
                     'parent' => $item['parent'],
-                    'url' => $item['url'],
+                    'url' => 'taxonomy/' . $item['taxonomy'],
                     'position' => $item['menu_position']
                 ]
             );

@@ -47,24 +47,21 @@
                     'value' => $model->thumbnail,
                 ])@endcomponent
 
-                @php
-                $supports = $config->get('supports');
-                @endphp
-                @if($spCategory = @$supports['category'])
-                @component('tadcms::components.form_taxonomies', [
-                    'config' => $spCategory,
-                    'name' => 'taxonomy[categories]',
-                    //'value' => $model->thumbnail
-                ])@endcomponent
-                @endif
+                @foreach($taxonomies as $key => $item)
+                    @component('tadcms::components.form_taxonomies', [
+                        'config' => $item,
+                        'name' => 'taxonomy['. $key .']',
+                        //'value' => $model->thumbnail
+                    ])@endcomponent
+                @endforeach
 
-                @if($spTag = @$supports['tag'])
+                {{--@if($spTag = @$supports['tag'])
                 @component('tadcms::components.form_tags', [
                     'config' => $spTag,
                     'name' => 'taxonomy[tags]',
                     //'value' => $model->thumbnail,
                 ])@endcomponent
-                @endif
+                @endif--}}
 
                 @do_action('post_type.' . $postType . '.form.right')
             </div>

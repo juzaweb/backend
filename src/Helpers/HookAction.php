@@ -4,11 +4,6 @@ namespace Tadcms\Backend\Helpers;
 
 class HookAction
 {
-    public function getFilter($name, $default = null)
-    {
-        return apply_filters($name, $default);
-    }
-    
     /**
      * TAD CMS: Add a top-level menu page.
      *
@@ -69,13 +64,17 @@ class HookAction
         $opts = [
             'label' => '',
             'description' => '',
+            'hierarchical' => false,
             'taxonomy' => $taxonomy,
-            'url' => 'taxonomy/' . str_replace('_', '-', $taxonomy),
             'parent' => null,
             'menu_position' => 20,
             'menu_icon' => 'fa fa-list-alt',
-            'supports' => ['thumbnail'],
+            'object_types' => [],
+            'supports' => [
+                'thumbnail',
+            ],
         ];
+        
         $args = array_merge($opts, $args);
         
         add_filters('taxonomies', function ($items) use ($args) {
@@ -89,7 +88,7 @@ class HookAction
     /**
      * TAD CMS: Registers a post type.
      * @param string $postType (Required) Post type key. Must not exceed 20 characters
-     * @param array $args (Optional) Array of arguments for registering a post type.
+     * @param array $args Array of arguments for registering a post type.
      * @return bool
      * */
     public function registerPostType($postType, $args = [])
@@ -114,7 +113,10 @@ class HookAction
             $this->registerTaxonomy($supports['category']['taxonomy'], [
                 'label' => $supports['category']['label'],
                 'parent' => 'post-type.' . $postType,
-                'menu_position' => $args['menu_position'] + 1
+                'menu_position' => $args['menu_position'] + 1,
+                'object_types' => [
+                    'post-type.' . $postType
+                ],
             ]);
         }
     
@@ -127,12 +129,14 @@ class HookAction
             $this->registerTaxonomy($supports['tag']['taxonomy'], [
                 'label' => $supports['tag']['label'],
                 'parent' => 'post-type.' . $postType,
+                'object_types' => [
+                    'post-type.' . $postType
+                ],
                 'menu_position' => $args['menu_position'] + 2
             ]);
         }
     
         $args['supports'] = $supports;
-    
         add_filters('post_types', function ($items) use ($args) {
             $items[$args['post_type']] = $args;
             return $items;
