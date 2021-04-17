@@ -2,6 +2,14 @@
 
 namespace Tadcms\Backend\Helpers;
 
+/**
+ * Class HookAction
+ *
+ * @package    Theanh\Tadcms
+ * @author     The Anh Dang <dangtheanh16@gmail.com>
+ * @link       https://github.com/theanhk/tadcms
+ * @license    MIT
+ */
 class HookAction
 {
     /**

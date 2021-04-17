@@ -25,5 +25,7 @@ return [
         'email_templates' => 'Email templates',
         'password_confirmation' => 'Confirm password',
         'avatar' => 'Avatar',
+        'language' => 'Language',
+        'site-url' => 'Site url',
     ],
 ];

@@ -7,7 +7,7 @@ use Tadcms\Backend\Helpers\MenuCollection;
 use Theanh\LaravelHooks\Facades\Events;
 
 /**
- * Class Tadcms\Backend\Helpers\Menu\BackendMenu
+ * Class BackendMenu
  *
  * @package    Theanh\Tadcms
  * @author     The Anh Dang <dangtheanh16@gmail.com>
@@ -81,8 +81,8 @@ class BackendMenu
         );
         
         /*add_menu_page(
-            'tadcms::app.languages',
-            'languages',
+            'tadcms::app.translations',
+            'translations',
             'fa fa-language',
             null,
             100

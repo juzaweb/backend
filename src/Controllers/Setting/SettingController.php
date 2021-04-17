@@ -19,17 +19,13 @@ class SettingController extends BackendController
     public function save(Request $request)
     {
         $settings = $this->getSettings();
-        
         foreach ($settings as $setting) {
             if ($request->has($setting)) {
                 set_config($setting, $request->post($setting));
             }
         }
         
-        return $this->success(
-            trans('tadcms::app.save-successfully'),
-            route('admin.setting')
-        );
+        return $this->success(trans('tadcms::app.save-successfully'));
     }
     
     protected function getSettings()
@@ -40,6 +36,7 @@ class SettingController extends BackendController
             'language',
             'users_can_register',
             'user_confirmation',
+            'siteurl',
         ];
         
         return apply_filters('admin.general_settings', $items);

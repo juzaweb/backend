@@ -2,6 +2,8 @@
 
 @section('content')
     @component('tadcms::components.form')
+        <input type="hidden" name="redirect" value="/{{ request()->path() }}">
+
         <div class="row">
             <div class="col-md-8">
                 @component('tadcms::setting.forms.input', [
@@ -12,6 +14,18 @@
                 @component('tadcms::setting.forms.textarea', [
                     'title' => trans('tadcms::app.site-description'),
                     'name' => 'sitedescription',
+                ])@endcomponent
+
+                @component('tadcms::setting.forms.input', [
+                    'title' => trans('tadcms::validation.attributes.site-url'),
+                    'name' => 'siteurl',
+                    'default' => config('app.url')
+                ])@endcomponent
+
+                @component('tadcms::setting.forms.select', [
+                    'title' => trans('tadcms::validation.attributes.language'),
+                    'name' => 'language',
+                    'options' => $languages,
                 ])@endcomponent
 
                 <hr>
