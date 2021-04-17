@@ -6,13 +6,13 @@ use Livewire\Component;
 use Tadcms\System\Models\Taxonomy;
 use Tadcms\System\Repositories\TaxonomyRepository;
 
-class FormTaxonomy extends Component
+class FormTaxonomyCategory extends Component
 {
     public $items = [];
-    public $addNewForm = false;
     public $name;
     public $taxonomy;
     public $value;
+    public $showFormAdd = false;
     private $taxonomyRepository;
     
     public function mount($taxonomy, $value = [])
@@ -20,11 +20,6 @@ class FormTaxonomy extends Component
         $this->taxonomy = $taxonomy;
         $this->value = $value;
         $this->taxonomyRepository = app()->make(TaxonomyRepository::class);
-    }
-    
-    public function showAddNewForm()
-    {
-        $this->addNewForm = true;
     }
     
     public function loadItems()
@@ -39,6 +34,7 @@ class FormTaxonomy extends Component
     
     public function add()
     {
+        $this->showFormAdd = true;
         $this->validate([
             'name' => 'required',
         ]);
@@ -54,7 +50,7 @@ class FormTaxonomy extends Component
     
     public function render()
     {
-        return view('tadcms::livewire.components.form_taxonomy');
+        return view('tadcms::livewire.components.form_category');
     }
     
     protected function resetForm()

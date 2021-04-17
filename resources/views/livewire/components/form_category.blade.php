@@ -1,7 +1,8 @@
-<div class="form-group" xmlns:wire="http://www.w3.org/1999/xhtml">
+<div class="form-group form-taxonomy" xmlns:wire="http://www.w3.org/1999/xhtml">
 
-    <label class="col-form-label w-100">{{ trans(@$taxonomy['label']) }}
-        <span><a href="javascript:void(0)" class="float-right" wire:click="showAddNewForm"><i class="fa fa-plus"></i> @lang('tadcms::app.add-new')</a></span>
+    <label class="col-form-label w-100">
+        {{ trans(@$taxonomy['label']) }}
+        <span><a href="javascript:void(0)" class="float-right add-new"><i class="fa fa-plus"></i> @lang('tadcms::app.add-new')</a></span>
     </label>
 
     <div class="show-taxonomies taxonomy-{{ $taxonomy['taxonomy'] }}">
@@ -17,8 +18,7 @@
         </ul>
     </div>
 
-    @if($addNewForm)
-    <div class="add-new-form">
+    <div class="form-add @if(!$showFormAdd) box-hidden @endif">
         <div class="form-group">
             <label class="col-form-label">@lang('tadcms::app.name') <abbr>*</abbr></label>
             <input type="text" wire:model="name" class="form-control" autocomplete="off">
@@ -33,5 +33,4 @@
 
         <button type="button" class="btn btn-primary" wire:click="add" wire:loading.attr="disabled"><i class="fa fa-plus-circle" wire:loading.class="fa fa-spinner fa-spin"></i> @lang('tadcms::app.add')</button>
     </div>
-    @endif
 </div>

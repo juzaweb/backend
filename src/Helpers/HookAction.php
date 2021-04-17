@@ -72,6 +72,7 @@ class HookAction
         $opts = [
             'label' => '',
             'description' => '',
+            'type' => 'category',
             'hierarchical' => false,
             'taxonomy' => $taxonomy,
             'parent' => null,
@@ -137,6 +138,7 @@ class HookAction
             $this->registerTaxonomy($supports['tag']['taxonomy'], [
                 'label' => $supports['tag']['label'],
                 'parent' => 'post-type.' . $postType,
+                'type' => 'tag',
                 'object_types' => [
                     'post-type.' . $postType
                 ],
