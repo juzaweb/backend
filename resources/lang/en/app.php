@@ -92,6 +92,7 @@ return [
     'site-name' => 'Site name',
     'site-description' => 'Site description',
     'yes' => 'Yes',
+    'updates' => 'Updates',
     'no' => 'No',
     'reset' => 'Reset',
     'email-setting' => 'Email setting',

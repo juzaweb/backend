@@ -26,12 +26,32 @@ class BackendMenu
     public static function tadMenuLeft() {
         HookAction::addMenuPage(
             'tadcms::app.dashboard',
-            '',
+            'dashboard',
             [
                 'icon' => 'fa fa-dashboard',
                 'position' => 1
             ]
         );
+    
+        /*HookAction::addMenuPage(
+            'tadcms::app.dashboard',
+            'dashboard',
+            [
+                'icon' => 'fa fa-dashboard',
+                'position' => 1,
+                'parent' => 'dashboard',
+            ]
+        );*/
+    
+        /*HookAction::addMenuPage(
+            'tadcms::app.updates',
+            'dashboard.update',
+            [
+                'icon' => 'fa fa-upgrade',
+                'position' => 2,
+                'parent' => 'dashboard',
+            ]
+        );*/
     
         HookAction::addMenuPage(
             'tadcms::app.comments',
@@ -95,6 +115,16 @@ class BackendMenu
                 'icon' => 'fa fa-cogs',
                 'parent' => 'themes',
                 'position' => 45
+            ]
+        );
+    
+        HookAction::addMenuPage(
+            'tadcms::app.menus',
+            'menus',
+            [
+                'icon' => 'fa fa-cogs',
+                'parent' => 'themes',
+                'position' => 46
             ]
         );
     

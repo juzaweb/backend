@@ -8,6 +8,10 @@ Route::group(['prefix' => 'themes'], function () {
     //Route::post('/activate', 'Appearance\ThemeController@activate')->name('admin.themes.activate');
     
     Route::get('/install', 'Appearance\ThemeInstallController@index')->name('admin.themes.install');
+    
+    Route::get('/editor', 'Appearance\ThemeEditorController@index')->name('admin.themes.editor');
+    
+    Route::post('/editor', 'Appearance\ThemeEditorController@save')->name('admin.themes.editor.save');
 });
 
 Route::group(['prefix' => 'menus'], function () {
@@ -20,10 +24,4 @@ Route::group(['prefix' => 'menus'], function () {
     Route::post('/save', 'Appearance\MenuController@save')->name('admin.menu.save');
     
     Route::post('/get-data', 'Appearance\MenuController@getItems')->name('admin.menu.items');
-});
-
-Route::group(['prefix' => 'design/editor'], function () {
-    //Route::get('/', 'Appearance\ThemeEditorController@index')->name('admin.design.editor');
-    
-    //Route::post('/save', 'Appearance\ThemeEditorController@save')->name('admin.design.editor.save');
 });
