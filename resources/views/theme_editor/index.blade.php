@@ -71,12 +71,24 @@
         <section class="theme-editor__index" component="UI.PanelContainer">
             <header class="te-top-bar">
                 {{--<div class="te-top-bar__branding">
-                    <a title="{{ trans('app.theme') }}" aria_label="{{ trans('app.theme') }}" class="te-brand-link" data-no-turbolink="true" href="{{ route('vendor.admin.menu') }}">
+                    <a title="{{ trans('app.theme') }}" aria_label="{{ trans('app.theme') }}" class="te-brand-link" data-no-turbolink="true" href="">
                         <span class="te-brand-logo" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 42">
                             <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#logo-sapo"></use>
                         </span>
                     </a>
                 </div>--}}
+                <div class="te-top-bar__branding">
+                    <a title="{{ trans('app.theme') }}" aria_label="{{ trans('app.theme') }}" class="te-brand-link" data-no-turbolink="true" href="">
+                        {{--<span class="te-brand-logo" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 42">
+                            <use xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="#logo-sapo">
+
+                            </use>
+                        </span>--}}
+                        <span class="te-brand-logo">
+                            <img src="{{ asset('vendor/tadcms/images/icon.png') }}" alt="" style="margin-top: 15px;">
+                        </span>
+                    </a>
+                </div>
                 <div class="te-top-bar__list">
                     <div class="te-top-bar__item te-top-bar__item--fill">
                         <span class="te-theme-name"><a href="" data-no-turbolink="true" data-turbolinks="false">‹‹ {{ trans('app.back_to_theme') }}</a></span>

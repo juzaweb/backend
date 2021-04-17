@@ -43,7 +43,7 @@
 
         <div class="theme-editor__panel-body" data-scrollable>
             <form action="{{ route('admin.themes.editor.save') }}" method="post" class="form-ajax" data-success="save_success">
-                <button class="btn btn-save-top" type="submit">{{ trans('app.save') }}</button>
+                {{--<button class="btn btn-save-top" type="submit">{{ trans('app.save') }}</button>--}}
 
                 <input type="hidden" name="code" value="{{ $item['code'] }}">
 
@@ -56,7 +56,7 @@
                             <section class="next-card__section">
 
                                 <header class="next-card__header theme-setting theme-setting--header">
-                                    <h3 class="ui-subheading">{{ $card['name'] }} <a href="javascript:void(0)" class="show-card-body"><i class="fa fa-eye"></i> {{ trans('app.show') }}</a></h3>
+                                    <h3 class="ui-subheading">{{ $card['name'] }} {{--<a href="javascript:void(0)" class="show-card-body"><i class="fa fa-eye"></i> {{ trans('app.show') }}</a>--}}</h3>
                                 </header>
 
                                 <div class="card-body">
