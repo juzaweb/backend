@@ -7,7 +7,7 @@ Route::group(['middleware' => 'admin'], function () {
     
     require (__DIR__ . '/appearance.route.php');
     
-    //require (__DIR__ . '/media.route.php');
+    require (__DIR__ . '/media.route.php');
     
     require (__DIR__ . '/plugin.route.php');
     

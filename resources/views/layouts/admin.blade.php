@@ -90,12 +90,13 @@
     </div>
 </div>
 
-
-@yield('footer')
-
 @livewireScripts
 
 @admin_footer
+
+@yield('script')
+
+@yield('footer')
 
 {{--<script type="text/javascript">
     $.extend( $.validator.messages, {

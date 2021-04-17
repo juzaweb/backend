@@ -3,53 +3,119 @@
 namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Http\Request;
-use Tadcms\System\Models\Media;
-use Tadcms\Services\MediaService;
-use Tadcms\Repositories\FolderMediaRepository;
+use Illuminate\Support\Facades\DB;
+use Theanh\FileManager\Repositories\FolderMediaRepository;
+use Theanh\FileManager\Exceptions\UploadMissingFileException;
+use Theanh\FileManager\Handler\HandlerFactory;
+use Theanh\FileManager\Receiver\FileReceiver;
 
 class MediaController extends BackendController
 {
-    /**
-     * @var MediaService $mediaService
-     * */
-    protected $mediaService;
-    
     protected $folderRepository;
     
-    public function __construct(
-        Request $request,
-        MediaService $mediaService,
-        FolderMediaRepository $folderRepository
-    )
+    public function __construct(FolderMediaRepository $folderRepository)
     {
-        parent::__construct($request);
-    
-        $this->mediaService = $mediaService;
-    
         $this->folderRepository = $folderRepository;
     }
     
-    public function index() {
+    public function index($fileType = 'image', $folderId = null)
+    {
         return view('tadcms::media.index', [
+            'fileTypes' => $this->getFileTypes(),
+            'fileType' => $fileType,
+            'folderId' => $folderId,
             'title' => trans('tadcms::app.media')
         ]);
     }
     
-    public function getDataTable() {
-        $page_size = $request->get('page_size', 10);
-        $folder_id = $request->get('folder_id');
+    public function upload(Request $request)
+    {
+        $receiver = new FileReceiver(
+            'upload',
+            $request,
+            HandlerFactory::classFromRequest($request)
+        );
     
-        //$files = $this->mediaService->getFiles($folder_id, null, $page_size);
-        $directories = $this->folderRepository->getDirectories($folder_id, null);
+        if ($receiver->isUploaded() === false) {
+            throw new UploadMissingFileException();
+        }
+    
+        $save = $receiver->receive();
+        if ($save->isFinished()) {
+            try {
+                DB::beginTransaction();
+                $new_file = $this->saveFile($save->getFile());
+                DB::commit();
+            }
+            catch (\Exception $exception) {
+                DB::rollBack();
+                unlink($save->getFile()->getRealPath());
+                throw $exception;
+            }
         
-        $files = Media::where('folder_id', '=', $folder_id)
-            ->paginate($page_size);
+            if ($new_file) {
+            
+                // event
+            
+                return response()->json([
+                    'status' => true,
+                    'data' => [
+                        'message' => 'Upload success.'
+                    ]
+                ]);
+            }
         
-        $data = array_merge($directories, $files->items());
-        
-        return $this->response([
-            'items' => $data,
-            'load_more' => $files->nextPageUrl() ? true : false,
-        ], true);
+            return 'Can\'t save your file.';
+        }
+    
+        $handler = $save->handler();
+    
+        return response()->json([
+            "done" => $handler->getPercentageDone(),
+            'status' => true
+        ]);
+    }
+    
+    public function addFolder(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:150',
+            'parent_id' => 'nullable|exists:lfm_folder_media,id',
+        ], [], [
+            'name' => trans('filemanager::file-manager.folder-name'),
+            'parent_id' => trans('filemanager::file-manager.parent')
+        ]);
+    
+        $name = $request->post('name');
+        $parentId = $request->post('parent_id');
+    
+        if ($this->folderRepository->exists([
+            'name' => $name,
+            'parent_id' => $parentId
+        ])) {
+            return $this->error(
+                trans('filemanager::file-manager.errors.folder-exists')
+            );
+        }
+    
+        try {
+            DB::beginTransaction();
+            $this->folderRepository->create(
+                $request->all()
+            );
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            throw $exception;
+        }
+    
+        // event
+    
+        return $this->success(trans('tadcms::app.add-folder-successfully'));
+    }
+    
+    protected function getFileTypes()
+    {
+        return config('file-manager.file_types');
     }
 }

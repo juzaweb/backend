@@ -41,14 +41,15 @@ class BackendMenu
                 'position' => 30
             ]
         );
-        
-        /*add_menu_page(
+    
+        HookAction::addMenuPage(
             'tadcms::app.media',
             'media',
-            'fa fa-photo',
-            null,
-            5
-        );*/
+            [
+                'icon' => 'fa fa-photo',
+                'position' => 5
+            ]
+        );
     
         HookAction::addMenuPage(
             'tadcms::app.users',
