@@ -2,7 +2,6 @@
 
 @section('content')
     @component('tadcms::components.form')
-        <input type="hidden" name="redirect" value="/{{ request()->path() }}">
 
         <div class="row">
             <div class="col-md-8">

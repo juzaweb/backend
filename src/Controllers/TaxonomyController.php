@@ -100,18 +100,14 @@ class TaxonomyController extends BackendController
     {
         $this->taxonomyRepository->create($request->all());
         
-        return $this->success(trans('tadcms::app.successfully'),
-            route('admin.taxonomy.index', [$taxonomy])
-        );
+        return $this->success(trans('tadcms::app.successfully'));
     }
     
     public function update($taxonomy, $id, TaxonomyRequest $request)
     {
         $this->taxonomyRepository->update($id, $request->all());
     
-        return $this->success(trans('tadcms::app.successfully'),
-            route('admin.taxonomy.index', [$taxonomy])
-        );
+        return $this->success(trans('tadcms::app.successfully'));
     }
     
     public function bulkActions($taxonomy, Request $request)

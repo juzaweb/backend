@@ -26,7 +26,7 @@ class TaxonomyRequest extends FormRequest
     protected function prepareForValidation()
     {
         $taxonomy = $this->input('taxonomy');
-        $taxonomies = HookAction::getFilter('taxonomies', []);
+        $taxonomies = apply_filters('taxonomies', []);
         if (!isset($taxonomies[$taxonomy])) {
             $taxonomy = null;
         }

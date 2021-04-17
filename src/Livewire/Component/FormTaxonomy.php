@@ -12,11 +12,13 @@ class FormTaxonomy extends Component
     public $addNewForm = false;
     public $name;
     public $taxonomy;
+    public $value;
     private $taxonomyRepository;
     
-    public function mount($taxonomy)
+    public function mount($taxonomy, $value = [])
     {
         $this->taxonomy = $taxonomy;
+        $this->value = $value;
         $this->taxonomyRepository = app()->make(TaxonomyRepository::class);
     }
     
@@ -27,8 +29,9 @@ class FormTaxonomy extends Component
     
     public function loadItems()
     {
+        $taxonomy = $this->taxonomy['taxonomy'];
         $this->items = Taxonomy::with(['childrens'])
-            ->where('taxonomy', '=', $this->taxonomy)
+            ->where('taxonomy', '=', $taxonomy)
             ->whereNull('parent_id')
             ->limit(10)
             ->get();

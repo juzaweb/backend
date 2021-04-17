@@ -10,6 +10,8 @@
     ])
         <div class="row">
             <div class="col-md-8">
+                <input type="hidden" name="redirect" value="{{ path_url(route('admin.taxonomy.index', [$taxonomy])) }}">
+
                 @component('tadcms::components.form_input', [
                     'name' => 'name',
                     'label' => trans('tadcms::app.name'),

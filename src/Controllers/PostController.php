@@ -5,6 +5,7 @@ namespace Tadcms\Backend\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Tadcms\Backend\Requests\PostRequest;
+use Tadcms\System\Models\Post;
 use Tadcms\System\Repositories\PostRepository;
 use Tadcms\System\Repositories\TaxonomyRepository;
 
@@ -23,8 +24,10 @@ class PostController extends BackendController
     
     public function index($postType)
     {
+        $config = $this->postRepository->getConfig($postType);
+        
         return view('tadcms::post.index', [
-            'title' => trans('tadcms::app.post'),
+            'title' => trans($config->get('label')),
             'post_type' => $postType,
         ]);
     }
@@ -59,18 +62,26 @@ class PostController extends BackendController
             'url' => route('admin.post-type.index', [$postType]),
         ]);
     
+        $taxonomyConfig = $this->taxonomyRepository->getConfig();
+        $taxonomies = $taxonomyConfig->filter(function ($item) use ($postType) {
+            return in_array('post-type.' . $postType, $item['object_types']);
+        });
+        
         $model = $this->postRepository->findOrFail($id);
         $model->load(['taxonomies']);
+        $selectedTaxonomies = $model->taxonomies->pluck('id')->toArray();
         
         return view('tadcms::post.form', [
             'model' => $model,
             'title' => $model->title,
             'postType' => $postType,
-            'config' => $config
+            'config' => $config,
+            'taxonomies' => $taxonomies,
+            'selectedTaxonomies' => $selectedTaxonomies
         ]);
     }
     
-    public function getDataTable(Request $request, $postType) {
+    public function getDataTable($postType, Request $request) {
         $search = $request->get('search');
         $status = $request->get('status');
         
@@ -79,7 +90,7 @@ class PostController extends BackendController
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', 20);
         
-        $query = $this->postRepository->query();
+        $query = Post::query();
         
         if ($search) {
             $query->where(function ($subquery) use ($search) {
@@ -125,7 +136,7 @@ class PostController extends BackendController
             return $this->error($exception->getMessage());
         }
         
-        return $this->success('tadcms::app.saved-successfully');
+        return $this->success(trans('tadcms::app.saved-successfully'));
     }
     
     public function update($postType, $id, PostRequest $request) {
@@ -141,6 +152,6 @@ class PostController extends BackendController
             throw $exception;
         }
         
-        return $this->success('tadcms::app.saved-successfully');
+        return $this->success(trans('tadcms::app.saved-successfully'));
     }
 }

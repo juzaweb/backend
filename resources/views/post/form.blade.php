@@ -10,6 +10,7 @@
     ])
         <div class="row">
             <div class="col-md-8">
+                <input type="hidden" name="redirect" value="{{ path_url(route('admin.post-type.index', [$postType])) }}">
 
                 @component('tadcms::components.form_input', [
                     'name' => 'title',
@@ -51,7 +52,7 @@
                     @component('tadcms::components.form_taxonomies', [
                         'config' => $item,
                         'name' => 'taxonomy['. $key .']',
-                        //'value' => $model->thumbnail
+                        'value' => $selectedTaxonomies ?? []
                     ])@endcomponent
                 @endforeach
 

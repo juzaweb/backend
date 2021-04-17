@@ -25,7 +25,7 @@
     <div class="modal fade" id="add-folder-modal" tabindex="-1" role="dialog" aria-labelledby="add-folder-modal-label" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <form action="{{ route('admin.media.add-folder') }}" method="post" class="form-ajax">
-                <input type="hidden" name="redirect" value="/{{ request()->path() }}">
+
                 
                 <div class="modal-content">
                     <div class="modal-header">

@@ -5,15 +5,12 @@
     </label>
 
     <div class="show-taxonomies taxonomy-{{ $taxonomy['taxonomy'] }}">
-        @php
-        $selected = explode(',', $value ?? '');
-        @endphp
         <ul class="mt-2 p-0" wire:init="loadItems">
             @foreach($items as $item)
                 <li class="m-1" id="item-category-{{ $item->id }}">
                     <div class="custom-control custom-checkbox">
-                        <input type="checkbox" name="categories[]" class="custom-control-input" id="{{ $taxonomy['taxonomy'] }}-{{ $item->id }}" value="{{ $item->id }}" @if(in_array($item->id, $selected)) checked @endif>
-                        <label class="custom-control-label" for="category-{{ $item->id }}">{{ $item->name }}</label>
+                        <input type="checkbox" name="taxonomies[]" class="custom-control-input" id="{{ $taxonomy['taxonomy'] }}-{{ $item->id }}" value="{{ $item->id }}" @if(in_array($item->id, $value ?? [])) checked @endif>
+                        <label class="custom-control-label" for="{{ $taxonomy['taxonomy'] }}-{{ $item->id }}">{{ $item->name }}</label>
                     </div>
                 </li>
             @endforeach
