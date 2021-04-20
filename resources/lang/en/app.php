@@ -18,6 +18,7 @@ return [
     'plugin' => 'Plugin',
     'plugins' => 'Plugins',
     'setting' => 'Setting',
+    'general' => 'General',
     'general-setting' => 'General Setting',
     'login' => 'Login',
     'sign-up' => 'Sign up',

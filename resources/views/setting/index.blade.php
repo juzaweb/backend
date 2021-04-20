@@ -1,59 +1,19 @@
 @extends('tadcms::layouts.admin')
 
 @section('content')
-    @component('tadcms::components.form')
+    <ul class="nav nav-tabs nav-tabs-line">
+        @foreach($forms as $key => $form)
+            <li class="nav-item">
+                <a class="nav-link @if($key == $component) active @endif" href="{{ route('admin.setting', [$key]) }}">{{ $form['name'] ?? '' }}</a>
+            </li>
+        @endforeach
+    </ul>
 
-        <div class="row">
-            <div class="col-md-8">
-                @component('tadcms::setting.forms.input', [
-                    'title' => trans('tadcms::app.site-name'),
-                    'name' => 'sitename',
-                ])@endcomponent
-
-                @component('tadcms::setting.forms.textarea', [
-                    'title' => trans('tadcms::app.site-description'),
-                    'name' => 'sitedescription',
-                ])@endcomponent
-
-                @component('tadcms::setting.forms.input', [
-                    'title' => trans('tadcms::validation.attributes.site-url'),
-                    'name' => 'siteurl',
-                    'default' => config('app.url')
-                ])@endcomponent
-
-                @component('tadcms::setting.forms.select', [
-                    'title' => trans('tadcms::validation.attributes.language'),
-                    'name' => 'language',
-                    'options' => $languages,
-                ])@endcomponent
-
-                <hr>
-
-                @do_action('setting.form_general.left')
-
-            </div>
-
-            <div class="col-md-4">
-
-                @component('tadcms::setting.forms.select', [
-                    'title' => trans('tadcms::validation.attributes.anyone-can-register'),
-                    'name' => 'users_can_register',
-                    'options' => [
-                        1 => trans('tadcms::app.yes'),
-                        0 => trans('tadcms::app.no'),
-                    ],
-                ])@endcomponent
-
-                @component('tadcms::setting.forms.select', [
-                    'title' => trans('tadcms::validation.attributes.user-confirmation'),
-                    'name' => 'user_confirmation',
-                    'options' => [
-                        1 => trans('tadcms::app.yes'),
-                        0 => trans('tadcms::app.no'),
-                    ],
-                ])@endcomponent
-
-            </div>
+    <div class="tab-content">
+        <div class="tab-pane p-2 active" role="tabpanel" aria-labelledby="home-tab">
+            @if(view()->exists($forms[$component]['view']))
+                @include($forms[$component]['view'])
+            @endif
         </div>
-    @endcomponent
+    </div>
 @endsection

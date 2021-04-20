@@ -21,7 +21,8 @@ class BackendController extends Controller
         return parent::callAction($method, $parameters);
     }
     
-    protected function addBreadcrumb(array $item, $name = 'admin') {
+    protected function addBreadcrumb(array $item, $name = 'admin')
+    {
         add_filters($name . '_breadcrumb', function ($items) use ($item) {
             $items[] = $item;
             return $items;

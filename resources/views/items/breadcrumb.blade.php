@@ -1,6 +1,6 @@
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
-        @if(!request()->is(config('tadcms.admin-prefix')))
+        @if(!request()->is(config('tadcms.admin-prefix') . '/dashboard'))
         <li class="breadcrumb-item"><a href="{{ route('admin.dashboard') }}">@lang('tadcms::app.dashboard')</a></li>
         @endif
 

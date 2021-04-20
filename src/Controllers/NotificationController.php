@@ -2,20 +2,22 @@
 
 namespace Tadcms\Backend\Controllers;
 
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\Request;
 use Tadcms\System\Models\User;
-use Tadcms\System\Models\TadNotify;
+use Theanh\Notification\Models\ManualNotification;
 
 class NotificationController extends BackendController
 {
-    public function index() {
-        
-        
+    public function index()
+    {
         return view('tadcms::notification.index', [
             'title' => trans('tadcms::app.notification')
         ]);
     }
     
-    public function getData() {
+    public function getDataTable(Request $request)
+    {
         $search = $request->get('search');
         $status = $request->get('status');
         
@@ -24,10 +26,9 @@ class NotificationController extends BackendController
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', 20);
         
-        $query = TadNotify::query();
-        
+        $query = ManualNotification::query();
         if ($search) {
-            $query->where(function ($subquery) use ($search) {
+            $query->where(function (Builder $subquery) use ($search) {
                 $subquery->orWhere('name', 'like', '%'. $search .'%');
                 $subquery->orWhere('subject', 'like', '%'. $search .'%');
             });
@@ -44,7 +45,7 @@ class NotificationController extends BackendController
         $rows = $query->get();
         
         foreach ($rows as $row) {
-            $row->created = $row->created_at->format('H:i Y-m-d');
+            $row->created = (string) $row->created_at;
             $row->edit_url = route('admin.notification.edit', ['id' => $row->id]);
         }
         
@@ -54,41 +55,52 @@ class NotificationController extends BackendController
         ]);
     }
     
-    public function form($id = null) {
-        $model = TadNotify::firstOrNew(['id' => $id]);
+    public function create()
+    {
+        $this->addBreadcrumb([
+            'name' => trans('tadcms::app.notification'),
+            'url' => route('admin.notification')
+        ]);
+
+        $model = new ManualNotification();
+        return view('tadcms::notification.form', [
+            'title' => trans('tadcms::app.add-new'),
+            'model' => $model,
+        ]);
+    }
+
+    public function edit($id)
+    {
+        $this->addBreadcrumb([
+            'name' => trans('tadcms::app.notification'),
+            'url' => route('admin.notification')
+        ]);
+
+        $model = ManualNotification::findOrFail($id);
         $users = User::whereIn('id', explode(',', $model->users))
             ->get(['id', 'name']);
         return view('tadcms::notification.form', [
-            'title' => $model->name ?: trans('app.add-new'),
+            'title' => $model->name,
             'model' => $model,
             'users' => $users,
         ]);
     }
     
-    public function save() {
-        $this->validateRequest([
+    public function store(Request $request)
+    {
+        $request->validate([
             'name' => 'required|string|max:250',
             'subject' => 'required|string|max:300',
             'content' => 'required',
             'type' => 'required|in:1,2,3',
-        ], $request, [
-            'name' => trans('app.name'),
-            'subject' => trans('app.subject'),
-            'content' => trans('app.content'),
-            'type' => trans('app.type'),
         ]);
         
         $users = $request->post('users');
-        $model = TadNotify::firstOrNew(['id' => $request->post('id')]);
+        $users = $users ? implode(',', $users) : null;
+
+        $model = new ManualNotification();
         $model->fill($request->all());
-        
-        if (empty($users)) {
-            $model->users = null;
-        }
-        else {
-            $model->users = implode(',', $users);
-        }
-        
+        $model->setAttribute('users', $users);
         $model->save();
         
         return response()->json([
@@ -97,16 +109,28 @@ class NotificationController extends BackendController
             'redirect' => route('admin.notification'),
         ]);
     }
+
+    public function update(Request $request, $id)
+    {
+
+    }
     
-    public function remove() {
-        $this->validateRequest([
+    public function bulkActions(Request $request)
+    {
+        $request->validate([
             'ids' => 'required',
-        ], $request, [
+            'action' => 'required',
+        ], [], [
             'ids' => trans('app.notification')
         ]);
-        
-        TadNotify::destroy($request->post('ids'));
-        
+
+        $action = $request->post('action');
+        switch ($action) {
+            case 'delete':
+                ManualNotification::destroy($request->post('ids'));
+                break;
+        }
+
         return response()->json([
             'status' => 'success',
             'message' => trans('app.deleted_successfully'),

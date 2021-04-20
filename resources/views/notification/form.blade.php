@@ -1,13 +1,6 @@
-@extends('layouts.backend')
-
-@section('title', $title)
+@extends('tadcms::layouts.admin')
 
 @section('content')
-
-{{ breadcrumb('admin', [
-        'name' => trans('app.notification'),
-        'url' => route('admin.notification')
-    ]) }}
 
 <div class="cui__utils__content">
     <form method="post" action="{{ route('admin.notification.save') }}" class="form-ajax">

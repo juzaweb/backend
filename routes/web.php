@@ -3,6 +3,7 @@
 use Theanh\FileManager\Routes AS FileManagerRoutes;
 
 Route::group(['middleware' => 'admin'], function () {
+
     require (__DIR__ . '/taxonomy.route.php');
     
     require (__DIR__ . '/appearance.route.php');
@@ -15,7 +16,7 @@ Route::group(['middleware' => 'admin'], function () {
     
     require (__DIR__ . '/user.route.php');
     
-    Route::get('/', function (){
+    Route::get('/', function () {
         return redirect()->route('admin.dashboard');
     });
     
@@ -25,7 +26,7 @@ Route::group(['middleware' => 'admin'], function () {
     
     Route::get('/load-data/{func}', 'LoadDataController@loadData')->name('admin.load_data');
     
-    //Route::tadResource('notification', 'NotificationController');
+    Route::tadResource('notification', 'NotificationController');
     
     //Route::tadResource('languages', 'LanguageController');
     

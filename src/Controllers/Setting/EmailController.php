@@ -26,8 +26,7 @@ class EmailController extends BackendController
         }
         
         return $this->success(
-            trans('tadcms::app.save-successfully'),
-            route('admin.setting.email')
+            trans('tadcms::app.save-successfully')
         );
     }
     

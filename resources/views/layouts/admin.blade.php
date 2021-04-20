@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:400,700,800&display=swap">
     <link rel="stylesheet" href="{{ asset('vendor/tadcms/css/vendor.css') }}">
 
+    <!-- Tadcms Vendor -->
     <script type="text/javascript">
         var tadcms = {
             'adminPrefix': "{{ config('tadcms.admin-prefix') }}",
@@ -21,9 +22,10 @@
 
     <script src="{{ asset('vendor/tadcms/js/turbolinks.min.js') }}"></script>
     <script src="{{ asset('vendor/tadcms/js/vendor.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('vendor/tadcms/ckeditor/ckeditor.js') }}"></script>
 
     @yield('header')
-    <script src="{{ asset('vendor/tadcms/ckeditor/ckeditor.js') }}"></script>
+
     {{--<script src="https://www.gstatic.com/charts/loader.js"></script>--}}
 
     @livewireStyles
@@ -67,9 +69,7 @@
             <h4 class="font-weight-bold ml-3">{{ $title }}</h4>
 
             <div class="cui__utils__content">
-
                 @yield('content')
-
             </div>
         </div>
         <div class="cui__layout__footer">

@@ -16,14 +16,16 @@ use Theanh\LaravelHooks\Facades\Events;
  */
 class BackendMenu
 {
-    public static function render() {
+    public static function render()
+    {
         $items = MenuCollection::make(Events::filter('admin_menu', []));
         return view('tadcms::items.admin_menu', [
             'items' => $items,
         ]);
     }
     
-    public static function tadMenuLeft() {
+    public static function tadMenuLeft()
+    {
         HookAction::addMenuPage(
             'tadcms::app.dashboard',
             'dashboard',
@@ -87,18 +89,27 @@ class BackendMenu
             null,
             100
         );*/
-        
+
         /*add_menu_page(
-            'tadcms::app.notification',
-            'notification',
-            'fa fa-bell',
+            'tadcms::app.permissions',
+            'translations',
+            'fa fa-language',
             null,
             100
         );*/
-        
+
+        HookAction::addMenuPage(
+            'tadcms::app.notification',
+            'notification',
+            [
+                'icon' => 'fa fa-bell',
+                'position' => 100
+            ]
+        );
     }
     
-    public static function tadAppearanceMenu() {
+    public static function tadAppearanceMenu()
+    {
         HookAction::addMenuPage(
             'tadcms::app.appearance',
             'themes',
@@ -139,7 +150,8 @@ class BackendMenu
         );
     }
     
-    public static function tadPluginMenu() {
+    public static function tadPluginMenu()
+    {
         HookAction::addMenuPage(
             'tadcms::app.plugins',
             'plugins',
@@ -150,7 +162,8 @@ class BackendMenu
         );
     }
     
-    public static function tadSettingMenu() {
+    public static function tadSettingMenu()
+    {
         HookAction::addMenuPage(
             'tadcms::app.setting',
             'setting',
@@ -167,16 +180,6 @@ class BackendMenu
                 'icon' => 'fa fa-cogs',
                 'parent' => 'setting',
                 'position' => 1
-            ]
-        );
-        
-        HookAction::addMenuPage(
-            'tadcms::app.email-setting',
-            'setting-email',
-            [
-                'icon' => 'fa fa-cogs',
-                'parent' => 'setting',
-                'position' => 2
             ]
         );
         
@@ -225,7 +228,6 @@ class BackendMenu
                 ]
             );
         }
-        
     }
     
     public static function tadTaxonomyMenu()
