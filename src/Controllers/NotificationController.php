@@ -4,8 +4,12 @@ namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Tadcms\Backend\Requests\NotificationRequest;
 use Tadcms\System\Models\User;
 use Theanh\Notification\Models\ManualNotification;
+use Theanh\Notification\SendNotification;
+use Theanh\Notification\Jobs\SendNotification as SendNotificationJob;
 
 class NotificationController extends BackendController
 {
@@ -58,61 +62,76 @@ class NotificationController extends BackendController
     public function create()
     {
         $this->addBreadcrumb([
-            'name' => trans('tadcms::app.notification'),
-            'url' => route('admin.notification')
+            'title' => trans('tadcms::app.notification'),
+            'url' => route('admin.notification.index')
         ]);
 
         $model = new ManualNotification();
+        $vias = $this->getVias();
         return view('tadcms::notification.form', [
             'title' => trans('tadcms::app.add-new'),
             'model' => $model,
+            'vias' => $vias,
         ]);
     }
 
     public function edit($id)
     {
         $this->addBreadcrumb([
-            'name' => trans('tadcms::app.notification'),
-            'url' => route('admin.notification')
+            'title' => trans('tadcms::app.notification'),
+            'url' => route('admin.notification.index')
         ]);
 
+        $vias = $this->getVias();
         $model = ManualNotification::findOrFail($id);
         $users = User::whereIn('id', explode(',', $model->users))
             ->get(['id', 'name']);
+
         return view('tadcms::notification.form', [
-            'title' => $model->name,
+            'title' => $model->data['subject'] ?? '',
             'model' => $model,
             'users' => $users,
+            'vias' => $vias,
         ]);
     }
     
-    public function store(Request $request)
+    public function store(NotificationRequest $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:250',
-            'subject' => 'required|string|max:300',
-            'content' => 'required',
-            'type' => 'required|in:1,2,3',
-        ]);
-        
+        $via = $request->post('via');
+        $via = implode(',', $via);
+
         $users = $request->post('users');
-        $users = $users ? implode(',', $users) : null;
+        $users = $users ? implode(',', $users) : -1;
 
         $model = new ManualNotification();
         $model->fill($request->all());
+        $model->setAttribute('status', 4);
+        $model->setAttribute('method', $via);
         $model->setAttribute('users', $users);
         $model->save();
         
-        return response()->json([
-            'status' => 'success',
-            'message' => trans('app.saved_successfully'),
-            'redirect' => route('admin.notification'),
-        ]);
+        return $this->success(
+            trans('tadcms::app.saved-successfully')
+        );
     }
 
-    public function update(Request $request, $id)
+    public function update(NotificationRequest $request, $id)
     {
+        $via = $request->post('via');
+        $via = implode(',', $via);
 
+        $users = $request->post('users');
+        $users = $users ? implode(',', $users) : -1;
+
+        $model = ManualNotification::findOrFail($id);
+        $model->fill($request->all());
+        $model->setAttribute('method', $via);
+        $model->setAttribute('users', $users);
+        $model->save();
+
+        return $this->success(
+            trans('tadcms::app.saved-successfully')
+        );
     }
     
     public function bulkActions(Request $request)
@@ -121,19 +140,60 @@ class NotificationController extends BackendController
             'ids' => 'required',
             'action' => 'required',
         ], [], [
-            'ids' => trans('app.notification')
+            'ids' => trans('tadcms::app.notification')
         ]);
 
+        $ids = $request->post('ids');
         $action = $request->post('action');
-        switch ($action) {
-            case 'delete':
-                ManualNotification::destroy($request->post('ids'));
-                break;
+
+        try {
+            DB::beginTransaction();
+            switch ($action) {
+                case 'delete':
+                    ManualNotification::destroy($ids);
+                    break;
+                case 'send':
+                    ManualNotification::whereIn('id', $ids)
+                        ->update([
+                            'status' => 2
+                        ]);
+
+                    $useMethod = config('notification.method');
+                    if (in_array($useMethod, ['sync', 'queue'])) {
+                        foreach ($ids as $id) {
+                            $notification = ManualNotification::find($id);
+                            if (empty($notification)) {
+                                continue;
+                            }
+
+                            switch ($useMethod) {
+                                case 'sync':
+                                    (new SendNotification($notification))->send();
+                                    break;
+                                case 'queue':
+                                    SendNotificationJob::dispatch($notification);
+                                    break;
+                            }
+                        }
+                    }
+                    break;
+            }
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return $this->error(
+                $exception->getMessage()
+            );
         }
 
-        return response()->json([
-            'status' => 'success',
-            'message' => trans('app.deleted_successfully'),
-        ]);
+        return $this->success(
+            trans('tadcms::app.successfully')
+        );
+    }
+
+    protected function getVias()
+    {
+        $vias = collect(config('notification.via'));
+        return $vias->where('enable', true);
     }
 }

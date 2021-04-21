@@ -6,7 +6,7 @@
         </span>
     </label>
 
-    <select class="form-control load-taxonomy select-tags" data-placeholder="--- @lang('tadcms::app.tags') ---" data-explodes="tag-explode"></select>
+    <select class="form-control load-taxonomies select-tags" data-placeholder="--- @lang('tadcms::app.tags') ---" data-explodes="tag-explode"></select>
 
     <div class="show-tags mt-2">
         {{--@foreach($tags as $item)

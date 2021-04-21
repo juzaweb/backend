@@ -2,7 +2,8 @@
 
 use Tadcms\Backend\Helpers\Menu\Breadcrumb;
 
-function breadcrumb($name, $add_items = []) {
+function breadcrumb($name, $add_items = [])
+{
     $items = apply_filters($name . '_breadcrumb', []);
     
     if ($add_items) {
@@ -14,11 +15,13 @@ function breadcrumb($name, $add_items = []) {
     return Breadcrumb::render($name, $items);
 }
 
-function admin_header() {
+function admin_header()
+{
     do_action('admin_header');
 }
 
-function admin_footer() {
+function admin_footer()
+{
     do_action('admin_footer');
 }
 
@@ -29,9 +32,9 @@ function admin_footer() {
  * @param string|bool|null $ver String specifying script version number, if it has one, which is added to the URL as a query string for cache busting purposes.
  * @param bool $in_footer (Optional) Whether to enqueue the script before </body> instead of in the <head>
  * @return bool
- *
  */
-function add_admin_script($handle, $src, $ver = '1.0', $in_footer = false) {
+function add_admin_script($handle, $src, $ver = '1.0', $in_footer = false)
+{
     /**
      * If is't url
      * */
@@ -39,20 +42,16 @@ function add_admin_script($handle, $src, $ver = '1.0', $in_footer = false) {
         // Check is script in module
         if (strpos('/Modules/', $src)) {
             $src = '';
-        }
-        // Check is script in theme
-        else if (strpos('/Themes/')) {
+        } elseif (strpos('/Themes/')) {
             $src = theme_asset($src);
-        }
-        // Can't find script
-        else {
+        } else {
             return false;
         }
     }
     
     if ($in_footer) {
         
-        add_action('admin_header');
+        do_action('admin_header');
         
         return add_filters('admin_footer_script', [
             'src' => $src
@@ -64,7 +63,8 @@ function add_admin_script($handle, $src, $ver = '1.0', $in_footer = false) {
     ]);
 }
 
-function register_notification($key, $name, $class) {
+function register_notification($key, $name, $class)
+{
     return add_filters('notify_methods', function ($items) use ($key, $name, $class) {
         $items[$key] = [
             'name' => $name,
@@ -75,12 +75,4 @@ function register_notification($key, $name, $class) {
     });
 }
 
-/**
- * TAD CMS: Add general setting page
- * @param string $html_input // Html input/textarea/select tags input setting
- **/
-function add_general_setting($html_input) {
-    add_action('setting.form_general', function () use ($html_input) {
-        echo $html_input;
-    });
-}
+

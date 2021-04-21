@@ -18,7 +18,7 @@ class BackendMenu
 {
     public static function render()
     {
-        $items = MenuCollection::make(Events::filter('admin_menu', []));
+        $items = MenuCollection::make(apply_filters('admin_menu', []));
         return view('tadcms::items.admin_menu', [
             'items' => $items,
         ]);
@@ -196,7 +196,7 @@ class BackendMenu
     
     public static function tadPostTypeMenu()
     {
-        $items = Events::filter('post_types', []);
+        $items = apply_filters('post_types', []);
         foreach ($items as $item) {
             $menuSlug = 'post-type.' . $item['post_type'];
             HookAction::addMenuPage(
@@ -232,7 +232,7 @@ class BackendMenu
     
     public static function tadTaxonomyMenu()
     {
-        $items = Events::filter('taxonomies', []);
+        $items = apply_filters('taxonomies', []);
         foreach ($items as $item) {
             $taxonomy = 'taxonomy.' . $item['taxonomy'];
             HookAction::addMenuPage(

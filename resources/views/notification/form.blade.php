@@ -1,88 +1,77 @@
 @extends('tadcms::layouts.admin')
 
 @section('content')
+    @component('tadcms::components.form', [
+        'action' => $model->id ? route('admin.notification.update', [$model->id]) :
+                    route('admin.notification.store'),
+        'method' => $model->id ? 'put' : 'post'
+    ])
+        <div class="row">
+            <div class="col-md-8">
+                <input type="hidden" name="redirect" value="{{ route('admin.notification.index') }}">
 
-<div class="cui__utils__content">
-    <form method="post" action="{{ route('admin.notification.save') }}" class="form-ajax">
-        <div class="card">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h5 class="mb-0 card-title font-weight-bold">{{ $title }}</h5>
-                    </div>
+                <div class="form-group">
+                    <label class="col-form-label" for="users">@lang('tadcms::app.send-for') <abbr>*</abbr></label>
+                    <select name="users[]" id="users" class="form-control load-users" data-placeholder="--- @lang('tadcms::app.users') ---" multiple @if($model->users == -1) disabled @endif>
+                        @if(!empty($users))
+                            @foreach($users as $user)
+                                <option value="{{ $user->id }}" selected>{{ $user->name }}</option>
+                            @endforeach
+                        @endif
+                    </select>
 
-                    <div class="col-md-6">
-                        <div class="btn-group float-right">
-                            <button type="submit" class="btn btn-success"><i class="fa fa-save"></i> @lang('app.save')</button>
-                            <a href="{{ route('admin.notification') }}" class="btn btn-warning"><i class="fa fa-times-circle"></i> @lang('app.cancel')</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card-body">
-
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <div class="form-group">
-                            <label class="col-form-label" for="name">@lang('app.name') <span class="text-danger">*</span></label>
-
-                            <input type="text" name="name" class="form-control" id="name" value="{{ $model->name }}" autocomplete="off" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-form-label" for="users">@lang('app.send_for')</label>
-                            <select name="users[]" id="users" class="form-control load-users" data-placeholder="--- @lang('app.users') ---" multiple>
-                                @if($users)
-                                    @foreach($users as $user)
-                                        <option value="{{ $user->id }}" selected>{{ $user->name }}</option>
-                                    @endforeach
-                                @endif
-                            </select>
-                            <input type="checkbox" class="all-users"> @lang('tadcms::app.all-users')
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-form-label" for="subject">@lang('app.subject') <span class="text-danger">*</span></label>
-                            <input type="text" name="subject" class="form-control" id="subject" value="{{ $model->subject }}" autocomplete="off" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-form-label" for="content">@lang('app.content') <span class="text-danger">*</span></label>
-                            <textarea class="form-control" name="content" id="content" rows="6">{{ $model->content }}</textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-form-label" for="subject">@lang('app.url')</label>
-                            <input type="text" name="url" class="form-control" id="url" value="{{ $model->url }}" autocomplete="off">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="col-form-label" for="type">@lang('app.type')</label>
-
-                            <select name="type" id="type" class="form-control" required>
-                                <option value="1" @if($model->type == 1) selected @endif>@lang('app.notify')</option>
-                                <option value="2" @if($model->type == 2) selected @endif>@lang('app.email')</option>
-                                <option value="3" @if($model->type == 3) selected @endif>@lang('app.notify_and_email')</option>
-                            </select>
-                        </div>
-
-                    </div>
-
+                    <input type="checkbox" class="all-users" @if($model->users == -1) checked @endif> @lang('tadcms::app.all-users')
                 </div>
 
-                <input type="hidden" name="id" value="{{ $model->id }}">
+                @component('tadcms::components.form_input', [
+                    'label' => trans('tadcms::app.subject'),
+                    'name' => 'data[subject]',
+                    'value' => $model->data['subject'] ?? '',
+                    'required' => true
+                ])
+                @endcomponent
+
+                @component('tadcms::components.form_ckeditor', [
+                    'label' => trans('tadcms::app.content'),
+                    'name' => 'data[content]',
+                    'value' => $model->data['content'] ?? '',
+                ])
+                @endcomponent
             </div>
+
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="col-form-label">@lang('tadcms::app.via') <abbr>*</abbr></label>
+                    @php
+                    $methods = $model->method ? explode(',', $model->method) : [];
+                    @endphp
+                    @foreach($vias as $key => $via)
+                        <div class="custom-control custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="method-{{ $key }}" name="via[{{ $key }}]" value="{{ $key }}" @if(in_array($key, $methods)) checked @endif>
+                            <label class="custom-control-label text-capitalize" for="method-{{ $key }}">{{ $key }}</label>
+                        </div>
+                    @endforeach
+                </div>
+
+                @component('tadcms::components.form_image', [
+                    'label' => trans('tadcms::app.image'),
+                    'name' => 'data[image]',
+                    'value' => $model->data['image']  ?? '',
+                ])
+                @endcomponent
+
+                @component('tadcms::components.form_input', [
+                    'label' => trans('tadcms::app.url'),
+                    'name' => 'data[url]',
+                    'value' => $model->data['url'] ?? '',
+                ])
+                @endcomponent
+            </div>
+
         </div>
-    </form>
+    @endcomponent
 
     <script type="text/javascript">
-        CKEDITOR.replace('content', {
-            filebrowserImageBrowseUrl: '/admin-cp/filemanager?type=Images',
-            filebrowserBrowseUrl: '/admin-cp/filemanager?type=Files'
-        });
-
         $('.all-users').on('change', function () {
             if ($(this).is(':checked')) {
                 $('#users').prop('disabled', true);
@@ -92,5 +81,4 @@
             }
         });
     </script>
-</div>
 @endsection

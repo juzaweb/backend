@@ -2,6 +2,8 @@
 
 namespace Tadcms\Backend\Helpers;
 
+use Illuminate\Support\Arr;
+
 /**
  * Class HookAction
  *
@@ -29,7 +31,8 @@ class HookAction
      * - int $position The position in the menu order this item should appear.
      * @return bool.
      */
-    public function addMenuPage($menuTitle, $menuSlug, $args = []) {
+    public function addMenuPage($menuTitle, $menuSlug, $args = [])
+    {
         $opts = [
             'title' => $menuTitle,
             'key' => $menuSlug,
@@ -43,16 +46,13 @@ class HookAction
         return add_filters('admin_menu', function ($menu) use ($item) {
             if ($item['parent']) {
                 $menu[$item['parent']]['children'][$item['key']] = $item;
-            }
-            else {
-                if (isset($menu[$item['key']])) {
-                    if (isset($menu[$item['key']]['children'])) {
+            } else {
+                if (Arr::has($menu, $item['key'])) {
+                    if (Arr::has($menu[$item['key']], 'children')) {
                         $item['children'] = $menu[$item['key']]['children'];
                     }
-                    
                     $menu[$item['key']] = $item;
-                }
-                else {
+                } else {
                     $menu[$item['key']] = $item;
                 }
             }
@@ -153,5 +153,22 @@ class HookAction
         });
         
         return true;
+    }
+
+    /**
+     * TAD CMS: Add setting form
+     * @param string $key
+     * @param array $args
+     **/
+    public function addSettingForm($key, $args = [])
+    {
+
+    }
+
+    public function addGeneralSettingInput($html_input)
+    {
+        add_action('setting.form_general', function () use ($html_input) {
+            echo $html_input;
+        });
     }
 }

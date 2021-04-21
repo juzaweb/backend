@@ -4,6 +4,7 @@ namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Http\Request;
 use Tadcms\System\Models\Taxonomy;
+use Tadcms\System\Models\User;
 
 class LoadDataController extends BackendController
 {
@@ -13,7 +14,7 @@ class LoadDataController extends BackendController
             return $this->{$func}($request);
         }
         
-        return $this->error('Function not found');
+        return $this->error('Function not found.');
     }
     
     protected function loadAllLanguage(Request $request)
@@ -26,7 +27,7 @@ class LoadDataController extends BackendController
         }
     }
     
-    protected function loadTaxonomy(Request $request)
+    protected function loadTaxonomies(Request $request)
     {
         $search = $request->get('search');
         $explodes = $request->get('explodes');
@@ -53,6 +54,35 @@ class LoadDataController extends BackendController
             $data['pagination'] = ['more' => true];
         }
         
+        return response()->json($data);
+    }
+
+    protected function loadUsers(Request $request)
+    {
+        $search = $request->get('search');
+        $explodes = $request->get('explodes');
+        $taxonomy = $request->get('taxonomy');
+
+        $query = User::query();
+        $query->select([
+            'id',
+            'name AS text'
+        ]);
+
+        if ($search) {
+            $query->where('name', 'like', '%'. $search .'%');
+        }
+
+        if ($explodes) {
+            $query->whereNotIn('id', explode(',', $explodes));
+        }
+
+        $paginate = $query->paginate(10);
+        $data['results'] = $query->get();
+        if ($paginate->nextPageUrl()) {
+            $data['pagination'] = ['more' => true];
+        }
+
         return response()->json($data);
     }
 }

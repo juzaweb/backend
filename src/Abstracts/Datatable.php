@@ -1,6 +1,6 @@
 <?php
 
-namespace Tadcms\Backend\Helpers;
+namespace Tadcms\Backend\Abstracts;
 
 abstract class Datatable
 {
