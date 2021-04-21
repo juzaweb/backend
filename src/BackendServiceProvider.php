@@ -48,7 +48,8 @@ class BackendServiceProvider extends ServiceProvider
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang', 'tadcms');
     }
     
-    protected function bootMiddlewares() {
+    protected function bootMiddlewares()
+    {
         $this->app['router']->aliasMiddleware('admin', \Tadcms\Backend\Middleware\Admin::class);
     }
 }

@@ -17,10 +17,10 @@ class DbConfigServiceProvider extends ServiceProvider
         }
         
         $mail = DataConfig::getConfigEmail();
-        
+
         if ($mail['email_setting']) {
             $config = [
-                //'driver'     => $mail['email_driver'],
+                'driver'     => 'smtp',
                 'host'       => $mail['email_host'],
                 'port'       => (int) $mail['email_port'],
                 'from'       => [
@@ -38,11 +38,11 @@ class DbConfigServiceProvider extends ServiceProvider
     
     protected function checkDbConnection()
     {
+
         try {
             DB::connection()->getPdo();
-    
-            if (!Schema::hasTable('configs'))
-            {
+
+            if (Schema::hasTable('configs')) {
                 return true;
             }
         } catch (\Exception $e) {

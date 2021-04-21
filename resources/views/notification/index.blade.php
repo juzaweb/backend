@@ -15,8 +15,8 @@
             <form method="post" class="form-inline">
                 <select name="bulk_actions" class="form-control w-60 mb-2 mr-1">
                     <option value="">@lang('tadcms::app.bulk-actions')</option>
-                    <option value="delete">@lang('tadcms::app.delete')</option>
                     <option value="send">@lang('tadcms::app.send')</option>
+                    <option value="delete">@lang('tadcms::app.delete')</option>
                 </select>
 
                 <button type="submit" class="btn btn-primary mb-2" id="apply-action">@lang('tadcms::app.apply')</button>
