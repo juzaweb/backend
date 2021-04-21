@@ -19,5 +19,6 @@ class LivewireServiceProvider extends ServiceProvider
         Livewire::component('tadcms::component.form-tags', 'Tadcms\Backend\Livewire\Component\FormTaxonomyTag');
         Livewire::component('tadcms::media.media-list', 'Tadcms\Backend\Livewire\Media\MediaList');
         Livewire::component('tadcms::media.media-item', 'Tadcms\Backend\Livewire\Media\MediaItem');
+        Livewire::component('tadcms::component.top-notify', 'Tadcms\Backend\Livewire\Component\TopNotify');
     }
 }

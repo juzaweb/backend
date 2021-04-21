@@ -25,48 +25,19 @@
             <span class="dropdown-toggle-text">EN</span>
         </a>
         <div class="dropdown-menu dropdown-menu-right" role="menu">
-            <a class="dropdown-item " href="javascript:void(0)"><span class="text-uppercase font-size-12 mr-1">EN</span>
-                English</a>
+            <a class="dropdown-item " href="javascript:void(0)">
+                <span class="text-uppercase font-size-12 mr-1">EN</span>
+                English
+            </a>
         </div>
     </div>
 
-    <div class="cui__topbar__actionsDropdown dropdown mr-4 d-none d-sm-block">
+    <div class="cui__topbar__actionsDropdown dropdown mr-4 d-none d-sm-block" xmlns:wire="http://www.w3.org/1999/xhtml">
         <a href="javascript:void(0)" class="dropdown-toggle text-nowrap" data-toggle="dropdown" aria-expanded="false" data-offset="0,15">
             <i class="dropdown-toggle-icon fa fa-bell-o"></i>
         </a>
 
-        <div class="cui__topbar__actionsDropdownMenu dropdown-menu dropdown-menu-right" role="menu">
-            <div style="width: 350px;">
-                <div class="card-body">
-                    <div class="tab-content">
-                        <div class="height-300 kit__customScroll">
-                            <ul class="list-unstyled">
-                                {{--@php
-                                    $notifications = Auth::user()->unreadNotifications()
-                                        ->orderBy('id', 'DESC')
-                                        ->limit(5)
-                                        ->get(['id', 'data']);
-                                @endphp
-
-                                @if($notifications->isEmpty())
-                                    <p>@lang('tadcms::app.no_notifications')</p>
-                                @else
-                                    @foreach($notifications as $notification)
-                                        <li class="mb-3">
-                                            <div class="d-flex align-items-baseline alert alert-info">
-                                                <p class="kit__l2__title">
-                                                    <a href="{{ route('account.notification.detail', [$notification->id]) }}" data-turbolinks="false">{{ $notification->data['subject'] }}</a>
-                                                </p>
-                                            </div>
-                                        </li>
-                                    @endforeach
-                                @endif--}}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        @livewire('tadcms::component.top-notify')
     </div>
 
     <div class="dropdown">

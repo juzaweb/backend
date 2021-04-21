@@ -31,7 +31,7 @@ class DbConfigServiceProvider extends ServiceProvider
                 'username'   => $mail['email_username'],
                 'password'   => $mail['email_password'],
             ];
-            
+
             Config::set('mail', $config);
         }
     }

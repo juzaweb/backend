@@ -62,6 +62,7 @@ return [
     'users' => 'Users',
     'translation' => 'Translation',
     'notification' => 'Notification',
+    'notifications' => 'Notifications',
     'languages' => 'Languages',
     'profile' => 'Profile',
     'email' => 'Email',
