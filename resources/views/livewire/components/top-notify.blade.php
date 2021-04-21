@@ -3,7 +3,7 @@
             <div class="card-body">
                 <div class="tab-content">
                     <div class="kit__l1">
-                        <div class="text-uppercase mb-2 text-gray-6 mb-2 font-weight-bold">@lang('tadcms::app.notifications') (3)</div>
+                        <div class="text-uppercase mb-2 text-gray-6 mb-2 font-weight-bold">@lang('tadcms::app.notifications') ({{ $total }})</div>
                         <hr>
                         <ul class="list-unstyled">
                             @if(empty($items))

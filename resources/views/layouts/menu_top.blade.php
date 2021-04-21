@@ -13,9 +13,9 @@
             </a>
 
             <div class="dropdown-menu" role="menu">
-                {{--<a class="dropdown-item" href="{{ route('admin.post-type.create', ['posts']) }}">Post</a>
-                <a class="dropdown-item" href="{{ route('admin.post-type.create', ['pages']) }}">Page</a>--}}
-                <a class="dropdown-item" href="{{ route('admin.users.create') }}">User</a>
+                <a class="dropdown-item" href="{{ route('admin.post-type.create', ['posts']) }}">@lang('tadcms::app.post')</a>
+                <a class="dropdown-item" href="{{ route('admin.post-type.create', ['pages']) }}">@lang('tadcms::app.page')</a>
+                <a class="dropdown-item" href="{{ route('admin.users.create') }}">@lang('tadcms::app.user')</a>
             </div>
         </div>
     </div>

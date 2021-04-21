@@ -8,6 +8,14 @@ use Livewire\Component;
 class TopNotify extends Component
 {
     public $items;
+    public $total;
+
+    public function mount()
+    {
+        $this->total = Auth::user()
+            ->unreadNotifications()
+            ->count();
+    }
 
     public function loadItems()
     {

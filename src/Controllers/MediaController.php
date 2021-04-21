@@ -18,11 +18,10 @@ class MediaController extends BackendController
         $this->folderRepository = $folderRepository;
     }
     
-    public function index($fileType = 'image', $folderId = null)
+    public function index($folderId = null)
     {
         return view('tadcms::media.index', [
             'fileTypes' => $this->getFileTypes(),
-            'fileType' => $fileType,
             'folderId' => $folderId,
             'title' => trans('tadcms::app.media')
         ]);
@@ -46,8 +45,7 @@ class MediaController extends BackendController
                 DB::beginTransaction();
                 $new_file = $this->saveFile($save->getFile());
                 DB::commit();
-            }
-            catch (\Exception $exception) {
+            } catch (\Exception $exception) {
                 DB::rollBack();
                 unlink($save->getFile()->getRealPath());
                 throw $exception;

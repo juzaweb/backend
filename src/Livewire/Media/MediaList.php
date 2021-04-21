@@ -10,12 +10,12 @@ use Theanh\FileManager\Models\Media;
 class MediaList extends Component
 {
     public $items = [];
-    public $type;
+    public $query;
     public $folderId;
     
-    public function mount($type, $folderId = null)
+    public function mount($query, $folderId = null)
     {
-        $this->type = $type;
+        $this->query = $query;
         $this->folderId = $folderId;
     }
     
@@ -33,7 +33,8 @@ class MediaList extends Component
     {
         $result = [];
         $fileIcon = $this->getFileIcon();
-        $files = Media::whereType($this->type)->whereFolderId($this->folderId)->get();
+        $files = Media::whereFolderId($this->folderId)->get();
+
         foreach ($files as $row) {
             $fileUrl = FileManager::url($row->path);
             $thumb = FileManager::isImage($row) ? $fileUrl : null;
@@ -61,7 +62,9 @@ class MediaList extends Component
     protected function getDirectories()
     {
         $result = [];
-        $directories = FolderMedia::whereType($this->type)->whereParentId($this->folderId)->get();
+        $directories = FolderMedia::whereParentId($this->folderId)
+            ->get();
+
         foreach ($directories as $row) {
             $result[] = (object) [
                 'id' => $row->id,
