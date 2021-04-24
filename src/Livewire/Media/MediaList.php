@@ -40,7 +40,7 @@ class MediaList extends Component
         $fileIcon = $this->getFileIcon();
         $query = Media::whereFolderId($this->folderId);
 
-        if ($sQuery->has('type')) {
+        if ($sQuery->get('type')) {
             $query->where('type', '=', $sQuery->get('type'));
         }
 
@@ -68,13 +68,18 @@ class MediaList extends Component
         
         return $result;
     }
-    
+
+    /**
+     * Get directories in folder
+     * @param Collection $sQuery
+     * @return array
+     * */
     protected function getDirectories($sQuery)
     {
         $result = [];
         $query = FolderMedia::whereParentId($this->folderId);
 
-        if ($sQuery->has('type')) {
+        if ($sQuery->get('type')) {
             $query->where('type', '=', $sQuery->get('type'));
         }
 

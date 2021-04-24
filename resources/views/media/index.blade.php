@@ -5,12 +5,12 @@
         <div class="col-md-8">
 
             <form action="" method="get" class="form-inline">
-                <input type="text" class="form-control w-25" name="search" placeholder="Search by name">
+                <input type="text" class="form-control w-25" name="search" placeholder="Search by name" autocomplete="off">
 
                 <select name="type" class="form-control w-25 ml-1">
                     <option value="">All type</option>
                     @foreach($fileTypes as $key => $type)
-                    <option value="{{ $key }}" {{ old('type', '') == $key ? 'selected' : '' }}>{{ strtoupper($key) }}</option>
+                    <option value="{{ $key }}" {{ request()->query('type') == $key ? 'selected' : '' }}>{{ strtoupper($key) }}</option>
                     @endforeach
                 </select>
 
