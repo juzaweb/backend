@@ -16,7 +16,7 @@ class MenuController extends BackendController
     
     public function addMenu(Request $request)
     {
-        $this->validateRequest([
+        $this->validate([
             'name' => 'required|string|max:250',
         ], $request, [
             'name' => trans('app.name')
@@ -53,7 +53,7 @@ class MenuController extends BackendController
     
     public function getItems(Request $request)
     {
-        $this->validateRequest([
+        $this->validate([
             'type' => 'required',
         ], $request, [
             'type' => trans('app.type')

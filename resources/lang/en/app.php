@@ -21,6 +21,7 @@ return [
     'general' => 'General',
     'general-setting' => 'General Setting',
     'login' => 'Login',
+    'login-successfully' => 'Login successfully',
     'sign-up' => 'Sign up',
     'forgot-password' => 'Forgot password?',
     'search' => 'Search',

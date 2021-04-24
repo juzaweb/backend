@@ -7,16 +7,8 @@ use Livewire\Component;
 class MenuIndex extends Component
 {
     public $menu;
-    public $showAddMenu = false;
     public $items = [];
-    
-    public function showAddMenu()
-    {
-        if (!$this->showAddMenu) {
-            $this->showAddMenu = true;
-        }
-    }
-    
+
     public function loadItems()
     {
         $this->items = [

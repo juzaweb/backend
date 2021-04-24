@@ -50,14 +50,8 @@ class LoginController extends Controller
             'password' => $password
         ], $remember)) {
             do_action('auth.login.success', Auth::user());
-            
-            if ($request->has('redirect')) {
-                return $this->redirect(
-                    $request->input('redirect')
-                );
-            }
-            
-            return $this->redirect('/');
+
+            return $this->success(trans('tadcms::app.login-successfully'));
         }
     
         do_action('auth.login.failed');

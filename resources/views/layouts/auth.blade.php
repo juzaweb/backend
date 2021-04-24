@@ -9,6 +9,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.googleapis.com/css?family=Mukta:400,700,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('vendor/tadcms/css/vendor.css') }}">
+    <script type="text/javascript" src="{{ asset('vendor/tadcms/js/turbolinks.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('vendor/tadcms/js/vendor.js') }}"></script>
 </head>
 <body class="cui__layout--cardsShadow cui__menuLeft--dark">

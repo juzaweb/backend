@@ -103,13 +103,20 @@ class NotificationController extends BackendController
         $users = $request->post('users');
         $users = $users ? implode(',', $users) : -1;
 
-        $model = new ManualNotification();
-        $model->fill($request->all());
-        $model->setAttribute('status', 4);
-        $model->setAttribute('method', $via);
-        $model->setAttribute('users', $users);
-        $model->save();
-        
+        DB::beginTransaction();
+        try {
+            $model = new ManualNotification();
+            $model->fill($request->all());
+            $model->setAttribute('status', 4);
+            $model->setAttribute('method', $via);
+            $model->setAttribute('users', $users);
+            $model->save();
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return $this->error($exception->getMessage());
+        }
+
         return $this->success(
             trans('tadcms::app.saved-successfully')
         );
@@ -123,11 +130,18 @@ class NotificationController extends BackendController
         $users = $request->post('users');
         $users = $users ? implode(',', $users) : -1;
 
-        $model = ManualNotification::findOrFail($id);
-        $model->fill($request->all());
-        $model->setAttribute('method', $via);
-        $model->setAttribute('users', $users);
-        $model->save();
+        DB::beginTransaction();
+        try {
+            $model = ManualNotification::findOrFail($id);
+            $model->fill($request->all());
+            $model->setAttribute('method', $via);
+            $model->setAttribute('users', $users);
+            $model->save();
+            DB::commit();
+        } catch (\Exception $exception) {
+            DB::rollBack();
+            return $this->error($exception->getMessage());
+        }
 
         return $this->success(
             trans('tadcms::app.saved-successfully')

@@ -5,9 +5,6 @@ namespace Tadcms\Backend\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Theanh\FileManager\Repositories\FolderMediaRepository;
-use Theanh\FileManager\Exceptions\UploadMissingFileException;
-use Theanh\FileManager\Handler\HandlerFactory;
-use Theanh\FileManager\Receiver\FileReceiver;
 
 class MediaController extends BackendController
 {
@@ -24,53 +21,6 @@ class MediaController extends BackendController
             'fileTypes' => $this->getFileTypes(),
             'folderId' => $folderId,
             'title' => trans('tadcms::app.media')
-        ]);
-    }
-    
-    public function upload(Request $request)
-    {
-        $receiver = new FileReceiver(
-            'upload',
-            $request,
-            HandlerFactory::classFromRequest($request)
-        );
-    
-        if ($receiver->isUploaded() === false) {
-            throw new UploadMissingFileException();
-        }
-    
-        $save = $receiver->receive();
-        if ($save->isFinished()) {
-            try {
-                DB::beginTransaction();
-                $new_file = $this->saveFile($save->getFile());
-                DB::commit();
-            } catch (\Exception $exception) {
-                DB::rollBack();
-                unlink($save->getFile()->getRealPath());
-                throw $exception;
-            }
-        
-            if ($new_file) {
-            
-                // event
-            
-                return response()->json([
-                    'status' => true,
-                    'data' => [
-                        'message' => 'Upload success.'
-                    ]
-                ]);
-            }
-        
-            return 'Can\'t save your file.';
-        }
-    
-        $handler = $save->handler();
-    
-        return response()->json([
-            "done" => $handler->getPercentageDone(),
-            'status' => true
         ]);
     }
     
@@ -104,7 +54,7 @@ class MediaController extends BackendController
             DB::commit();
         } catch (\Exception $exception) {
             DB::rollBack();
-            throw $exception;
+            return $this->error($exception->getMessage());
         }
     
         // event
