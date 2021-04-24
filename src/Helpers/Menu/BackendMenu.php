@@ -243,4 +243,44 @@ class BackendMenu
             ]
         );
     }
+
+    public static function tadPageMenu()
+    {
+        HookAction::addMenuPage(
+            'tadcms::app.pages',
+            'pages',
+            [
+                'icon' => 'fa fa-edit',
+                'position' => 15
+            ]
+        );
+
+        HookAction::addMenuPage(
+            'tadcms::app.all-pages',
+            'pages',
+            [
+                'position' => 2,
+                'parent' => 'pages',
+            ]
+        );
+
+        HookAction::addMenuPage(
+            'tadcms::app.add-new',
+            'pages.create',
+            [
+                'position' => 3,
+                'parent' => 'pages',
+            ]
+        );
+
+        HookAction::addMenuPage(
+            'tadcms::app.tags',
+            'page-tags',
+            [
+                'icon' => 'fa fa-list-alt',
+                'parent' => 'pages',
+                'position' => 5
+            ]
+        );
+    }
 }

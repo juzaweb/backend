@@ -42,7 +42,7 @@ class Admin
         }
 
         if (config('tadcms.use_page')) {
-
+            BackendMenu::tadPageMenu();
         }
     }
 }

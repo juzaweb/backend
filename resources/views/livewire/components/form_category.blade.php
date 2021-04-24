@@ -1,7 +1,7 @@
 <div class="form-group form-taxonomy" xmlns:wire="http://www.w3.org/1999/xhtml">
     <label class="col-form-label w-100">
-        {{ $label ?? '' }}
-        <span><a href="javascript:void(0)" class="float-right add-new"><i class="fa fa-plus"></i> @lang('tadcms::app.add-new')</a></span>
+        {{ $label }}
+        <span><a href="javascript:void(0)" class="float-right" wire:click="showFormAdd"><i class="fa fa-plus"></i> @lang('tadcms::app.add-new')</a></span>
     </label>
 
     <div class="show-taxonomies taxonomy-{{ $taxonomy }}">
@@ -17,19 +17,21 @@
         </ul>
     </div>
 
-    <div class="form-add box-hidden">
+    @if($showFormAdd)
+    <div class="form-add">
         <div class="form-group">
             <label class="col-form-label">@lang('tadcms::app.name') <abbr>*</abbr></label>
             <input type="text" wire:model="name" class="form-control" autocomplete="off">
             @error('name') <span class="text-danger">{{ $message }}</span> @enderror
         </div>
 
-        {{--<div class="form-group">--}}
-            {{--<label class="col-form-label">@lang('tadcms::app.parent')</label>--}}
-            {{--<select type="text" wire:model="parent" class="form-control load-taxonomy" autocomplete="off" data-taxonomy="{{ $taxonomy['taxonomy'] }}"></select>--}}
-            {{--@error('parent') <span class="text-danger">{{ $message }}</span> @enderror--}}
-        {{--</div>--}}
+        <div class="form-group">
+            <label class="col-form-label">@lang('tadcms::app.parent')</label>
+            <select type="text" wire:model="parent" class="form-control load-taxonomy" autocomplete="off" data-taxonomy="{{ $taxonomy }}"></select>
+            @error('parent') <span class="text-danger">{{ $message }}</span> @enderror
+        </div>
 
-        <button type="button" class="btn btn-primary"><i class="fa fa-plus-circle" wire:loading.class="fa fa-spinner fa-spin"></i> @lang('tadcms::app.add')</button>
+        <button type="button" class="btn btn-primary" wire:click="add" wire:loading.attr="disabled"><i class="fa fa-plus-circle" wire:loading.class="fa fa-spinner fa-spin"></i> @lang('tadcms::app.add')</button>
     </div>
+    @endif
 </div>

@@ -51,6 +51,7 @@ abstract class PostControllerAbstract extends BackendController
             'lang' => app()->getLocale(),
             'title' => trans('tadcms::app.add-new'),
             'postType' => $this->postType,
+            'postTypeSingular' => $this->postTypeSingular,
             'supports' => $this->supports
         ]);
     }
@@ -71,6 +72,7 @@ abstract class PostControllerAbstract extends BackendController
             'lang' => app()->getLocale(),
             'title' => $model->title,
             'postType' => $this->postType,
+            'postTypeSingular' => $this->postTypeSingular,
             'supports' => $this->supports,
             'selectedTaxonomies' => $selectedTaxonomies
         ]);

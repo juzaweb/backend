@@ -52,7 +52,7 @@
                 @component('tadcms::components.form_taxonomies', [
                     'label' => trans('tadcms::app.categories'),
                     'taxonomy' => 'category',
-                    'type' => 'post',
+                    'type' => $postTypeSingular,
                     'value' => $selectedTaxonomies ?? []
                 ])@endcomponent
                 @endif

@@ -9,12 +9,15 @@ class FormTaxonomyCategory extends Component
 {
     public $items = [];
     public $name;
+    public $label;
     public $type;
     public $taxonomy;
     public $value;
+    public $showFormAdd = false;
     
-    public function mount($type, $taxonomy, $value = [])
+    public function mount($label, $type, $taxonomy, $value = [])
     {
+        $this->label = $label;
         $this->type = $type;
         $this->taxonomy = $taxonomy;
         $this->value = $value;
@@ -30,8 +33,34 @@ class FormTaxonomyCategory extends Component
             ->get();
     }
 
+    public function showFormAdd()
+    {
+        $this->showFormAdd = true;
+    }
+
+    public function add()
+    {
+        $this->validate([
+            'name' => 'required',
+        ]);
+
+        $model = Taxonomy::create([
+            'name' => $this->name,
+            'type' => $this->type,
+            'taxonomy' => $this->taxonomy
+        ]);
+
+        $this->resetForm();
+        $this->items->push($model);
+    }
+
     public function render()
     {
         return view('tadcms::livewire.components.form_category');
+    }
+
+    protected function resetForm()
+    {
+        $this->name = '';
     }
 }
