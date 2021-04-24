@@ -196,55 +196,51 @@ class BackendMenu
     
     public static function tadPostTypeMenu()
     {
-        $items = apply_filters('post_types', []);
-        foreach ($items as $item) {
-            $menuSlug = 'post-type.' . $item['post_type'];
-            HookAction::addMenuPage(
-                $item['label'],
-                $menuSlug,
-                [
-                    'icon' => $item['menu_icon'],
-                    'position' => $item['menu_position']
-                ]
-            );
-    
-            HookAction::addMenuPage(
-                $item['label'],
-                $menuSlug,
-                [
-                    'icon' => $item['menu_icon'],
-                    'position' => 2,
-                    'parent' => $menuSlug,
-                ]
-            );
-    
-            HookAction::addMenuPage(
-                'tadcms::app.add-new',
-                $menuSlug . '.create',
-                [
-                    'icon' => $item['menu_icon'],
-                    'position' => 3,
-                    'parent' => $menuSlug,
-                ]
-            );
-        }
-    }
-    
-    public static function tadTaxonomyMenu()
-    {
-        $items = apply_filters('taxonomies', []);
-        foreach ($items as $item) {
-            $taxonomy = 'taxonomy.' . $item['taxonomy'];
-            HookAction::addMenuPage(
-                $item['label'],
-                $taxonomy,
-                [
-                    'icon' => $item['menu_icon'],
-                    'parent' => $item['parent'],
-                    'url' => 'taxonomy/' . $item['taxonomy'],
-                    'position' => $item['menu_position']
-                ]
-            );
-        }
+        HookAction::addMenuPage(
+            'tadcms::app.posts',
+            'posts',
+            [
+                'icon' => 'fa fa-edit',
+                'position' => 15
+            ]
+        );
+
+        HookAction::addMenuPage(
+            'tadcms::app.all-posts',
+            'posts',
+            [
+                'position' => 2,
+                'parent' => 'posts',
+            ]
+        );
+
+        HookAction::addMenuPage(
+            'tadcms::app.add-new',
+            'posts.create',
+            [
+                'position' => 3,
+                'parent' => 'posts',
+            ]
+        );
+
+        HookAction::addMenuPage(
+            'tadcms::app.categories',
+            'categories',
+            [
+                'icon' => 'fa fa-list-alt',
+                'parent' => 'posts',
+                'position' => 4
+            ]
+        );
+
+        HookAction::addMenuPage(
+            'tadcms::app.tags',
+            'tags',
+            [
+                'icon' => 'fa fa-list-alt',
+                'parent' => 'posts',
+                'position' => 5
+            ]
+        );
     }
 }

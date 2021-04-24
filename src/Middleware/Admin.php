@@ -37,7 +37,12 @@ class Admin
         BackendMenu::tadAppearanceMenu();
         BackendMenu::tadPluginMenu();
         BackendMenu::tadSettingMenu();
-        //BackendMenu::tadPostTypeMenu();
-        //BackendMenu::tadTaxonomyMenu();
+        if (config('tadcms.use_post')) {
+            BackendMenu::tadPostTypeMenu();
+        }
+
+        if (config('tadcms.use_page')) {
+
+        }
     }
 }

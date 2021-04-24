@@ -9,12 +9,6 @@ class MenuServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        if (config('tadcms.use_post')) {
 
-        }
-    
-        if (config('tadcms.use_page')) {
-
-        }
     }
 }

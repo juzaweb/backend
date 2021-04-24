@@ -10,49 +10,8 @@ class TaxonomyController extends TaxonomyControllerAbstract
     protected $taxonomy = 'categories';
     protected $taxonomySingular = 'category';
 
-    public function index()
+    protected function label(): string
     {
-        $model = $this->taxonomyRepository->firstOrNew(['id' => null]);
-        return view('tadcms::taxonomy.index', [
-            'title' => trans('tadcms::app.' . $this->taxonomy),
-            'taxonomy' => $this->taxonomy,
-            'model' => $model,
-            'lang' => $this->getLocale()
-        ]);
-    }
-
-    public function create()
-    {
-        $model = $this->taxonomyRepository->newModel();
-
-        $this->addBreadcrumb([
-            'title' => trans('tadcms::app.' . $this->taxonomy),
-            'url' => route('admin.'. $this->taxonomy .'.index')
-        ]);
-
-        return view('tadcms::taxonomy.form', [
-            'model' => $model,
-            'title' => trans('tadcms::app.add-new'),
-            'taxonomy' => $this->taxonomy,
-            'lang' => $this->getLocale()
-        ]);
-    }
-
-    public function edit($id)
-    {
-        $model = $this->taxonomyRepository->findOrFail($id);
-        $model->load('parent');
-
-        $this->addBreadcrumb([
-            'title' => trans('tadcms::app.categories'),
-            'url' => route('admin.'. $this->taxonomy .'.index')
-        ]);
-
-        return view('tadcms::taxonomy.form', [
-            'model' => $model,
-            'title' => $model->name,
-            'taxonomy' => $this->taxonomy,
-            'lang' => $this->getLocale()
-        ]);
+        return trans('tadcms::app.categories');
     }
 }

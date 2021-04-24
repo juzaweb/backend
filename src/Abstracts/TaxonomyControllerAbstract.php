@@ -11,10 +11,15 @@ use Tadcms\System\Models\Taxonomy;
 
 abstract class TaxonomyControllerAbstract extends BackendController
 {
-    protected $type = 'post';
-    protected $taxonomy = 'categories';
-    protected $taxonomySingular = 'category';
+    protected $type;
+    protected $taxonomy;
+    protected $taxonomySingular;
     protected $taxonomyRepository;
+
+    protected $supports = [
+        'thumbnail',
+        'hierarchical'
+    ];
 
     public function __construct(
         TaxonomyRepository $taxonomyRepository
@@ -22,11 +27,50 @@ abstract class TaxonomyControllerAbstract extends BackendController
         $this->taxonomyRepository = $taxonomyRepository;
     }
 
-    abstract public function index();
+    public function index()
+    {
+        $model = $this->taxonomyRepository->firstOrNew(['id' => null]);
+        return view('tadcms::taxonomy.index', [
+            'title' => $this->getLabel(),
+            'taxonomy' => $this->taxonomy,
+            'model' => $model,
+            'lang' => $this->getLocale()
+        ]);
+    }
 
-    abstract public function create();
+    public function create()
+    {
+        $model = $this->taxonomyRepository->newModel();
+        $this->addBreadcrumb([
+            'title' => $this->getLabel(),
+            'url' => route('admin.'. $this->taxonomy .'.index')
+        ]);
 
-    abstract public function edit($id);
+        return view('tadcms::taxonomy.form', [
+            'model' => $model,
+            'title' => trans('tadcms::app.add-new'),
+            'taxonomy' => $this->taxonomy,
+            'lang' => $this->getLocale()
+        ]);
+    }
+
+    public function edit($id)
+    {
+        $model = $this->taxonomyRepository->findOrFail($id);
+        $model->load('parent');
+
+        $this->addBreadcrumb([
+            'title' => $this->getLabel(),
+            'url' => route('admin.'. $this->taxonomy .'.index')
+        ]);
+
+        return view('tadcms::taxonomy.form', [
+            'model' => $model,
+            'title' => $model->name,
+            'taxonomy' => $this->taxonomy,
+            'lang' => $this->getLocale()
+        ]);
+    }
 
     public function getDataTable(Request $request)
     {
@@ -118,5 +162,12 @@ abstract class TaxonomyControllerAbstract extends BackendController
     protected function getLocale()
     {
         return request()->input('locale') ?? app()->getLocale();
+    }
+
+    abstract protected function label() : string;
+
+    protected function getLabel()
+    {
+        return $this->label();
     }
 }
