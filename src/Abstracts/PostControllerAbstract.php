@@ -25,11 +25,55 @@ abstract class PostControllerAbstract extends BackendController
         $this->taxonomyRepository = $taxonomyRepository;
     }
 
-    abstract public function index();
+    public function index()
+    {
+        return view('tadcms::post.index', [
+            'title' => $this->getTitle(),
+            'postType' => $this->postType,
+        ]);
+    }
 
-    abstract public function create();
+    public function create()
+    {
+        $this->addBreadcrumb([
+            'title' => $this->getTitle(),
+            'url' => route("admin.{$this->postType}.index"),
+        ]);
 
-    abstract public function edit($id);
+        $taxonomies = [];
+        $model = new Post();
+
+        return view('tadcms::post.form', [
+            'model' => $model,
+            'lang' => app()->getLocale(),
+            'title' => trans('tadcms::app.add-new'),
+            'postType' => $this->postType,
+            'taxonomies' => $taxonomies
+        ]);
+    }
+
+    public function edit($id)
+    {
+        $this->addBreadcrumb([
+            'title' => $this->getTitle(),
+            'url' => route("admin.{$this->postType}.index"),
+        ]);
+
+        $taxonomies = [];
+
+        $model = $this->postRepository->findOrFail($id);
+        $model->load(['translations', 'taxonomies']);
+        $selectedTaxonomies = $model->taxonomies->pluck('id')->toArray();
+
+        return view('tadcms::post.form', [
+            'model' => $model,
+            'lang' => app()->getLocale(),
+            'title' => $model->title,
+            'postType' => $this->postType,
+            'taxonomies' => $taxonomies,
+            'selectedTaxonomies' => $selectedTaxonomies
+        ]);
+    }
 
     public function getDataTable(Request $request)
     {
@@ -143,4 +187,11 @@ abstract class PostControllerAbstract extends BackendController
             trans('tadcms::app.successfully')
         );
     }
+
+    protected function getTitle()
+    {
+        return $this->label();
+    }
+
+    abstract protected function label() : string;
 }

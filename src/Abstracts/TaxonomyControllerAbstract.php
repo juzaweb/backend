@@ -31,7 +31,7 @@ abstract class TaxonomyControllerAbstract extends BackendController
     {
         $model = $this->taxonomyRepository->firstOrNew(['id' => null]);
         return view('tadcms::taxonomy.index', [
-            'title' => $this->getLabel(),
+            'title' => $this->getTitle(),
             'taxonomy' => $this->taxonomy,
             'model' => $model,
             'lang' => $this->getLocale()
@@ -42,7 +42,7 @@ abstract class TaxonomyControllerAbstract extends BackendController
     {
         $model = $this->taxonomyRepository->newModel();
         $this->addBreadcrumb([
-            'title' => $this->getLabel(),
+            'title' => $this->getTitle(),
             'url' => route('admin.'. $this->taxonomy .'.index')
         ]);
 
@@ -60,7 +60,7 @@ abstract class TaxonomyControllerAbstract extends BackendController
         $model->load('parent');
 
         $this->addBreadcrumb([
-            'title' => $this->getLabel(),
+            'title' => $this->getTitle(),
             'url' => route('admin.'. $this->taxonomy .'.index')
         ]);
 
@@ -164,10 +164,10 @@ abstract class TaxonomyControllerAbstract extends BackendController
         return request()->input('locale') ?? app()->getLocale();
     }
 
-    abstract protected function label() : string;
-
-    protected function getLabel()
+    protected function getTitle()
     {
         return $this->label();
     }
+
+    abstract protected function label() : string;
 }
