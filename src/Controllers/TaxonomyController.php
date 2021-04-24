@@ -2,136 +2,57 @@
 
 namespace Tadcms\Backend\Controllers;
 
-use Illuminate\Http\Request;
-use Tadcms\Backend\Controllers\BackendController;
-use Tadcms\Backend\Requests\TaxonomyRequest;
-use Tadcms\System\Models\Taxonomy;
-use Tadcms\System\Repositories\TaxonomyRepository;
+use Tadcms\Backend\Abstracts\TaxonomyControllerAbstract;
 
-class TaxonomyController extends BackendController
+class TaxonomyController extends TaxonomyControllerAbstract
 {
-    protected $taxonomyRepository;
-    
-    public function __construct(
-        TaxonomyRepository $taxonomyRepository
-    ) {
-        $this->taxonomyRepository = $taxonomyRepository;
-    }
-    
-    public function index($taxonomy)
+    protected $type = 'post';
+    protected $taxonomy = 'categories';
+    protected $taxonomySingular = 'category';
+
+    public function index()
     {
         $model = $this->taxonomyRepository->firstOrNew(['id' => null]);
-        
         return view('tadcms::taxonomy.index', [
-            'title' => 'Category',
-            'taxonomy' => $taxonomy,
+            'title' => trans('tadcms::app.' . $this->taxonomy),
+            'taxonomy' => $this->taxonomy,
             'model' => $model,
+            'lang' => $this->getLocale()
         ]);
     }
-    
-    public function getDataTable($taxonomy, Request $request)
-    {
-        $search = $request->get('search');
-        $sort = $request->get('sort', 'id');
-        $order = $request->get('order', 'desc');
-        $offset = $request->get('offset', 0);
-        $limit = $request->get('limit', 20);
-    
-        $query = Taxonomy::query();
-        $query->where('taxonomy', '=', $taxonomy);
-    
-        if ($search) {
-            $query->where(function ($subquery) use ($search) {
-                $subquery->orWhere('name', 'like', '%'. $search .'%');
-                $subquery->orWhere('description', 'like', '%'. $search .'%');
-            });
-        }
-        
-        $count = $query->count();
-        $query->orderBy($sort, $order);
-        $query->offset($offset);
-        $query->limit($limit);
-        $rows = $query->get();
-    
-        foreach ($rows as $row) {
-            $row->edit_url = route('admin.taxonomy.edit', [$taxonomy, $row->id]);
-        }
-    
-        return response()->json([
-            'total' => $count,
-            'rows' => $rows
-        ]);
-    }
-    
-    public function create($taxonomy)
+
+    public function create()
     {
         $model = $this->taxonomyRepository->newModel();
-    
+
         $this->addBreadcrumb([
-            'title' => trans('tadcms::app.category'),
-            'url' => route('admin.taxonomy.index', [$taxonomy])
+            'title' => trans('tadcms::app.' . $this->taxonomy),
+            'url' => route('admin.'. $this->taxonomy .'.index')
         ]);
-        
+
         return view('tadcms::taxonomy.form', [
             'model' => $model,
             'title' => trans('tadcms::app.add-new'),
-            'taxonomy' => $taxonomy,
+            'taxonomy' => $this->taxonomy,
+            'lang' => $this->getLocale()
         ]);
     }
-    
-    public function edit($taxonomy, $id)
+
+    public function edit($id)
     {
         $model = $this->taxonomyRepository->findOrFail($id);
         $model->load('parent');
-        
+
         $this->addBreadcrumb([
-            'title' => trans('tadcms::app.category'),
-            'url' => route('admin.taxonomy.index', [$taxonomy])
+            'title' => trans('tadcms::app.categories'),
+            'url' => route('admin.'. $this->taxonomy .'.index')
         ]);
-        
+
         return view('tadcms::taxonomy.form', [
             'model' => $model,
             'title' => $model->name,
-            'taxonomy' => $taxonomy,
+            'taxonomy' => $this->taxonomy,
+            'lang' => $this->getLocale()
         ]);
-    }
-    
-    public function store($taxonomy, TaxonomyRequest $request)
-    {
-        $this->taxonomyRepository->create($request->all());
-        
-        return $this->success(trans('tadcms::app.successfully'));
-    }
-    
-    public function update($taxonomy, $id, TaxonomyRequest $request)
-    {
-        $this->taxonomyRepository->update($id, $request->all());
-    
-        return $this->success(trans('tadcms::app.successfully'));
-    }
-    
-    public function bulkActions($taxonomy, Request $request)
-    {
-        $request->validate([
-            'ids' => 'required|array',
-            'action' => 'required',
-        ]);
-    
-        do_action('bulk_action.taxonomy.' . $taxonomy, $request->post());
-        
-        $action = $request->post('action');
-        $ids = $request->post('ids');
-        
-        switch ($action) {
-            case 'delete':
-                foreach ($ids as $id) {
-                    $this->taxonomyRepository->delete($id);
-                }
-                break;
-        }
-        
-        return $this->success(
-            trans('tadcms::app.successfully')
-        );
     }
 }

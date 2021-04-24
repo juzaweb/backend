@@ -7,7 +7,7 @@
 
         <div class="col-md-6">
             <div class="btn-group float-right">
-                <a href="{{ route('admin.taxonomy.create', [$taxonomy]) }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> @lang('tadcms::app.add-new')</a>
+                <a href="{{ route('admin.'. $taxonomy .'.create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> @lang('tadcms::app.add-new')</a>
             </div>
         </div>
     </div>
@@ -58,8 +58,8 @@
         }
 
         var table = new TadTable({
-            url: '{{ route('admin.taxonomy.get-data', [$taxonomy]) }}',
-            action_url: '{{ route('admin.taxonomy.bulk-actions', [$taxonomy]) }}',
+            url: '{{ route('admin.'.$taxonomy.'.get-data') }}',
+            action_url: '{{ route('admin.'.$taxonomy.'.bulk-actions') }}',
         });
     </script>
 @endsection

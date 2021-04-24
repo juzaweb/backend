@@ -3,36 +3,28 @@
 namespace Tadcms\Backend\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Tadcms\Backend\Facades\HookAction;
 
 class TaxonomyRequest extends FormRequest
 {
     public function rules()
     {
+        $locale = app()->getLocale();
+
         return [
-            'name' => 'required|string|max:250',
-            'description' => 'nullable|string|max:300',
-            'thumbnail' => 'nullable|string|max:150',
-            'taxonomy' => 'required',
+            $locale . '.name' => 'required|string|max:250',
+            $locale . '.description' => 'nullable|string|max:300',
+            $locale . '.thumbnail' => 'nullable|string|max:150',
             'parent_id' => 'nullable|exists:taxonomies,id',
         ];
     }
-    
-    /**
-     * Prepare the data for validation.
-     *
-     * @return void
-     */
-    protected function prepareForValidation()
+
+    public function attributes()
     {
-        $taxonomy = $this->input('taxonomy');
-        $taxonomies = apply_filters('taxonomies', []);
-        if (!isset($taxonomies[$taxonomy])) {
-            $taxonomy = null;
-        }
-        
-        $this->merge([
-            'taxonomy' => $taxonomy,
-        ]);
+        $locale = app()->getLocale();
+        return [
+            $locale . '.name' => trans('tadcms::app.name'),
+            $locale . '.description' => trans('tadcms::app.description'),
+            $locale . '.thumbnail' => trans('tadcms::app.thumbnail'),
+        ];
     }
 }
