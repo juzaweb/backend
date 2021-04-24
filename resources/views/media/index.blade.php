@@ -14,7 +14,7 @@
                     @endforeach
                 </select>
 
-                <select name="mime" class="form-control w-25 ml-1">
+                {{--<select name="mime" class="form-control w-25 ml-1">
                     <option value="">All media items</option>
                     <option value="image">Images</option>
                     <option value="audio">Audio</option>
@@ -24,7 +24,7 @@
                     <option value="application/x-gzip,application/rar,application/x-tar,application/zip,application/x-7z-compressed">Archives</option>
                     <option value="unattached">Unattached</option>
                     <option value="mine">Mine</option>
-                </select>
+                </select>--}}
 
                 <button type="submit" class="btn btn-primary ml-1">@lang('tadcms::app.search')</button>
             </form>
@@ -40,7 +40,6 @@
 
     <div class="list-media mt-5">
         @livewire('tadcms::media.media-list', [
-            'query' => request()->query(),
             'folderId' => $folderId
         ])
     </div>

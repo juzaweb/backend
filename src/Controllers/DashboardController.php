@@ -6,6 +6,11 @@ class DashboardController extends BackendController
 {
     public function index()
     {
+        return redirect()->route('admin.dashboard');
+    }
+
+    public function dashboard()
+    {
         return view('tadcms::dashboard.index', [
             'title' => trans('tadcms::app.dashboard'),
         ]);

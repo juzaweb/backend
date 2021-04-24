@@ -1,5 +1,5 @@
 <li class="media-item">
-    <a @if($item->is_file) href="javascript:void(0)" @else href="{{ route('admin.media.folder', [$item->type, $item->id]) }}" @endif>
+    <a @if($item->is_file) href="javascript:void(0)" @else href="{{ route('admin.media.folder', [$item->id]) }}" @endif>
         <div class="attachment-preview">
             <div class="thumbnail @if(empty($item->is_file)) media-folder @endif">
                 <div class="centered">

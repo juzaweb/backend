@@ -4,6 +4,7 @@ namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Theanh\FileManager\Models\FolderMedia;
 use Theanh\FileManager\Repositories\FolderMediaRepository;
 
 class MediaController extends BackendController
@@ -17,10 +18,23 @@ class MediaController extends BackendController
     
     public function index($folderId = null)
     {
+        $title = trans('tadcms::app.media');
+        if ($folderId) {
+            $this->addBreadcrumb([
+                'title' => $title,
+                'url' => route('admin.media'),
+            ]);
+
+            $folder = FolderMedia::find($folderId);
+            $folder->load('parent');
+            $this->addBreadcrumbFolder($folder);
+            $title = $folder->name;
+        }
+
         return view('tadcms::media.index', [
             'fileTypes' => $this->getFileTypes(),
             'folderId' => $folderId,
-            'title' => trans('tadcms::app.media')
+            'title' => $title
         ]);
     }
     
@@ -65,5 +79,21 @@ class MediaController extends BackendController
     protected function getFileTypes()
     {
         return config('file-manager.file_types');
+    }
+
+    protected function addBreadcrumbFolder($folder)
+    {
+        $parent = $folder->parent;
+        if ($parent) {
+            $this->addBreadcrumb([
+                'title' => $parent->name,
+                'url' => route('admin.media.folder', $parent->id),
+            ]);
+
+            $parent->load('parent');
+            if ($parent->parent) {
+                $this->addBreadcrumbFolder($parent);
+            }
+        }
     }
 }

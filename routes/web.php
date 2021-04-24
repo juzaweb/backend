@@ -15,9 +15,10 @@ Route::group(['middleware' => 'admin'], function () {
     require (__DIR__ . '/setting.route.php');
     
     require (__DIR__ . '/user.route.php');
-    
 
-    Route::get('/dashboard', 'DashboardController@index')->name('admin.dashboard');
+    Route::get('/', 'DashboardController@index');
+
+    Route::get('/dashboard', 'DashboardController@dashboard')->name('admin.dashboard');
     
     Route::get('/dashboard/update', 'DashboardController@update')->name('admin.dashboard.update');
     

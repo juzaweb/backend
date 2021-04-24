@@ -2,6 +2,7 @@
 
 namespace Tadcms\Backend\Livewire\Media;
 
+use Illuminate\Support\Collection;
 use Livewire\Component;
 use Theanh\FileManager\Facades\FileManager;
 use Theanh\FileManager\Models\FolderMedia;
@@ -10,31 +11,40 @@ use Theanh\FileManager\Models\Media;
 class MediaList extends Component
 {
     public $items = [];
-    public $query;
     public $folderId;
     
-    public function mount($query, $folderId = null)
+    public function mount($folderId = null)
     {
-        $this->query = $query;
         $this->folderId = $folderId;
     }
     
     public function loadItems()
     {
-        $this->items = array_merge($this->getDirectories(), $this->getFiles());
+        $sQuery = collect(request()->query());
+        $this->items = array_merge($this->getDirectories($sQuery), $this->getFiles($sQuery));
     }
     
     public function render()
     {
         return view('tadcms::livewire.media.media-list');
     }
-    
-    protected function getFiles()
+
+    /**
+     * Get files in folder
+     * @param Collection $sQuery
+     * @return array
+     * */
+    protected function getFiles($sQuery)
     {
         $result = [];
         $fileIcon = $this->getFileIcon();
-        $files = Media::whereFolderId($this->folderId)->get();
+        $query = Media::whereFolderId($this->folderId);
 
+        if ($sQuery->has('type')) {
+            $query->where('type', '=', $sQuery->get('type'));
+        }
+
+        $files = $query->get();
         foreach ($files as $row) {
             $fileUrl = FileManager::url($row->path);
             $thumb = FileManager::isImage($row) ? $fileUrl : null;
@@ -59,12 +69,16 @@ class MediaList extends Component
         return $result;
     }
     
-    protected function getDirectories()
+    protected function getDirectories($sQuery)
     {
         $result = [];
-        $directories = FolderMedia::whereParentId($this->folderId)
-            ->get();
+        $query = FolderMedia::whereParentId($this->folderId);
 
+        if ($sQuery->has('type')) {
+            $query->where('type', '=', $sQuery->get('type'));
+        }
+
+        $directories = $query->get();
         foreach ($directories as $row) {
             $result[] = (object) [
                 'id' => $row->id,
