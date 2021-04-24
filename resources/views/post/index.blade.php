@@ -7,10 +7,9 @@
 
         <div class="col-md-6">
             <div class="btn-group float-right">
-                <a href="{{ route('admin.post-type.create', [$post_type]) }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> @lang('tadcms::app.add-new')</a>
+                <a href="{{ route("admin.{$postType}.create") }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> @lang('tadcms::app.add-new')</a>
             </div>
         </div>
-
     </div>
 
     <div class="row mb-2">
@@ -81,8 +80,8 @@
         }
 
         var table = new TadTable({
-            url: '{{ route('admin.post-type.get-data', [$post_type]) }}',
-            action_url: '{{ route('admin.post-type.bulk-actions', [$post_type]) }}',
+            url: '{{ route("admin.{$postType}.get-data") }}',
+            action_url: '{{ route("admin.{$postType}.bulk-actions") }}',
         });
     </script>
 @endsection

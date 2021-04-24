@@ -13,6 +13,8 @@ class PostController extends BackendController
 {
     protected $postRepository;
     protected $taxonomyRepository;
+    protected $postType = 'posts';
+    protected $postTypeSingular = 'post';
     
     public function __construct(
         PostRepository $postRepository,
@@ -22,66 +24,58 @@ class PostController extends BackendController
         $this->taxonomyRepository = $taxonomyRepository;
     }
     
-    public function index($postType)
+    public function index()
     {
-        $config = $this->postRepository->getConfig($postType);
-        
         return view('tadcms::post.index', [
-            'title' => trans($config->get('label')),
-            'post_type' => $postType,
+            'title' => trans('tadcms::app.posts'),
+            'postType' => $this->postType,
         ]);
     }
     
-    public function create($postType)
+    public function create()
     {
-        $config = $this->postRepository->getConfig($postType);
         $this->addBreadcrumb([
-            'title' => trans($config->get('label')),
-            'url' => route('admin.post-type.index', [$postType]),
+            'title' => trans('tadcms::app.posts'),
+            'url' => route("admin.{$this->postType}.index"),
         ]);
-        
-        $taxonomyConfig = $this->taxonomyRepository->getConfig();
-        $taxonomies = $taxonomyConfig->filter(function ($item) use ($postType) {
-            return in_array('post-type.' . $postType, $item['object_types']);
-        });
-        
-        $model = $this->postRepository->newModel();
+
+        $taxonomies = [];
+        $model = new Post();
         
         return view('tadcms::post.form', [
             'model' => $model,
+            'lang' => app()->getLocale(),
             'title' => trans('tadcms::app.add-new'),
-            'postType' => $postType,
+            'postType' => $this->postType,
             'taxonomies' => $taxonomies
         ]);
     }
     
-    public function edit($postType, $id) {
-        $config = $this->postRepository->getConfig($postType);
+    public function edit($id)
+    {
         $this->addBreadcrumb([
-            'title' => trans($config->get('label')),
-            'url' => route('admin.post-type.index', [$postType]),
+            'title' => trans('tadcms::app.posts'),
+            'url' => route("admin.{$this->postType}.index"),
         ]);
-    
-        $taxonomyConfig = $this->taxonomyRepository->getConfig();
-        $taxonomies = $taxonomyConfig->filter(function ($item) use ($postType) {
-            return in_array('post-type.' . $postType, $item['object_types']);
-        });
+
+        $taxonomies = [];
         
         $model = $this->postRepository->findOrFail($id);
-        $model->load(['taxonomies']);
+        $model->load(['translations', 'taxonomies']);
         $selectedTaxonomies = $model->taxonomies->pluck('id')->toArray();
-        
+
         return view('tadcms::post.form', [
             'model' => $model,
+            'lang' => app()->getLocale(),
             'title' => $model->title,
-            'postType' => $postType,
-            'config' => $config,
+            'postType' => $this->postType,
             'taxonomies' => $taxonomies,
             'selectedTaxonomies' => $selectedTaxonomies
         ]);
     }
     
-    public function getDataTable($postType, Request $request) {
+    public function getDataTable(Request $request)
+    {
         $search = $request->get('search');
         $status = $request->get('status');
         
@@ -99,9 +93,9 @@ class PostController extends BackendController
             });
         }
         
-        $query->where('type', '=', $postType);
+        $query->where('type', '=', $this->postTypeSingular);
         
-        if (!is_null($status)) {
+        if ($status) {
             $query->where('status', '=', $status);
         }
         
@@ -113,8 +107,8 @@ class PostController extends BackendController
         
         foreach ($rows as $row) {
             $row->thumb_url = $row->getThumbnail();
-            $row->created = $row->created_at->format('H:i Y-m-d');
-            $row->edit_url = route('admin.post-type.edit', [$postType, $row->id]);
+            $row->created = get_date($row->created_at);
+            $row->edit_url = route("admin.{$this->postType}.edit", [$row->id]);
         }
         
         return response()->json([
@@ -123,27 +117,31 @@ class PostController extends BackendController
         ]);
     }
     
-    public function store($postType, PostRequest $request) {
+    public function store(PostRequest $request)
+    {
         DB::beginTransaction();
         try {
             $this->postRepository->create(array_merge($request->all(), [
-                'type' => $postType
+                'type' => $this->postTypeSingular
             ]));
         
             DB::commit();
         } catch (\Exception $exception) {
             DB::rollBack();
-            return $this->error($exception->getMessage());
+            throw $exception;
         }
         
-        return $this->success(trans('tadcms::app.saved-successfully'));
+        return $this->success(
+            trans('tadcms::app.saved-successfully')
+        );
     }
     
-    public function update($postType, $id, PostRequest $request) {
+    public function update($id, PostRequest $request)
+    {
         DB::beginTransaction();
         try {
             $this->postRepository->update($id, array_merge($request->all(), [
-                'type' => $postType
+                'type' => $this->postTypeSingular
             ]));
             
             DB::commit();
@@ -152,6 +150,31 @@ class PostController extends BackendController
             throw $exception;
         }
         
-        return $this->success(trans('tadcms::app.saved-successfully'));
+        return $this->success(
+            trans('tadcms::app.saved-successfully')
+        );
+    }
+
+    public function bulkActions(Request $request)
+    {
+        $request->validate([
+            'ids' => 'required|array',
+            'action' => 'required',
+        ]);
+
+        $action = $request->post('action');
+        $ids = $request->post('ids');
+
+        switch ($action) {
+            case 'delete':
+                foreach ($ids as $id) {
+                    $this->postRepository->delete($id);
+                }
+                break;
+        }
+
+        return $this->success(
+            trans('tadcms::app.successfully')
+        );
     }
 }

@@ -8,10 +8,11 @@ class PostRequest extends FormRequest
 {
     public function rules()
     {
+        $lang = app()->getLocale();
         return [
-            'title' => 'required|string|max:250',
+            $lang . '.title' => 'required|string|max:250',
             'status' => 'required|string|in:0,1',
-            'thumbnail' => 'nullable|string|max:150',
+            $lang . 'thumbnail' => 'nullable|string|max:150',
         ];
     }
 }

@@ -5,22 +5,22 @@
     @component('tadcms::components.form', [
         'method' => $model->id ? 'put' : 'post',
         'action' =>  $model->id ?
-            route('admin.post-type.update', [$postType, $model->id]) :
-            route('admin.post-type.store', [$postType])
+            route('admin.'. $postType .'.update', [$model->id]) :
+            route('admin.'. $postType .'.store')
     ])
         <div class="row">
             <div class="col-md-8">
-                <input type="hidden" name="redirect" value="{{ path_url(route('admin.post-type.index', [$postType])) }}">
+                <input type="hidden" name="redirect" value="{{ path_url(route('admin.'.$postType.'.index')) }}">
 
                 @component('tadcms::components.form_input', [
-                    'name' => 'title',
+                    'name' => $lang . "[title]",
                     'label' => trans('tadcms::app.title'),
                     'value' => $model->title,
                 ])
                 @endcomponent
 
                 @component('tadcms::components.form_ckeditor', [
-                    'name' => 'content',
+                    'name' => $lang . '[content]',
                     'label' => trans('tadcms::app.content'),
                     'value' => $model->content,
                 ])
@@ -44,7 +44,7 @@
 
                 @component('tadcms::components.form_image', [
                     'label' => trans('tadcms::app.thumbnail'),
-                    'name' => 'thumbnail',
+                    'name' => $lang . '[thumbnail]',
                     'value' => $model->thumbnail,
                 ])@endcomponent
 

@@ -2,6 +2,7 @@
 
 namespace Tadcms\Backend\Providers;
 
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
@@ -18,7 +19,7 @@ class DbConfigServiceProvider extends ServiceProvider
         
         $mail = DataConfig::getConfigEmail();
 
-        if ($mail['email_setting']) {
+        if (Arr::get($mail, 'email_setting')) {
             $config = [
                 'driver'     => 'smtp',
                 'host'       => $mail['email_host'],
