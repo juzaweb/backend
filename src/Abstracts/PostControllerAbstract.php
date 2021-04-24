@@ -16,6 +16,10 @@ abstract class PostControllerAbstract extends BackendController
     protected $taxonomyRepository;
     protected $postType = 'posts';
     protected $postTypeSingular = 'post';
+    protected $supports = [
+        'category',
+        'tag'
+    ];
 
     public function __construct(
         PostRepository $postRepository,
@@ -30,6 +34,7 @@ abstract class PostControllerAbstract extends BackendController
         return view('tadcms::post.index', [
             'title' => $this->getTitle(),
             'postType' => $this->postType,
+            'supports' => $this->supports
         ]);
     }
 
@@ -40,15 +45,13 @@ abstract class PostControllerAbstract extends BackendController
             'url' => route("admin.{$this->postType}.index"),
         ]);
 
-        $taxonomies = [];
         $model = new Post();
-
         return view('tadcms::post.form', [
             'model' => $model,
             'lang' => app()->getLocale(),
             'title' => trans('tadcms::app.add-new'),
             'postType' => $this->postType,
-            'taxonomies' => $taxonomies
+            'supports' => $this->supports
         ]);
     }
 
@@ -59,8 +62,6 @@ abstract class PostControllerAbstract extends BackendController
             'url' => route("admin.{$this->postType}.index"),
         ]);
 
-        $taxonomies = [];
-
         $model = $this->postRepository->findOrFail($id);
         $model->load(['translations', 'taxonomies']);
         $selectedTaxonomies = $model->taxonomies->pluck('id')->toArray();
@@ -70,7 +71,7 @@ abstract class PostControllerAbstract extends BackendController
             'lang' => app()->getLocale(),
             'title' => $model->title,
             'postType' => $this->postType,
-            'taxonomies' => $taxonomies,
+            'supports' => $this->supports,
             'selectedTaxonomies' => $selectedTaxonomies
         ]);
     }

@@ -48,18 +48,19 @@
                     'value' => $model->thumbnail,
                 ])@endcomponent
 
-                @foreach($taxonomies as $key => $item)
-                    @component('tadcms::components.form_taxonomies', [
-                        'config' => $item,
-                        'name' => 'taxonomy['. $key .']',
-                        'value' => $selectedTaxonomies ?? []
-                    ])@endcomponent
-                @endforeach
+                @if(in_array('category', $supports))
+                @component('tadcms::components.form_taxonomies', [
+                    'label' => trans('tadcms::app.categories'),
+                    'taxonomy' => 'category',
+                    'type' => 'post',
+                    'value' => $selectedTaxonomies ?? []
+                ])@endcomponent
+                @endif
 
-                {{--@if($spTag = @$supports['tag'])
-                @component('tadcms::components.form_tags', [
-                    'config' => $spTag,
+                {{--@if(in_array('tag', $supports))
+                @component('tadcms::components.form_taxonomies', [
                     'name' => 'taxonomy[tags]',
+                    'type' => 'tag',
                     //'value' => $model->thumbnail,
                 ])@endcomponent
                 @endif--}}

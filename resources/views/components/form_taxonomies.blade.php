@@ -1,11 +1,12 @@
-@if($config['type'] == 'category')
+@if(($form ?? 'category') == 'category')
     @livewire('tadcms::component.form-taxonomies', [
-        'taxonomy' => $config,
+        'taxonomy' => $taxonomy,
+        'type' => $type,
         'value' => $value ?? []
     ])
 @endif
 
-@if($config['type'] == 'tag')
+@if(($form ?? 'category') == 'tag')
     @livewire('tadcms::component.form-tags', [
         'taxonomy' => $config,
         'value' => $value ?? []

@@ -1,7 +1,6 @@
 @extends('tadcms::layouts.admin')
 
 @section('content')
-
     <div class="row">
         <div class="col-md-6"></div>
 
@@ -13,7 +12,6 @@
     </div>
 
     <div class="row mb-2">
-
         <div class="col-md-3">
             <form method="post" class="form-inline">
                 <select name="bulk_actions" class="form-control w-50 mb-2 mr-1">
@@ -45,7 +43,6 @@
                 <button type="submit" class="btn btn-primary mb-2">@lang('tadcms::app.search')</button>
             </form>
         </div>
-
     </div>
 
     <div class="table-responsive mb-5">
