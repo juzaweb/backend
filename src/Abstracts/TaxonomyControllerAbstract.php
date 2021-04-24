@@ -34,7 +34,8 @@ abstract class TaxonomyControllerAbstract extends BackendController
             'title' => $this->getTitle(),
             'taxonomy' => $this->taxonomy,
             'model' => $model,
-            'lang' => $this->getLocale()
+            'lang' => $this->getLocale(),
+            'supports' => $this->supports
         ]);
     }
 
@@ -50,7 +51,8 @@ abstract class TaxonomyControllerAbstract extends BackendController
             'model' => $model,
             'title' => trans('tadcms::app.add-new'),
             'taxonomy' => $this->taxonomy,
-            'lang' => $this->getLocale()
+            'lang' => $this->getLocale(),
+            'supports' => $this->supports
         ]);
     }
 
@@ -68,7 +70,8 @@ abstract class TaxonomyControllerAbstract extends BackendController
             'model' => $model,
             'title' => $model->name,
             'taxonomy' => $this->taxonomy,
-            'lang' => $this->getLocale()
+            'lang' => $this->getLocale(),
+            'supports' => $this->supports
         ]);
     }
 
@@ -99,6 +102,7 @@ abstract class TaxonomyControllerAbstract extends BackendController
 
         foreach ($rows as $row) {
             $row->edit_url = route("admin.{$this->taxonomy}.edit", [$row->id]);
+            $row->thumbnail = upload_url($row->thumbnail);
         }
 
         return response()->json([

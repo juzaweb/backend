@@ -26,6 +26,7 @@
                 ])
                 @endcomponent
 
+                @if(in_array('hierarchical', $supports))
                 <div class="form-group">
                     <label class="col-form-label" for="parent_id">@lang('tadcms::app.parent')</label>
                     <select name="parent_id" id="parent_id" class="form-control load-taxonomies" data-taxonomy="{{ $taxonomy }}" data-placeholder="{{ trans('tadcms::app.parent') }}" data-explodes="{{ $model->id }}">
@@ -34,8 +35,9 @@
                         @endif
                     </select>
                 </div>
+                @endif
             </div>
-
+            @if(in_array('thumbnail', $supports))
             <div class="col-md-4">
                 @component('tadcms::components.form_image', [
                     'name' => $lang . '[thumbnail]',
@@ -43,7 +45,7 @@
                     'value' => $model->thumbnail
                 ])@endcomponent
             </div>
-
+            @endif
         </div>
     @endcomponent
 

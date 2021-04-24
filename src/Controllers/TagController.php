@@ -9,6 +9,7 @@ class TagController extends TaxonomyControllerAbstract
     protected $type = 'post';
     protected $taxonomy = 'tags';
     protected $taxonomySingular = 'tag';
+    protected $supports = [];
 
     protected function label(): string
     {

@@ -43,6 +43,9 @@
                     <thead>
                         <tr>
                             <th data-width="3%" data-field="state" data-checkbox="true"></th>
+                            @if(in_array('thumbnail', $supports))
+                                <th data-width="10%" data-field="thumbnail" data-formatter="thumbnail_formatter" data-sortable="true">@lang('tadcms::app.thumbnail')</th>
+                            @endif
                             <th data-field="name" data-formatter="name_formatter" data-sortable="true">@lang('tadcms::app.name')</th>
                             <th data-width="15%" data-field="created_at" data-sortable="true">@lang('tadcms::app.created-at')</th>
                         </tr>
@@ -53,6 +56,12 @@
     </div>
 
     <script type="text/javascript">
+        @if(in_array('thumbnail', $supports))
+            function thumbnail_formatter(value, row, index) {
+                return `<img src="${row.thumbnail}" class="w-100">`;
+            }
+        @endif
+
         function name_formatter(value, row, index) {
             return '<a href="'+ row.edit_url +'">'+ value +'</a>';
         }
