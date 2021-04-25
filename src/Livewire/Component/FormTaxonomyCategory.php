@@ -9,6 +9,7 @@ class FormTaxonomyCategory extends Component
 {
     public $items = [];
     public $name;
+    public $parent;
     public $label;
     public $type;
     public $taxonomy;
@@ -44,8 +45,21 @@ class FormTaxonomyCategory extends Component
             'name' => 'required',
         ]);
 
+        if (Taxonomy::whereHas('translations', function ($q) {
+            $q->where('name', '=', $this->name);
+        })
+            ->whereType($this->type)
+            ->whereTaxonomy($this->taxonomy)
+            ->exists()
+        ) {
+            return $this->addError('name', trans('validation.exists', [
+                'attribute' => trans('tadcms::app.name')
+            ]));
+        }
+
         $model = Taxonomy::create([
             'name' => $this->name,
+            'parent_id' => $this->parent,
             'type' => $this->type,
             'taxonomy' => $this->taxonomy
         ]);
@@ -56,11 +70,12 @@ class FormTaxonomyCategory extends Component
 
     public function render()
     {
-        return view('tadcms::livewire.components.form_category');
+        return view('tadcms::livewire.components.form-category');
     }
 
     protected function resetForm()
     {
         $this->name = '';
+        $this->parent = '';
     }
 }

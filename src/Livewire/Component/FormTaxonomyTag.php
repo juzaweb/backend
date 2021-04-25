@@ -25,7 +25,11 @@ class FormTaxonomyTag extends Component
 
     public function showFormAdd()
     {
-        $this->showFormAdd = true;
+        if ($this->showFormAdd) {
+            $this->showFormAdd = false;
+        } else {
+            $this->showFormAdd = true;
+        }
     }
     
     public function add()
