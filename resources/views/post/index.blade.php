@@ -16,6 +16,9 @@
             <form method="post" class="form-inline">
                 <select name="bulk_actions" class="form-control w-50 mb-2 mr-1">
                     <option value="">@lang('tadcms::app.bulk-actions')</option>
+                    <option value="public">@lang('tadcms::app.public')</option>
+                    <option value="private">@lang('tadcms::app.private')</option>
+                    <option value="draft">@lang('tadcms::app.draft')</option>
                     <option value="delete">@lang('tadcms::app.delete')</option>
                 </select>
 
@@ -37,6 +40,7 @@
                         <option value="">@lang('tadcms::app.all-status')</option>
                         <option value="public">@lang('tadcms::app.public')</option>
                         <option value="private">@lang('tadcms::app.private')</option>
+                        <option value="draft">@lang('tadcms::app.draft')</option>
                     </select>
                 </div>
 
@@ -70,10 +74,14 @@
         }
 
         function status_formatter(value, row, index) {
-            if (value == 1) {
-                return '<span class="text-success">@lang('tadcms::app.enabled')</span>';
+            switch (value) {
+                case 'public':
+                    return `<span class="text-success">${tadcms.lang.public}</span>`;
+                case 'private':
+                    return `<span class="text-warning">${tadcms.lang.private}</span>`;
+                case 'draft':
+                    return `<span class="text-secondary">${tadcms.lang.draft}</span>`;
             }
-            return '<span class="text-danger">@lang('tadcms::app.disabled')</span>';
         }
 
         var table = new TadTable({

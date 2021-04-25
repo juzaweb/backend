@@ -36,8 +36,9 @@
                     'name' => 'status',
                     'value' => $model->status,
                     'options' => [
-                        '1' => trans('tadcms::app.enabled'),
-                        '0' => trans('tadcms::app.disabled')
+                        'public' => trans('tadcms::app.public'),
+                        'private' => trans('tadcms::app.private'),
+                        'draft' => trans('tadcms::app.draft'),
                     ],
                 ])
                 @endcomponent

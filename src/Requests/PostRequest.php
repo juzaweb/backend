@@ -11,7 +11,7 @@ class PostRequest extends FormRequest
         $lang = app()->getLocale();
         return [
             $lang . '.title' => 'required|string|max:250',
-            'status' => 'required|string|in:0,1',
+            'status' => 'required|string|in:public,private,draft,trash',
             $lang . 'thumbnail' => 'nullable|string|max:150',
         ];
     }

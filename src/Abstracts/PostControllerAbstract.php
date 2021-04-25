@@ -100,12 +100,12 @@ abstract class PostControllerAbstract extends BackendController
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', 20);
 
-        $query = Post::query();
+        $query = Post::query()->with(['translations']);
 
         if ($search) {
-            $query->where(function ($subquery) use ($search) {
-                $subquery->orWhere('name', 'like', '%'. $search .'%');
-                $subquery->orWhere('description', 'like', '%'. $search .'%');
+            $query->where(function ($subQuery) use ($search) {
+                $subQuery->orWhereTranslationLike('title', '%'. $search .'%');
+                //$subQuery->orWhereTranslationLike('content', '%'. $search .'%');
             });
         }
 
@@ -188,6 +188,15 @@ abstract class PostControllerAbstract extends BackendController
                 case 'delete':
                     foreach ($ids as $id) {
                         $this->postRepository->delete($id);
+                    }
+                    break;
+                case 'public':
+                case 'private':
+                case 'draft':
+                    foreach ($ids as $id) {
+                        $this->postRepository->update($id, [
+                            'status' => $action
+                        ]);
                     }
                     break;
             }

@@ -17,6 +17,7 @@
         var tadcms = {
             'adminPrefix': "{{ config('tadcms.admin-prefix') }}",
             'adminUrl': '{{ url(config('tadcms.admin-prefix')) }}',
+            'lang': @json(trans('tadcms::app'))
         };
     </script>
 
