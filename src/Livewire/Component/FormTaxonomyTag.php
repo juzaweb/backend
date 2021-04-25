@@ -33,7 +33,19 @@ class FormTaxonomyTag extends Component
         $this->validate([
             'name' => 'required',
         ]);
-        
+
+        if (Taxonomy::whereHas('translations', function ($q) {
+            $q->where('name', '=', $this->name);
+        })
+            ->whereType($this->type)
+            ->whereTaxonomy($this->taxonomy)
+            ->exists()
+        ) {
+            return $this->addError('name', trans('validation.exists', [
+                'attribute' => trans('tadcms::app.name')
+            ]));
+        }
+
         $model = Taxonomy::create([
             'name' => $this->name,
             'type' => $this->type,

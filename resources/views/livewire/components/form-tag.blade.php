@@ -6,7 +6,7 @@
         </span>
     </label>
 
-    <select class="form-control load-taxonomies select-tags"
+    <select class="form-control select-tags"
             data-placeholder="--- @lang('tadcms::app.tags') ---"
             data-type="{{ $type }}"
             data-taxonomy="{{ $taxonomy }}"
@@ -15,9 +15,10 @@
     <div class="show-tags mt-2">
         @if($value ?? null)
             @foreach($value as $item)
-            <span class="tag m-1">{{ $item->name }} <a href="javascript:void(0)" class="text-danger ml-1 remove-tag-item"><i class="fa fa-times-circle"></i></a>
-    <input type="hidden" name="taxonomies[]" class="tag-explode" value="{{ $item->id }}">
-    </span>
+                @component('tadcms::components.tag-item', [
+                    'item' => $item
+                ])
+                @endcomponent
             @endforeach
         @endif
     </div>
@@ -34,3 +35,45 @@
     </div>
     @endif
 </div>
+
+<script>
+    document.addEventListener('livewire:load', function (event) {
+        window.livewire.hook('afterDomUpdate', () => {
+            $('.select-tags').select2({
+                allowClear: true,
+                dropdownAutoWidth : true,
+                width: '100%',
+                placeholder: function(params) {
+                    return {
+                        id: null,
+                        text: params.placeholder,
+                    }
+                },
+                ajax: {
+                    method: 'GET',
+                    url: tadcms.adminUrl +'/load-data/loadTaxonomies',
+                    dataType: 'json',
+                    data: function (params) {
+                        let type = $(this).data('type');
+                        let taxonomy = $(this).data('taxonomy');
+                        let explodes = $(this).data('explodes');
+                        if (explodes) {
+                            explodes = $("." + explodes).map(function () {
+                                return $(this).val();
+                            }).get();
+                        }
+
+                        var query = {
+                            search: $.trim(params.term),
+                            page: params.page,
+                            explodes: explodes,
+                            type: type,
+                            taxonomy: taxonomy
+                        };
+                        return query;
+                    }
+                }
+            });
+        });
+    });
+</script>
