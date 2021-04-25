@@ -4,53 +4,49 @@ namespace Tadcms\Backend\Livewire\Component;
 
 use Livewire\Component;
 use Tadcms\System\Models\Taxonomy;
-use Tadcms\System\Repositories\TaxonomyRepository;
 
 class FormTaxonomyTag extends Component
 {
     public $items = [];
+    public $type;
+    public $label;
     public $name;
     public $taxonomy;
     public $value;
     public $showFormAdd = false;
-    private $taxonomyRepository;
     
-    public function mount($taxonomy, $value = [])
+    public function mount($label, $type, $taxonomy, $value = [])
     {
+        $this->label = $label;
+        $this->type = $type;
         $this->taxonomy = $taxonomy;
         $this->value = $value;
-        $this->taxonomyRepository = app()->make(TaxonomyRepository::class);
     }
-    
-    public function loadItems()
+
+    public function showFormAdd()
     {
-        $taxonomy = $this->taxonomy['taxonomy'];
-        $this->items = Taxonomy::with(['childrens'])
-            ->where('taxonomy', '=', $taxonomy)
-            ->whereNull('parent_id')
-            ->limit(10)
-            ->get();
+        $this->showFormAdd = true;
     }
     
     public function add()
     {
-        $this->showFormAdd = true;
         $this->validate([
             'name' => 'required',
         ]);
         
-        $model = $this->taxonomyRepository->create([
+        $model = Taxonomy::create([
             'name' => $this->name,
-            'taxonomy' => $this->taxonomy['taxonomy']
+            'type' => $this->type,
+            'taxonomy' => $this->taxonomy,
         ]);
         
         $this->resetForm();
-        $this->items->push($model);
+        $this->value->push($model);
     }
     
     public function render()
     {
-        return view('tadcms::livewire.components.form_tag');
+        return view('tadcms::livewire.components.form-tag');
     }
     
     protected function resetForm()

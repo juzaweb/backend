@@ -117,6 +117,7 @@ return [
     'pending' => 'Pending',
     'sending' => 'Sending',
     'unsent' => 'Unsent',
+    'add-tag' => 'Add tag',
     'send-for' => 'Send for',
     'remember-me' => 'Remember me',
     'saved-successfully' => 'Saved successfully',

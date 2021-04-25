@@ -65,7 +65,18 @@ abstract class PostControllerAbstract extends BackendController
 
         $model = $this->postRepository->findOrFail($id);
         $model->load(['translations', 'taxonomies']);
-        $selectedTaxonomies = $model->taxonomies->pluck('id')->toArray();
+
+        if (in_array('category', $this->supports)) {
+            $selectedCategories = $model->taxonomies
+                ->where('taxonomy', '=', 'category')
+                ->pluck('id')
+                ->toArray();
+        }
+
+        if (in_array('tag', $this->supports)) {
+            $selectedTags = $model->taxonomies
+                ->where('taxonomy', '=', 'tag');
+        }
 
         return view('tadcms::post.form', [
             'model' => $model,
@@ -74,7 +85,8 @@ abstract class PostControllerAbstract extends BackendController
             'postType' => $this->postType,
             'postTypeSingular' => $this->postTypeSingular,
             'supports' => $this->supports,
-            'selectedTaxonomies' => $selectedTaxonomies
+            'selectedCategories' => $selectedCategories ?? [],
+            'selectedTags' => $selectedTags ?? []
         ]);
     }
 
@@ -196,5 +208,5 @@ abstract class PostControllerAbstract extends BackendController
         return $this->label();
     }
 
-    abstract protected function label() : string;
+    abstract protected function label(): string;
 }

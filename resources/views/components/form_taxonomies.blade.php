@@ -9,7 +9,9 @@
 
 @if(($form ?? 'category') == 'tag')
     @livewire('tadcms::component.form-tags', [
-        'taxonomy' => $config,
+        'label' => $label,
+        'taxonomy' => $taxonomy,
+        'type' => $type,
         'value' => $value ?? []
     ])
 @endif

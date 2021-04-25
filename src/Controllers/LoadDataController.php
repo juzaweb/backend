@@ -31,25 +31,31 @@ class LoadDataController extends BackendController
     {
         $search = $request->get('search');
         $explodes = $request->get('explodes');
+        $type = $request->get('type');
         $taxonomy = $request->get('taxonomy');
-        
-        $query = Taxonomy::query();
+
+        $query = Taxonomy::query()->with(['translations']);
         $query->select([
             'id',
-            'name AS text'
         ]);
+
+        $query->where('type', '=', $type);
         $query->where('taxonomy', '=', $taxonomy);
         
         if ($search) {
-            $query->where('name', 'like', '%'. $search .'%');
+            $query->whereTranslation('name', 'like', '%'. $search .'%');
         }
         
         if ($explodes) {
-            $query->whereNotIn('id', explode(',', $explodes));
+            $query->whereNotIn('id', $explodes);
         }
         
         $paginate = $query->paginate(10);
         $data['results'] = $query->get();
+        foreach ($data['results'] as $item) {
+            $item->text = $item->name;
+        }
+
         if ($paginate->nextPageUrl()) {
             $data['pagination'] = ['more' => true];
         }
@@ -61,7 +67,6 @@ class LoadDataController extends BackendController
     {
         $search = $request->get('search');
         $explodes = $request->get('explodes');
-        $taxonomy = $request->get('taxonomy');
 
         $query = User::query();
         $query->select([
