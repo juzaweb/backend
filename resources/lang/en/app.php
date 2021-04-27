@@ -121,9 +121,13 @@ return [
     'draft' => 'Draft',
     'public' => 'Public',
     'private' => 'Private',
+    'or' => 'or',
+    'menu-structure' => 'Menu structure',
+    'add-menu-items' => 'Add menu items',
     'send-for' => 'Send for',
     'remember-me' => 'Remember me',
     'saved-successfully' => 'Saved successfully',
     'send-email-test' => 'Send email test',
     'click-here-to-select-file' => 'Click here to select file',
+    'select-menu-to-edit' => 'Select a menu to edit',
 ];

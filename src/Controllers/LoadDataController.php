@@ -3,6 +3,7 @@
 namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Http\Request;
+use Tadcms\System\Models\Menu;
 use Tadcms\System\Models\Taxonomy;
 use Tadcms\System\Models\User;
 
@@ -80,6 +81,29 @@ class LoadDataController extends BackendController
 
         if ($explodes) {
             $query->whereNotIn('id', explode(',', $explodes));
+        }
+
+        $paginate = $query->paginate(10);
+        $data['results'] = $query->get();
+        if ($paginate->nextPageUrl()) {
+            $data['pagination'] = ['more' => true];
+        }
+
+        return response()->json($data);
+    }
+
+    protected function loadMenus(Request $request)
+    {
+        $search = $request->get('search');
+
+        $query = Menu::query();
+        $query->select([
+            'id',
+            'name AS text'
+        ]);
+
+        if ($search) {
+            $query->where('name', 'like', '%'. $search .'%');
         }
 
         $paginate = $query->paginate(10);

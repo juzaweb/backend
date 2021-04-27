@@ -1,25 +1,22 @@
 @extends('tadcms::layouts.admin')
 
 @section('content')
-
-    @livewire('tadcms::menu.menu-index')
-
     <div class="row alert alert-light p-3 no-radius">
-        <div class="col-md-6">
+        <div class="col-md-6 form-select-menu">
             <div class="alert-default">
-                Select a menu to edit:
-                <select name="id" class="w-25">
+                @lang('tadcms::app.select-menu-to-edit'):
+                <select name="id" class="w-25 form-control load-menus">
                     @if(isset($menu->id))
                         <option value="{{ $menu->id }}" selected>{{ $menu->name }}</option>
                     @endif
                 </select>
 
-                or <a href="javascript:void(0)" class="ml-1"><i class="fa fa-plus"></i> {{ trans('tadcms::app.create-new-menu') }}</a>
+                @lang('tadcms::app.or') <a href="javascript:void(0)" class="ml-1 btn-add-menu"><i class="fa fa-plus"></i> {{ trans('tadcms::app.create-new-menu') }}</a>
             </div>
         </div>
 
-        <div class="col-md-6 box-hidden">
-            <form action="{{ route('admin.menu.add') }}" method="post" class="form-ajax form-inline">
+        <div class="col-md-6 form-add-menu box-hidden">
+            <form action="{{ route('admin.menu.save') }}" method="post" class="form-ajax form-inline">
                 <div class="form-group">
                     <input type="text" name="name" class="form-control" autocomplete="off" required placeholder="{{ trans('tadcms::app.menu-name') }}">
                 </div>
@@ -29,25 +26,83 @@
         </div>
     </div>
 
-    <div class="row mt-3">
-        <div class="col-md-4" wire:init="loadItems">
-            <h5 class="mb-2 font-weight-bold">Add menu items</h5>
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <h5 class="mb-2 font-weight-bold">@lang('tadcms::app.add-menu-items')</h5>
+
+            <div class="card">
+                <div class="card-header bg-light pb-1">
+                    <h6 class="card-title"> {{ trans('tadcms::app.categories') }}</h6>
+                </div>
+
+                <div class="card-body">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="javascript: void(0);" data-toggle="tab">Most Used</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0);" data-toggle="tab">View All</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:void(0);" data-toggle="tab">Search</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content" id="v-pills-tabContent">
+                        <div class="tab-pane fade p-2 active show" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                            <div class="form-check mt-1">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" value="">
+                                    Option two is checked now
+                                </label>
+                            </div>
+                            <div class="form-check mt-1">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" value="">
+                                    Option two is checked now
+                                </label>
+                            </div>
+                            <div class="form-check mt-1">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" value="">
+                                    Option two is checked now
+                                </label>
+                            </div>
+
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input class="form-check-input" type="checkbox" value="">
+                                            Select all
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <button class="btn btn-primary">Add to menu</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div class="col-md-8">
-            <h5 class="mb-2 font-weight-bold">Menu structure</h5>
+            <h5 class="mb-2 font-weight-bold">@lang('tadcms::app.menu-structure')</h5>
 
-            <form action="{{ route('admin.menu.save') }}" method="post" class="form-ajax">
-                <input type="hidden" name="id" value="{{ @$menu->id }}">
+            <form action="{{ route('admin.menu.save') }}" method="post" class="form-ajax form-menu-structure">
+                <input type="hidden" name="id" value="{{ $menu->id ?? '' }}">
 
                 <div class="card">
-                    <div class="card-header bg-light">
+                    <div class="card-header bg-light pb-1">
                         <div class="row">
                             <div class="col-md-9">
                                 <div class="form-group row">
                                     <label for="name" class="col-sm-3">{{ trans('tadcms::app.menu-name') }}</label>
                                     <div class="col-sm-9">
-                                        <input type="text" name="name" id="name" class="form-control" value="{{ @$menu->name }}" autocomplete="off">
+                                        <input type="text" name="name" id="name" class="form-control" value="{{ $menu->name ?? '' }}" autocomplete="off">
                                     </div>
                                 </div>
                             </div>
@@ -63,31 +118,48 @@
 
                         <div class="dd" id="nestable">
                             <ol class="dd-list">
-                                <li class="dd-item dd3-item" data-id="13">
-                                    <div class="dd-handle dd3-handle"></div>
-                                    <div class="dd3-content">Level 1</div>
+                                <li class="dd-item" data-id="1">
+                                    <div class="dd-handle">
+                                        Level 1
+                                        <a href="javascript:void(0)" class="dd-nodrag"><i class="fa fa-sort-down"></i></a>
+                                    </div>
                                 </li>
-                                <li class="dd-item dd3-item" data-id="14">
-                                    <div class="dd-handle dd3-handle"></div>
-                                    <div class="dd3-content">Level 1</div>
-                                </li>
-                                <li class="dd-item dd3-item" data-id="15">
-                                    <div class="dd-handle dd3-handle"></div>
-                                    <div class="dd3-content">Level 1</div>
+                                <li class="dd-item" data-id="2">
+                                    <div class="dd-handle">Level 1</div>
                                     <ol class="dd-list">
-                                        <li class="dd-item dd3-item" data-id="16">
-                                            <div class="dd-handle dd3-handle"></div>
-                                            <div class="dd3-content">Level 2</div>
+                                        <li class="dd-item" data-id="3">
+                                            <div class="dd-handle">Level 2</div>
                                         </li>
-                                        <li class="dd-item dd3-item" data-id="17">
-                                            <div class="dd-handle dd3-handle"></div>
-                                            <div class="dd3-content">Level 2</div>
+                                        <li class="dd-item" data-id="4">
+                                            <div class="dd-handle">Level 2</div>
                                         </li>
-                                        <li class="dd-item dd3-item" data-id="18">
-                                            <div class="dd-handle dd3-handle"></div>
-                                            <div class="dd3-content">Level 2</div>
+                                        <li class="dd-item" data-id="5">
+                                            <div class="dd-handle">Level 2</div>
+                                            <ol class="dd-list">
+                                                <li class="dd-item" data-id="6">
+                                                    <div class="dd-handle">Level 3</div>
+                                                </li>
+                                                <li class="dd-item" data-id="7">
+                                                    <div class="dd-handle">Level 3</div>
+                                                </li>
+                                                <li class="dd-item" data-id="8">
+                                                    <div class="dd-handle">Level 3</div>
+                                                </li>
+                                            </ol>
+                                        </li>
+                                        <li class="dd-item" data-id="9">
+                                            <div class="dd-handle">Level 2</div>
+                                        </li>
+                                        <li class="dd-item" data-id="10">
+                                            <div class="dd-handle">Level 2</div>
                                         </li>
                                     </ol>
+                                </li>
+                                <li class="dd-item" data-id="11">
+                                    <div class="dd-handle">Level 1</div>
+                                </li>
+                                <li class="dd-item" data-id="12">
+                                    <div class="dd-handle">Level 1</div>
                                 </li>
                             </ol>
                         </div>
@@ -97,7 +169,7 @@
 
                     <div class="card-footer">
                         <div class="btn-group">
-                            <a href="javascript:void(0)" class="text-danger" wire:click="deleteMenu">{{ trans('tadcms::app.delete-menu') }}</a>
+                            <a href="javascript:void(0)" class="text-danger">{{ trans('tadcms::app.delete-menu') }}</a>
                         </div>
 
                         <div class="btn-group float-right">
@@ -159,7 +231,8 @@
             };
 
             $('#nestable').nestable({
-                group: 1
+                group: 1,
+                noDragClass: 'dd-nodrag'
             }).on('change', updateOutput);
 
         });

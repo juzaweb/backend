@@ -14,25 +14,6 @@ class MenuController extends BackendController
         ]);
     }
     
-    public function addMenu(Request $request)
-    {
-        $this->validate([
-            'name' => 'required|string|max:250',
-        ], $request, [
-            'name' => trans('app.name')
-        ]);
-        
-        $model = Menu::firstOrNew(['id' => $request->post('id')]);
-        $model->fill($request->all());
-        $model->save();
-        
-        return response()->json([
-            'status' => 'success',
-            'message' => trans('app.saved_successfully'),
-            'redirect' => route('admin.design.menu.id', [$model->id]),
-        ]);
-    }
-    
     public function save(Request $request)
     {
         $request->validate([
@@ -53,10 +34,8 @@ class MenuController extends BackendController
     
     public function getItems(Request $request)
     {
-        $this->validate([
+        $request->validate([
             'type' => 'required',
-        ], $request, [
-            'type' => trans('app.type')
         ]);
         
         $type = $request->post('type');
@@ -79,7 +58,7 @@ class MenuController extends BackendController
                 }
                 
                 return response()->json($result);
-            case 'country';
+            case 'country':
                 $items = Countries::where('status', '=', 1)
                     ->whereIn('id', $items)
                     ->get(['id', 'name', 'slug']);
