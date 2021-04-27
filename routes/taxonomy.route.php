@@ -12,4 +12,4 @@ Route::tadResource('tags', 'TagController');
 
 Route::get('tags/component-item', 'TagController@getTagComponent')->name('admin.tags.component-item');
 
-Route::tadResource('page-tags', 'TagController');
+Route::tadResource('page-tags', 'PageTagController');

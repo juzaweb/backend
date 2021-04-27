@@ -51,6 +51,8 @@ abstract class TaxonomyControllerAbstract extends BackendController
             'model' => $model,
             'title' => trans('tadcms::app.add-new'),
             'taxonomy' => $this->taxonomy,
+            'taxonomySingular' => $this->taxonomySingular,
+            'type' => $this->type,
             'lang' => $this->getLocale(),
             'supports' => $this->supports
         ]);
@@ -70,6 +72,8 @@ abstract class TaxonomyControllerAbstract extends BackendController
             'model' => $model,
             'title' => $model->name,
             'taxonomy' => $this->taxonomy,
+            'taxonomySingular' => $this->taxonomySingular,
+            'type' => $this->type,
             'lang' => $this->getLocale(),
             'supports' => $this->supports
         ]);
@@ -83,14 +87,14 @@ abstract class TaxonomyControllerAbstract extends BackendController
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', 20);
 
-        $query = Taxonomy::query();
+        $query = Taxonomy::query()->with(['translations']);
         $query->where('taxonomy', '=', $this->taxonomySingular);
         $query->where('type', '=', $this->type);
 
         if ($search) {
             $query->where(function ($subquery) use ($search) {
-                $subquery->orWhere('name', 'like', '%'. $search .'%');
-                $subquery->orWhere('description', 'like', '%'. $search .'%');
+                $subquery->orWhereTranslationLike('name', '%'. $search .'%');
+                $subquery->orWhereTranslationLike('description', '%'. $search .'%');
             });
         }
 
