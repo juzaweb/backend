@@ -4,6 +4,7 @@ namespace Tadcms\Backend\Controllers\Appearance;
 
 use Illuminate\Http\Request;
 use Tadcms\Backend\Controllers\BackendController;
+use Tadcms\System\Models\Menu;
 
 class MenuController extends BackendController
 {
@@ -25,13 +26,26 @@ class MenuController extends BackendController
         $model->fill($request->all());
         $model->save();
         
-        return response()->json([
-            'status' => 'success',
-            'message' => trans('app.saved_successfully'),
-            'redirect' => route('admin.design.menu.id', [$model->id]),
-        ]);
+        return $this->success(
+            trans('tadcms::app.saved-successfully')
+        );
     }
-    
+
+    public function delete(Request $request)
+    {
+        $request->validate([
+            'id' => 'required|exists:menus,id'
+        ], [], [
+            'id' => trans('tadcms::app.menu')
+        ]);
+
+        Menu::destroy([$request->input('id')]);
+
+        return $this->success(
+            trans('tadcms::app.deleted-successfully')
+        );
+    }
+
     public function getItems(Request $request)
     {
         $request->validate([

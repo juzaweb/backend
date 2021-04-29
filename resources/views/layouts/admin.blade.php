@@ -34,7 +34,7 @@
     @admin_header
 </head>
 
-<body class="cui__layout--cardsShadow cui__menuLeft--dark cui__topbar--fixed cui__menuLeft--unfixed">
+<body class="cui__menuLeft--dark cui__topbar--fixed cui__menuLeft--unfixed">
 <div class="cui__layout cui__layout--hasSider">
 
     <div class="cui__menuLeft">

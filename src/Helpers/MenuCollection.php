@@ -36,7 +36,8 @@ class MenuCollection
         return false;
     }
     
-    public function get($key, $default = null) {
+    public function get($key, $default = null)
+    {
         return $this->item->get($key, $default);
     }
     
