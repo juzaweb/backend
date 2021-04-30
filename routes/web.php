@@ -1,6 +1,6 @@
 <?php
 
-use Theanh\FileManager\Routes AS FileManagerRoutes;
+use Tadcms\FileManager\Routes AS FileManagerRoutes;
 
 Route::group(['middleware' => 'admin'], function () {
 

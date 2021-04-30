@@ -4,7 +4,7 @@ namespace Tadcms\Backend\Controllers\Auth;
 
 use Illuminate\Support\Facades\DB;
 use Tadcms\System\Models\User;
-use Theanh\Lararepo\Controller;
+use Tadcms\Lararepo\Controller;
 
 class VerificationController extends Controller
 {

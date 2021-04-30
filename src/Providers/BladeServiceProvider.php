@@ -10,7 +10,7 @@ use Illuminate\Support\ServiceProvider;
  *
  * @package    Tadcms\Backend
  * @author     The Anh Dang <dangtheanh16@gmail.com>
- * @link       https://github.com/theanhk/tadcms
+ * @link       https://github.com/tadcms/tadcms
  * @license    MIT
  */
 class BladeServiceProvider extends ServiceProvider

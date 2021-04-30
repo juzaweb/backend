@@ -8,9 +8,9 @@ use Illuminate\Support\Str;
 /**
  * Class HookAction
  *
- * @package    Theanh\Tadcms
+ * @package    Tadcms\Tadcms
  * @author     The Anh Dang <dangtheanh16@gmail.com>
- * @link       https://github.com/theanhk/tadcms
+ * @link       https://github.com/tadcms/tadcms
  * @license    MIT
  */
 class HookAction

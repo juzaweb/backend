@@ -4,7 +4,7 @@ namespace Tadcms\Backend\Controllers\Setting;
 
 use Illuminate\Http\Request;
 use Tadcms\Backend\Controllers\BackendController;
-use Theanh\EmailTemplate\Models\EmailTemplate;
+use Tadcms\EmailTemplate\Models\EmailTemplate;
 
 class EmailTemplateController extends BackendController
 {

@@ -2,7 +2,7 @@
 
 namespace Tadcms\Backend\Controllers\Auth;
 
-use Theanh\Lararepo\Controller;
+use Tadcms\Lararepo\Controller;
 use Illuminate\Http\Request;
 use Tadcms\System\Models\User;
 use Illuminate\Support\Facades\Auth;

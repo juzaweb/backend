@@ -1,5 +1,6 @@
 {
     "name": "tadcms/backend",
+    "version": "1.0.1",
     "description": "TAD CMS backend.",
     "keywords": [],
     "license": "MIT",
@@ -16,7 +17,7 @@
     },
     "require": {
         "php": ">=7.2",
-        "theanh/tad-system": "dev-master"
+        "tadcms/system": "1.0.*"
     },
     "require-dev": {
       "laravel/laravel": "^6.0 | ^7.0 | ^8.0",

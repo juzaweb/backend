@@ -76,7 +76,7 @@
         <div class="cui__layout__footer">
             <div class="cui__footer">
                 <div class="cui__footer__inner">
-                    <a href="https://github.com/theanhk/tadcms" target="_blank" rel="noopener noreferrer" class="cui__footer__logo">
+                    <a href="https://github.com/tadcms/tadcms" target="_blank" rel="noopener noreferrer" class="cui__footer__logo">
                         Provided by TAD CMS
                         <span></span>
                     </a>

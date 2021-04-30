@@ -4,9 +4,9 @@ namespace Tadcms\Backend\Livewire\Media;
 
 use Illuminate\Support\Collection;
 use Livewire\Component;
-use Theanh\FileManager\Facades\FileManager;
-use Theanh\FileManager\Models\FolderMedia;
-use Theanh\FileManager\Models\Media;
+use Tadcms\FileManager\Facades\FileManager;
+use Tadcms\FileManager\Models\FolderMedia;
+use Tadcms\FileManager\Models\Media;
 
 class MediaList extends Component
 {
@@ -95,7 +95,7 @@ class MediaList extends Component
                 'time' => (string) $row->created_at,
                 'type' => $row->type,
                 'icon' => 'fa-folder-o',
-                'thumb' => asset('vendor/theanh/laravel-filemanager/images/folder.png'),
+                'thumb' => asset('vendor/tadcms/filemanager/images/folder.png'),
                 'is_file' => false
             ];
         }

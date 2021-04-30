@@ -5,14 +5,14 @@ namespace Tadcms\Backend\Controllers\Plugin;
 use Illuminate\Http\Request;
 use Tadcms\Backend\Controllers\BackendController;
 use Tadcms\System\Traits\ArrayPagination;
-use Theanh\Modules\Facades\Plugin;
+use Tadcms\Modules\Facades\Plugin;
 
 /**
  * Class Tadcms\Backend\Controllers\Plugin\PluginController
  *
- * @package    Theanh\Tadcms
+ * @package    Tadcms\Tadcms
  * @author     The Anh Dang <dangtheanh16@gmail.com>
- * @link       https://github.com/theanhk/tadcms
+ * @link       https://github.com/tadcms/tadcms
  * @license    MIT
  */
 class PluginController extends BackendController

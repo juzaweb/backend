@@ -5,7 +5,7 @@ namespace Tadcms\Backend\Controllers\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Tadcms\System\Models\PasswordReset;
-use Theanh\Lararepo\Controller;
+use Tadcms\Lararepo\Controller;
 use Illuminate\Http\Request;
 use Tadcms\System\Models\User;
 

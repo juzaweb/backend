@@ -3,7 +3,7 @@
 namespace Tadcms\Backend\Livewire\Theme;
 
 use Livewire\Component;
-use Theanh\MultiTheme\Facades\Theme;
+use Tadcms\MultiTheme\Facades\Theme;
 
 class ThemeList extends Component
 {

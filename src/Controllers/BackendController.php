@@ -2,7 +2,7 @@
 
 namespace Tadcms\Backend\Controllers;
 
-use Theanh\Lararepo\Controller;
+use Tadcms\Lararepo\Controller;
 
 class BackendController extends Controller
 {

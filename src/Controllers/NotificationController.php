@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Tadcms\Backend\Requests\NotificationRequest;
 use Tadcms\System\Models\User;
-use Theanh\Notification\Models\ManualNotification;
-use Theanh\Notification\SendNotification;
-use Theanh\Notification\Jobs\SendNotification as SendNotificationJob;
+use Tadcms\Notification\Models\ManualNotification;
+use Tadcms\Notification\SendNotification;
+use Tadcms\Notification\Jobs\SendNotification as SendNotificationJob;
 
 class NotificationController extends BackendController
 {

@@ -4,8 +4,8 @@ namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Theanh\FileManager\Models\FolderMedia;
-use Theanh\FileManager\Repositories\FolderMediaRepository;
+use Tadcms\FileManager\Models\FolderMedia;
+use Tadcms\FileManager\Repositories\FolderMediaRepository;
 
 class MediaController extends BackendController
 {
