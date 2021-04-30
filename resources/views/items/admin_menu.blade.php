@@ -4,7 +4,7 @@
             <span class="cui__menuLeft__item__link">
                 <i class="cui__menuLeft__item__icon {{ $item->get('icon') }}"></i>
 
-                <span class="cui__menuLeft__item__title">{{ trans($item->get('title')) }}</span>
+                <span class="cui__menuLeft__item__title">{{ $item->get('title') }}</span>
             </span>
 
             <ul class="cui__menuLeft__navigation">
@@ -22,7 +22,7 @@
         <li class="cui__menuLeft__item cui__menuLeft__item-{{ $item->get('url') }}">
             <a class="cui__menuLeft__item__link" href="{{ url('admin-cp/' . $item->get('url')) }}">
                 <i class="cui__menuLeft__item__icon {{ $item->get('icon') }}"></i>
-                <span class="cui__menuLeft__item__title">{{ trans($item->get('title')) }}</span>
+                <span class="cui__menuLeft__item__title">{{ $item->get('title') }}</span>
 
             </a>
         </li>

@@ -5,9 +5,9 @@ namespace Tadcms\Backend\Facades;
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @method static addMenuPage($menuTitle, $menuSlug, array $args)
- * @method static registerTaxonomy($taxonomy, array $args)
- * @method static registerPostType($postType, array $args)
+ * @method static addAdminMenu($menuTitle, $menuSlug, array $args)
+ * @method static registerTaxonomy($taxonomy, $objectType, array $args)
+ * @method static registerPostType($key, array $args)
  * @method static registerMenuItem($key, $componentClass)
  * @see \Tadcms\Backend\Supports\HookAction
  * */

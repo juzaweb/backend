@@ -3,6 +3,7 @@
 namespace Tadcms\Backend\Supports;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 /**
  * Class HookAction
@@ -31,7 +32,7 @@ class HookAction
      * - int $position The position in the menu order this item should appear.
      * @return bool.
      */
-    public function addMenuPage($menuTitle, $menuSlug, $args = [])
+    public function addAdminMenu($menuTitle, $menuSlug, $args = [])
     {
         $opts = [
             'title' => $menuTitle,
@@ -81,95 +82,121 @@ class HookAction
     /**
      * TAD CMS: Creates or modifies a taxonomy object.
      * @param string $taxonomy (Required) Taxonomy key, must not exceed 32 characters.
+     * @param string $objectType
      * @param array $args (Optional) Array of arguments for registering a post type.
-     * @return bool
+     * @return void
      * */
-    public function registerTaxonomy($taxonomy, $args = [])
+    public function registerTaxonomy($taxonomy, $objectType, $args = [])
     {
+        $type = Str::singular($objectType);
         $opts = [
             'label' => '',
             'description' => '',
-            'type' => 'category',
             'hierarchical' => false,
-            'taxonomy' => $taxonomy,
-            'parent' => null,
+            'parent' => $objectType,
+            'menu_slug' => $type . '.' . $taxonomy,
             'menu_position' => 20,
             'menu_icon' => 'fa fa-list-alt',
-            'object_types' => [],
             'supports' => [
                 'thumbnail',
             ],
         ];
 
-        $args = array_merge($opts, $args);
+        $args['type'] = $type;
+        $args = collect(array_merge($opts, $args));
 
-        add_filters('tadcms.taxonomies', function ($items) use ($args) {
-            $items[$args['taxonomy']] = $args;
+        add_filters('tadcms.taxonomies', function ($items) use ($taxonomy, $objectType, $args) {
+            if (Arr::has($items, $taxonomy)) {
+                $items[$taxonomy]['object_types'][$objectType] = $args;
+            } else {
+                $items[$taxonomy] = [
+                    'taxonomy' => $taxonomy,
+                    'singular' => Str::singular($taxonomy),
+                    'object_types' => [
+                        $objectType => $args
+                    ]
+                ];
+            }
             return $items;
         });
 
-        return true;
+        $this->addAdminMenu(
+            $args->get('label'),
+            $args->get('menu_slug'),
+            [
+                'icon' => 'fa fa-list-alt',
+                'parent' => $args->get('parent'),
+                'position' => $args->get('menu_position')
+            ]
+        );
     }
 
     /**
      * TAD CMS: Registers a post type.
-     * @param string $postType (Required) Post type key. Must not exceed 20 characters
+     * @param string $key (Required) Post type key. Must not exceed 20 characters
      * @param array $args Array of arguments for registering a post type.
-     * @return bool
      * */
-    public function registerPostType($postType, $args = [])
+    public function registerPostType($key, $args = [])
     {
-        $opts = [
+        $args = array_merge([
             'label' => '',
-            'post_type' => $postType,
             'description' => '',
             'menu_position' => 20,
             'menu_icon' => 'fa fa-list-alt',
             'supports' => [],
-        ];
-        $args = array_merge($opts, $args);
+        ], $args);
 
-        $supports = [];
-        if (in_array('category', $args['supports'])) {
-            $supports['category'] = [
-                'label' => 'tadcms::app.categories',
-                'taxonomy' => $postType . '-categories'
-            ];
+        $args['key'] = $key;
+        $args['singular'] = Str::singular($key);
+        $args = collect($args);
 
-            $this->registerTaxonomy($supports['category']['taxonomy'], [
-                'label' => $supports['category']['label'],
-                'parent' => 'post-type.' . $postType,
-                'menu_position' => $args['menu_position'] + 1,
-                'object_types' => [
-                    'post-type.' . $postType
-                ],
+        add_filters('tadcms.post_types', function ($items) use ($args) {
+            $items[$args->get('key')] = $args;
+            return $items;
+        });
+
+        $this->addAdminMenu(
+            $args->get('label'),
+            $key,
+            [
+                'icon' => 'fa fa-edit',
+                'position' => 15
+            ]
+        );
+
+        $this->addAdminMenu(
+            trans('tadcms::app.all-posts'),
+            $key,
+            [
+                'position' => 2,
+                'parent' => $key,
+            ]
+        );
+
+        $this->addAdminMenu(
+            trans('tadcms::app.add-new'),
+            $key . '.create',
+            [
+                'position' => 3,
+                'parent' => $key,
+            ]
+        );
+
+        $supports = $args->get('supports', []);
+        if (in_array('category', $supports)) {
+            $this->registerTaxonomy('categories', $key, [
+                'label' => trans('tadcms::app.categories'),
+                'menu_position' => 4,
             ]);
         }
 
         if (in_array('tag', $args['supports'])) {
-            $supports['tag'] = [
-                'label' => 'tadcms::app.tags',
-                'taxonomy' => $postType . '-tags'
-            ];
-
-            $this->registerTaxonomy($supports['tag']['taxonomy'], [
-                'label' => $supports['tag']['label'],
-                'parent' => 'post-type.' . $postType,
-                'type' => 'tag',
-                'object_types' => [
-                    'post-type.' . $postType
-                ],
-                'menu_position' => $args['menu_position'] + 2
+            $this->registerTaxonomy('tags', $key, [
+                'label' => trans('tadcms::app.tags'),
+                'menu_position' => 5,
+                'supports' => []
             ]);
         }
-
-        $args['supports'] = $supports;
-        add_filters('tadcms.post_types', function ($items) use ($args) {
-            $items[$args['post_type']] = $args;
-            return $items;
-        });
-
-        return true;
     }
 
     /**
@@ -196,6 +223,7 @@ class HookAction
                 'component' => '',
                 'position' => 20
             ], $args);
+            $args['key'] = $key;
 
             $items[$key] = collect($args);
             return $items;

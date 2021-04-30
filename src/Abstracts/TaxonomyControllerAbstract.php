@@ -29,6 +29,7 @@ abstract class TaxonomyControllerAbstract extends BackendController
 
     public function index()
     {
+        dd(apply_filters('tadcms.taxonomies', []), apply_filters('tadcms.post_types', []));
         $model = $this->taxonomyRepository->firstOrNew(['id' => null]);
         return view('tadcms::taxonomy.index', [
             'title' => $this->getTitle(),

@@ -25,24 +25,7 @@ class Admin
         }
         
         do_action('admin.middleware');
-        
-        $this->addBackendMenu();
-        
-        return $next($request);
-    }
-    
-    protected function addBackendMenu()
-    {
-        BackendMenu::tadMenuLeft();
-        BackendMenu::tadAppearanceMenu();
-        BackendMenu::tadPluginMenu();
-        BackendMenu::tadSettingMenu();
-        if (config('tadcms.use_post')) {
-            BackendMenu::tadPostTypeMenu();
-        }
 
-        if (config('tadcms.use_page')) {
-            BackendMenu::tadPageMenu();
-        }
+        return $next($request);
     }
 }
