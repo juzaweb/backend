@@ -8,8 +8,3 @@ HookAction::registerPostType('posts', [
     'menu_position' => 15,
     'supports' => ['category', 'tag'],
 ]);
-
-HookAction::registerTaxonomy('categories', 'pages', [
-    'label' => trans('tadcms::app.categories'),
-    'menu_position' => 4,
-]);

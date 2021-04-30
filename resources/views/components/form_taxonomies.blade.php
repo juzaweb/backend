@@ -1,17 +1,9 @@
-@if(($form ?? 'category') == 'category')
-    @livewire('tadcms::component.form-taxonomies', [
-        'label' => $label,
-        'taxonomy' => $taxonomy,
-        'type' => $type,
-        'value' => $value ?? []
-    ])
-@endif
-
-@if(($form ?? 'category') == 'tag')
+@if($taxonomy->get('singular') == 'tag')
     @livewire('tadcms::component.form-tags', [
-        'label' => $label,
         'taxonomy' => $taxonomy,
-        'type' => $type,
-        'value' => $value ?? []
+    ])
+@else
+    @livewire('tadcms::component.form-taxonomies', [
+        'taxonomy' => $taxonomy,
     ])
 @endif

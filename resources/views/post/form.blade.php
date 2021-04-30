@@ -49,24 +49,11 @@
                     'value' => $model->thumbnail,
                 ])@endcomponent
 
-                @if(in_array('category', $supports))
-                @component('tadcms::components.form_taxonomies', [
-                    'label' => trans('tadcms::app.categories'),
-                    'taxonomy' => 'category',
-                    'type' => $postTypeSingular,
-                    'value' => $selectedCategories ?? []
-                ])@endcomponent
-                @endif
-
-                @if(in_array('tag', $supports))
-                @component('tadcms::components.form_taxonomies', [
-                    'label' => trans('tadcms::app.tags'),
-                    'type' => $postTypeSingular,
-                    'taxonomy' => 'tag',
-                    'form' => 'tag',
-                    'value' => $selectedTags ?? []
-                ])@endcomponent
-                @endif
+                @foreach($taxonomies as $taxonomy)
+                    @component('tadcms::components.form_taxonomies', [
+                        'taxonomy' => $taxonomy,
+                    ])@endcomponent
+                @endforeach
 
                 @do_action('post_type.' . $postType . '.form.right')
             </div>

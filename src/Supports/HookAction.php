@@ -103,6 +103,8 @@ class HookAction
         ];
 
         $args['type'] = $type;
+        $args['taxonomy'] = $taxonomy;
+        $args['singular'] = Str::singular($taxonomy);
         $args = collect(array_merge($opts, $args));
 
         add_filters('tadcms.taxonomies', function ($items) use ($taxonomy, $objectType, $args) {

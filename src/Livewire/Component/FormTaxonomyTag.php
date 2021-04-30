@@ -8,28 +8,11 @@ use Tadcms\System\Models\Taxonomy;
 class FormTaxonomyTag extends Component
 {
     public $items = [];
-    public $type;
-    public $label;
-    public $name;
-    public $taxonomy;
-    public $value;
-    public $showFormAdd = false;
+    protected $taxonomy;
     
-    public function mount($label, $type, $taxonomy, $value = [])
+    public function mount($taxonomy)
     {
-        $this->label = $label;
-        $this->type = $type;
         $this->taxonomy = $taxonomy;
-        $this->value = $value;
-    }
-
-    public function showFormAdd()
-    {
-        if ($this->showFormAdd) {
-            $this->showFormAdd = false;
-        } else {
-            $this->showFormAdd = true;
-        }
     }
     
     public function add()
@@ -62,11 +45,8 @@ class FormTaxonomyTag extends Component
     
     public function render()
     {
-        return view('tadcms::livewire.components.form-tag');
-    }
-    
-    protected function resetForm()
-    {
-        $this->name = '';
+        return view('tadcms::livewire.components.form-tag', [
+            'taxonomy' => $this->taxonomy
+        ]);
     }
 }

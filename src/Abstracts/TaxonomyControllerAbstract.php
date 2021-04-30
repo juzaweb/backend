@@ -29,7 +29,6 @@ abstract class TaxonomyControllerAbstract extends BackendController
 
     public function index()
     {
-        dd(apply_filters('tadcms.taxonomies', []), apply_filters('tadcms.post_types', []));
         $model = $this->taxonomyRepository->firstOrNew(['id' => null]);
         return view('tadcms::taxonomy.index', [
             'title' => $this->getTitle(),
@@ -118,6 +117,20 @@ abstract class TaxonomyControllerAbstract extends BackendController
 
     public function store(TaxonomyRequest $request)
     {
+        if (Taxonomy::whereHas('translations', function ($q) use ($request) {
+            $q->where('name', '=', $request->name);
+        })
+            ->whereType($this->type)
+            ->whereTaxonomy($this->taxonomy)
+            ->exists()
+        ) {
+            return $this->error(
+                trans('validation.exists', [
+                    'attribute' => trans('tadcms::app.name')
+                ])
+            );
+        }
+
         $this->taxonomyRepository->create(array_merge($request->all(), [
             'type' => $this->type,
             'taxonomy' => $this->taxonomySingular

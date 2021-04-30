@@ -3,6 +3,7 @@
 namespace Tadcms\Backend\Abstracts;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Tadcms\Backend\Controllers\BackendController;
 use Tadcms\Backend\Requests\PostRequest;
@@ -15,11 +16,7 @@ abstract class PostControllerAbstract extends BackendController
     protected $postRepository;
     protected $taxonomyRepository;
     protected $postType = 'posts';
-    protected $postTypeSingular = 'post';
-    protected $supports = [
-        'category',
-        'tag'
-    ];
+    protected $setting;
 
     public function __construct(
         PostRepository $postRepository,
@@ -27,66 +24,57 @@ abstract class PostControllerAbstract extends BackendController
     ) {
         $this->postRepository = $postRepository;
         $this->taxonomyRepository = $taxonomyRepository;
+        $this->setting = $this->getSetting();
+
+        if (empty($this->setting)) {
+            throw new \Exception('Post type ' . $this->postType . ' does not exists.');
+        }
     }
 
     public function index()
     {
         return view('tadcms::post.index', [
-            'title' => $this->getTitle(),
+            'title' => $this->setting->get('label'),
             'postType' => $this->postType,
-            'supports' => $this->supports
         ]);
     }
 
     public function create()
     {
         $this->addBreadcrumb([
-            'title' => $this->getTitle(),
+            'title' => $this->setting->get('label'),
             'url' => route("admin.{$this->postType}.index"),
         ]);
 
         $model = new Post();
+        $taxonomies = $this->getTaxonomies();
+
         return view('tadcms::post.form', [
             'model' => $model,
             'lang' => app()->getLocale(),
             'title' => trans('tadcms::app.add-new'),
             'postType' => $this->postType,
-            'postTypeSingular' => $this->postTypeSingular,
-            'supports' => $this->supports
+            'taxonomies' => $taxonomies,
         ]);
     }
 
     public function edit($id)
     {
         $this->addBreadcrumb([
-            'title' => $this->getTitle(),
+            'title' => $this->setting->get('label'),
             'url' => route("admin.{$this->postType}.index"),
         ]);
 
         $model = $this->postRepository->findOrFail($id);
-        $model->load(['translations', 'taxonomies']);
-
-        if (in_array('category', $this->supports)) {
-            $selectedCategories = $model->taxonomies
-                ->where('taxonomy', '=', 'category')
-                ->pluck('id')
-                ->toArray();
-        }
-
-        if (in_array('tag', $this->supports)) {
-            $selectedTags = $model->taxonomies
-                ->where('taxonomy', '=', 'tag');
-        }
+        $model->load(['translations']);
+        $taxonomies = $this->getTaxonomies();
 
         return view('tadcms::post.form', [
             'model' => $model,
             'lang' => app()->getLocale(),
             'title' => $model->title,
             'postType' => $this->postType,
-            'postTypeSingular' => $this->postTypeSingular,
-            'supports' => $this->supports,
-            'selectedCategories' => $selectedCategories ?? [],
-            'selectedTags' => $selectedTags ?? []
+            'taxonomies' => $taxonomies,
         ]);
     }
 
@@ -212,10 +200,23 @@ abstract class PostControllerAbstract extends BackendController
         );
     }
 
-    protected function getTitle()
+    /**
+     * @return \Illuminate\Support\Collection
+     * */
+    protected function getSetting()
     {
-        return $this->label();
+        return Arr::get(apply_filters('tadcms.post_types', []), $this->postType);
     }
 
-    abstract protected function label(): string;
+    protected function getTaxonomies()
+    {
+        $taxonomies = collect(apply_filters('tadcms.taxonomies', []));
+        $taxonomies = $taxonomies->filter(function ($item) {
+            return Arr::has($item['object_types'], $this->postType);
+        })->mapWithKeys(function ($item) {
+            return [$item['taxonomy'] => $item['object_types'][$this->postType]];
+        });
+
+        return $taxonomies ?? [];
+    }
 }
