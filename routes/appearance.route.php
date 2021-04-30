@@ -20,6 +20,6 @@ Route::group(['prefix' => 'menus'], function () {
     Route::get('/{id}', 'Appearance\MenuController@index')->name('admin.menu.id');
 
     Route::post('/save', 'Appearance\MenuController@save')->name('admin.menu.save');
-    
-    Route::post('/get-data', 'Appearance\MenuController@getItems')->name('admin.menu.items');
+
+    Route::post('/add-item', 'Appearance\MenuController@addItem')->name('admin.menu.add-item');
 });

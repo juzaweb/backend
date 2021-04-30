@@ -1,21 +1,18 @@
-<li class="dd-item" data-id="1" data-text="{{ $text }}">
+<li
+        class="dd-item"
+        @foreach($data as $key => $item)
+            data-{{ $key }}="{{ $item }}"
+        @endforeach
+>
     <div class="dd-handle">
-        {{ $text }}
+        {{ $data['text'] }}
         <a href="javascript:void(0)" class="dd-nodrag show-menu-edit">
             <i class="fa fa-sort-down"></i>
         </a>
     </div>
 
     <div class="form-item-edit box-hidden">
-        <div class="form-group mb-0">
-            <label class=" mb-0">Text</label>
-            <input type="text" class="form-control" value="{{ $text }}">
-        </div>
-
-        <div class="form-group mb-0">
-            <label class=" mb-0">Url</label>
-            <input type="text" class="form-control" value="http://">
-        </div>
+        {{ ($menuBlock->get('component'))::formEdit(collect($data)) }}
 
         <a href="" class="text-danger">Delete</a>
         <a href="" class="text-info">Cancel</a>

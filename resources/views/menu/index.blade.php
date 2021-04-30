@@ -30,7 +30,13 @@
         <div class="col-md-4">
             <h5 class="mb-2 font-weight-bold">@lang('tadcms::app.add-menu-items')</h5>
 
-            {{ \Tadcms\Backend\MenuItems\TaxonomyMenuItem::render() }}
+            @foreach($menuBlocks as $key => $menuBlock)
+                @component('tadcms::items.menu_block', [
+                    'menuBlock' => $menuBlock,
+                    'key' => $key
+                ])
+                @endcomponent
+            @endforeach
 
             <div class="card card-menu-items">
                 <div class="card-header card-header-flex">
@@ -157,32 +163,6 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="card card-menu-items">
-                <div class="card-header card-header-flex">
-                    <div class="d-flex flex-column justify-content-center">
-                        <h5 class="mb-0">{{ trans('tadcms::app.custom-links') }}</h5>
-                    </div>
-
-                    <div class="ml-auto d-flex align-items-stretch">
-                        <a href="javascript:void(0)" class="card-menu-show"><i class="fa fa-sort-down"></i></a>
-                    </div>
-                </div>
-
-                <div class="card-body box-hidden">
-                    <div class="form-group">
-                        <label class="col-form-label">@lang('tadcms::app.url')</label>
-                        <input type="text" name="url" class="form-control" placeholder="http://">
-                    </div>
-
-                    <div class="form-group">
-                        <label class="col-form-label">@lang('tadcms::app.link-text')</label>
-                        <input type="text" class="form-control" name="text">
-                    </div>
-
-                    <button class="btn btn-primary">Add to menu</button>
                 </div>
             </div>
         </div>
@@ -216,7 +196,9 @@
                     <div class="card-body" id="form-menu">
 
                         <div class="dd" id="nestable">
+                            <ol class="dd-list">
 
+                            </ol>
                         </div>
                     </div>
 
@@ -237,12 +219,62 @@
     <script type="text/javascript">
         $(document).ready(function() {
 
+            var updateOutput = function(e)
+            {
+                var list   = e.length ? e : $(e.target);
+                if (window.JSON) {
+                    $('#items-output').val(window.JSON.stringify(list.nestable('serialize')));//, null, 2));
+                } else {
+                    alert('JSON browser support required for this application.');
+                }
+            };
+
             $('#nestable').nestable({
-                noDragClass: 'dd-nodrag',
-                json: [{"text":"Menu 1","id":1,"children":[{"text":"Menu 2","id":1}]},{"text":"Menu 3","id":1},{"text":"Menu 4","id":1},{"text":"Menu 5","id":1},{"text":"Menu 6","id":1},{"text":"Menu 7","id":1},{"text":"Menu 8","id":1},{"text":"Menu 9","id":1},{"text":"Menu 10","id":1}]
-            }).on('change', function (e) {
-                let list   = e.length ? e : $(e.target);
-                $('#items-output').val(window.JSON.stringify(list.nestable('serialize')));
+                noDragClass: 'dd-nodrag'
+            }).on('change', updateOutput);
+
+            $('body').on('submit', '.form-menu-block', function(event) {
+                if (event.isDefaultPrevented()) {
+                    return false;
+                }
+
+                event.preventDefault();
+                var form = $(this);
+                var formData = new FormData(form[0]);
+                var btnsubmit = form.find("button[type=submit]");
+                var currentIcon = btnsubmit.find('i').attr('class');
+
+                btnsubmit.find('i').attr('class', 'fa fa-spinner fa-spin');
+                btnsubmit.prop("disabled", true);
+
+                $.ajax({
+                    type: form.attr('method'),
+                    url: form.attr('action'),
+                    dataType: 'json',
+                    data: formData,
+                    cache:false,
+                    contentType: false,
+                    processData: false
+                }).done(function(response) {
+
+                    btnsubmit.find('i').attr('class', currentIcon);
+                    btnsubmit.prop("disabled", false);
+
+                    if (response.status === false) {
+                        return false;
+                    }
+
+                    $('#nestable .dd-list').append(response.data.html);
+                    updateOutput($('#nestable'));
+
+                    return false;
+                }).fail(function(response) {
+                    btnsubmit.find('i').attr('class', currentIcon);
+                    btnsubmit.prop("disabled", false);
+
+                    show_message(response);
+                    return false;
+                });
             });
 
         });

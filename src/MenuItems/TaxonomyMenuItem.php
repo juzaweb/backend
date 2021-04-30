@@ -7,13 +7,6 @@ use Tadcms\System\Models\Taxonomy;
 
 class TaxonomyMenuItem
 {
-    protected $items;
-
-    public static function render()
-    {
-        return (new self())->add();
-    }
-
     public function add()
     {
         $items = Taxonomy::limit(5)->get();

@@ -6,7 +6,10 @@ use Illuminate\Support\Facades\Facade;
 
 /**
  * @method static addMenuPage($menuTitle, $menuSlug, array $args)
- * @see \Tadcms\Backend\Helpers\HookAction
+ * @method static registerTaxonomy($taxonomy, array $args)
+ * @method static registerPostType($postType, array $args)
+ * @method static registerMenuItem($key, $componentClass)
+ * @see \Tadcms\Backend\Supports\HookAction
  * */
 class HookAction extends Facade
 {

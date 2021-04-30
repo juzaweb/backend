@@ -2,13 +2,29 @@
 
 namespace Tadcms\Backend\Abstracts;
 
-use Illuminate\View\View;
-
 abstract class MenuItemAbstract
 {
     /**
      * Render component view form items
-     * @return View
+     * @return \Illuminate\View\View
      * */
-    abstract public function items();
+    abstract public static function formAdd();
+
+    /**
+     * Render component view form items
+     * @return \Illuminate\View\View
+     * */
+    abstract public static function formEdit($data);
+
+    /**
+     * @param \Illuminate\Http\Request $request
+     * */
+    abstract public static function addData($request);
+
+    /**
+     * Render component view form items
+     * @param \Illuminate\Support\Collection $data
+     * @return string
+     * */
+    abstract public static function getLink($data);
 }

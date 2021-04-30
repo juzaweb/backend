@@ -10,8 +10,10 @@ class MenuController extends BackendController
 {
     public function index($id = null)
     {
+        $menuBlocks = $this->getMenuBlocks();
         return view('tadcms::menu.index', [
             'title' => trans('tadcms::app.menus'),
+            'menuBlocks' => $menuBlocks
         ]);
     }
     
@@ -46,84 +48,30 @@ class MenuController extends BackendController
         );
     }
 
-    public function getItems(Request $request)
+    public function addItem(Request $request)
     {
-        $request->validate([
-            'type' => 'required',
+        $menuKey = $request->post('key');
+        $menuBlock = $this->getMenuBlocks($menuKey);
+        $data = ($menuBlock->get('component'))::addData($request);
+
+        $itemView = view('tadcms::items.menu_item', [
+            'menuKey' => $menuKey,
+            'menuBlock' => $menuBlock,
+            'data' => $data,
         ]);
-        
-        $type = $request->post('type');
-        $items = $request->post('items');
-        
-        switch ($type) {
-            case 'genre':
-                $items = Genres::where('status', '=', 1)
-                    ->whereIn('id', $items)
-                    ->get(['id', 'name', 'slug']);
-                $result = [];
-                
-                foreach ($items as $item) {
-                    $url = parse_url(route('genre', [$item->slug]))['path'];
-                    $result[] = [
-                        'name' => $item->name,
-                        'url' => route('genre', [$item->slug]),
-                        'object_id' => $item->id,
-                    ];
-                }
-                
-                return response()->json($result);
-            case 'country':
-                $items = Countries::where('status', '=', 1)
-                    ->whereIn('id', $items)
-                    ->get(['id', 'name', 'slug']);
-                $result = [];
-                
-                foreach ($items as $item) {
-                    $url = parse_url(route('country', [$item->slug]))['path'];
-                    $result[] = [
-                        'name' => $item->name,
-                        'url' => $url,
-                        'object_id' => $item->id,
-                    ];
-                }
-                
-                return response()->json($result);
-            case 'type':
-                $items = Types::where('status', '=', 1)
-                    ->whereIn('id', $items)
-                    ->get(['id', 'name', 'slug']);
-                $result = [];
-                
-                foreach ($items as $item) {
-                    $url = parse_url(route('type', [$item->slug]))['path'];
-                    $result[] = [
-                        'name' => $item->name,
-                        'url' => $url,
-                        'object_id' => $item->id,
-                    ];
-                }
-                
-                return response()->json($result);
-            case 'page':
-                $items = Pages::whereIn('id', $items)
-                    ->get(['id', 'name', 'slug']);
-                $result = [];
-                
-                foreach ($items as $item) {
-                    $url = parse_url(route('page', [$item->slug]))['path'];
-                    $result[] = [
-                        'name' => $item->name,
-                        'url' => $url,
-                        'object_id' => $item->id,
-                    ];
-                }
-                
-                return response()->json($result);
+
+        return $this->response([
+            'html' => $itemView->render()
+        ], true);
+    }
+
+    protected function getMenuBlocks($key = null)
+    {
+        $menuItems = collect(apply_filters('tadcms.menu_blocks', []));
+        if ($key) {
+            return $menuItems->get($key);
         }
-        
-        return response()->json([
-            'status' => 'error',
-            'message' => ''
-        ]);
+
+        return $menuItems->sortBy('position');
     }
 }
