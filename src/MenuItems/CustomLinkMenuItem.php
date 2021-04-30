@@ -18,6 +18,14 @@ class CustomLinkMenuItem extends MenuItemAbstract
         ]);
     }
 
+    public static function validateData()
+    {
+        return [
+            'text' => 'required',
+            'url' => 'string|url'
+        ];
+    }
+
     public static function addData($request)
     {
         return [

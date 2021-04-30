@@ -16,6 +16,11 @@ abstract class MenuItemAbstract
      * */
     abstract public static function formEdit($data);
 
+    public static function validateData()
+    {
+        return [];
+    }
+
     /**
      * @param \Illuminate\Http\Request $request
      * */

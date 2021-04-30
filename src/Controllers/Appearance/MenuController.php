@@ -50,9 +50,17 @@ class MenuController extends BackendController
 
     public function addItem(Request $request)
     {
+        $request->validate([
+            'key' => 'required|string'
+        ]);
+
         $menuKey = $request->post('key');
         $menuBlock = $this->getMenuBlocks($menuKey);
-        $data = ($menuBlock->get('component'))::addData($request);
+        $blockComponent = $menuBlock->get('component');
+
+        $request->validate($blockComponent::validateData());
+
+        $data = $blockComponent::addData($request);
 
         $itemView = view('tadcms::items.menu_item', [
             'menuKey' => $menuKey,
