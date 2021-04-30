@@ -6,9 +6,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
 /**
- * Class Tadcms\Backend\Providers\BladeServiceProvider
- *
- * @package    Tadcms\Backend
+ * @package    tadcms\tadcms
  * @author     The Anh Dang <dangtheanh16@gmail.com>
  * @link       https://github.com/tadcms/tadcms
  * @license    MIT

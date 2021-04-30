@@ -20,6 +20,6 @@ class HookAction extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'tadhook';
+        return 'tadcms.hook';
     }
 }

@@ -24,15 +24,15 @@
             'hide': '@lang('app.hide')',
         }
     </script>
-    <link rel="stylesheet" href="{{ asset('vendor/tadcms/css/themeeditor-main.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('tadcms/css/themeeditor-main.min.css') }}">
     <!--[if lt IE 9]>
     <script src="{{ asset('styles/js/html5shiv.min.js') }}"></script>
     <script src="{{ asset('styles/js/respond.min.js') }}"></script>
     <![endif]-->
 
-    <script src="{{ asset('vendor/tadcms/js/turbolinks.min.js') }}"></script>
-    <script src="{{ asset('vendor/tadcms/js/themeeditor.min.js') }}"></script>
-    <script src="{{ asset('vendor/tadcms/js/theme-editor.js') }}"></script>
+    <script src="{{ asset('tadcms/js/turbolinks.min.js') }}"></script>
+    <script src="{{ asset('tadcms/js/themeeditor.min.js') }}"></script>
+    <script src="{{ asset('tadcms/js/theme-editor.js') }}"></script>
 
     <script type="text/javascript">
         $(document).ajaxStart(function () {
@@ -85,7 +85,7 @@
                             </use>
                         </span>--}}
                         <span class="te-brand-logo">
-                            <img src="{{ asset('vendor/tadcms/images/icon.png') }}" alt="" style="margin-top: 15px;">
+                            <img src="{{ asset('tadcms/images/icon.png') }}" alt="" style="margin-top: 15px;">
                         </span>
                     </a>
                 </div>

@@ -28,7 +28,7 @@ class BackendServiceProvider extends ServiceProvider
         $this->app->register(DbConfigServiceProvider::class);
         $this->app->register(LivewireServiceProvider::class);
     
-        $this->app->singleton('tadhook', function () {
+        $this->app->singleton('tadcms.hook', function () {
             return new HookAction();
         });
     }
