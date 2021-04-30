@@ -99,6 +99,7 @@ class HookAction
             'menu_icon' => 'fa fa-list-alt',
             'supports' => [
                 'thumbnail',
+                'hierarchical'
             ],
         ];
 

@@ -7,7 +7,7 @@
 
         <div class="col-md-6">
             <div class="btn-group float-right">
-                <a href="{{ route('admin.'. $taxonomy .'.create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> @lang('tadcms::app.add-new')</a>
+                <a href="{{ route('admin.'. $setting->get('type') .'.'. $taxonomy .'.create') }}" class="btn btn-success"><i class="fa fa-plus-circle"></i> @lang('tadcms::app.add-new')</a>
             </div>
         </div>
     </div>
@@ -43,7 +43,7 @@
                     <thead>
                         <tr>
                             <th data-width="3%" data-field="state" data-checkbox="true"></th>
-                            @if(in_array('thumbnail', $supports))
+                            @if(in_array('thumbnail', $setting->get('supports', [])))
                                 <th data-width="10%" data-field="thumbnail" data-formatter="thumbnail_formatter" data-sortable="true">@lang('tadcms::app.thumbnail')</th>
                             @endif
                             <th data-field="name" data-formatter="name_formatter" data-sortable="true">@lang('tadcms::app.name')</th>
@@ -56,7 +56,7 @@
     </div>
 
     <script type="text/javascript">
-        @if(in_array('thumbnail', $supports))
+        @if(in_array('thumbnail', $setting->get('supports', [])))
             function thumbnail_formatter(value, row, index) {
                 return `<img src="${row.thumbnail}" class="w-100">`;
             }
@@ -67,8 +67,8 @@
         }
 
         var table = new TadTable({
-            url: '{{ route('admin.'.$taxonomy.'.get-data') }}',
-            action_url: '{{ route('admin.'.$taxonomy.'.bulk-actions') }}',
+            url: '{{ route('admin.'. $setting->get('type') .'.'. $taxonomy .'.get-data') }}',
+            action_url: '{{ route('admin.'. $setting->get('type') .'.'. $taxonomy .'.bulk-actions') }}',
         });
     </script>
 @endsection

@@ -3,6 +3,7 @@
 namespace Tadcms\Backend\Abstracts;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 use Tadcms\System\Repositories\TaxonomyRepository;
 use Tadcms\Backend\Controllers\BackendController;
@@ -11,31 +12,32 @@ use Tadcms\System\Models\Taxonomy;
 
 abstract class TaxonomyControllerAbstract extends BackendController
 {
-    protected $type;
-    protected $taxonomy;
-    protected $taxonomySingular;
     protected $taxonomyRepository;
-
-    protected $supports = [
-        'thumbnail',
-        'hierarchical'
-    ];
+    protected $objectType;
+    protected $taxonomy;
+    protected $setting;
 
     public function __construct(
         TaxonomyRepository $taxonomyRepository
     ) {
         $this->taxonomyRepository = $taxonomyRepository;
+        $this->setting = $this->getSetting();
+
+        if (empty($this->setting)) {
+            throw new \Exception('Taxonomy ' . $this->taxonomy . ' for '. $this->objectType .' does not exists.');
+        }
     }
 
     public function index()
     {
         $model = $this->taxonomyRepository->firstOrNew(['id' => null]);
+
         return view('tadcms::taxonomy.index', [
-            'title' => $this->getTitle(),
+            'title' => $this->setting->get('label'),
             'taxonomy' => $this->taxonomy,
-            'model' => $model,
+            'setting' => $this->setting,
             'lang' => $this->getLocale(),
-            'supports' => $this->supports
+            'model' => $model,
         ]);
     }
 
@@ -43,18 +45,16 @@ abstract class TaxonomyControllerAbstract extends BackendController
     {
         $model = $this->taxonomyRepository->newModel();
         $this->addBreadcrumb([
-            'title' => $this->getTitle(),
-            'url' => route('admin.'. $this->taxonomy .'.index')
+            'title' => $this->setting->get('label'),
+            'url' => route('admin.'. $this->setting->get('type') .'.'. $this->taxonomy .'.index')
         ]);
 
         return view('tadcms::taxonomy.form', [
             'model' => $model,
             'title' => trans('tadcms::app.add-new'),
             'taxonomy' => $this->taxonomy,
-            'taxonomySingular' => $this->taxonomySingular,
-            'type' => $this->type,
-            'lang' => $this->getLocale(),
-            'supports' => $this->supports
+            'setting' => $this->setting,
+            'lang' => $this->getLocale()
         ]);
     }
 
@@ -64,18 +64,16 @@ abstract class TaxonomyControllerAbstract extends BackendController
         $model->load('parent');
 
         $this->addBreadcrumb([
-            'title' => $this->getTitle(),
-            'url' => route('admin.'. $this->taxonomy .'.index')
+            'title' => $this->setting->get('label'),
+            'url' => route('admin.'. $this->setting->get('type') .'.'. $this->taxonomy .'.index')
         ]);
 
         return view('tadcms::taxonomy.form', [
             'model' => $model,
             'title' => $model->name,
             'taxonomy' => $this->taxonomy,
-            'taxonomySingular' => $this->taxonomySingular,
-            'type' => $this->type,
+            'setting' => $this->setting,
             'lang' => $this->getLocale(),
-            'supports' => $this->supports
         ]);
     }
 
@@ -186,10 +184,18 @@ abstract class TaxonomyControllerAbstract extends BackendController
         return request()->input('locale') ?? app()->getLocale();
     }
 
-    protected function getTitle()
+    /**
+     * @return \Illuminate\Support\Collection
+     * */
+    protected function getSetting()
     {
-        return $this->label();
-    }
+        $taxonomies = collect(apply_filters('tadcms.taxonomies', []));
+        $taxonomies = $taxonomies->filter(function ($item) {
+            return Arr::has($item['object_types'], $this->objectType);
+        })->mapWithKeys(function ($item) {
+            return [$item['taxonomy'] => $item['object_types'][$this->objectType]];
+        });
 
-    abstract protected function label() : string;
+        return $taxonomies->get($this->taxonomy);
+    }
 }

@@ -6,12 +6,7 @@ use Tadcms\Backend\Abstracts\TaxonomyControllerAbstract;
 
 class TaxonomyController extends TaxonomyControllerAbstract
 {
-    protected $type = 'post';
+    protected $objectType = 'posts';
     protected $taxonomy = 'categories';
-    protected $taxonomySingular = 'category';
 
-    protected function label(): string
-    {
-        return trans('tadcms::app.categories');
-    }
 }
