@@ -168,7 +168,7 @@ class HookAction
         );
 
         $this->addAdminMenu(
-            trans('tadcms::app.all-posts'),
+            trans('tadcms::app.all') . ' '. $args->get('label'),
             $key,
             [
                 'position' => 2,

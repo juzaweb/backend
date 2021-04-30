@@ -8,3 +8,10 @@ HookAction::registerPostType('posts', [
     'menu_position' => 15,
     'supports' => ['category', 'tag'],
 ]);
+
+HookAction::registerPostType('pages', [
+    'label' => trans('tadcms::app.pages'),
+    'menu_icon' => 'fa fa-edit',
+    'menu_position' => 15,
+    'supports' => ['tag'],
+]);

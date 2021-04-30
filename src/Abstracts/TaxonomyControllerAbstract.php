@@ -86,8 +86,8 @@ abstract class TaxonomyControllerAbstract extends BackendController
         $limit = $request->get('limit', 20);
 
         $query = Taxonomy::query()->with(['translations']);
-        $query->where('taxonomy', '=', $this->taxonomySingular);
-        $query->where('type', '=', $this->type);
+        $query->where('taxonomy', '=', $this->setting->get('singular'));
+        $query->where('type', '=', $this->setting->get('type'));
 
         if ($search) {
             $query->where(function ($subquery) use ($search) {
@@ -103,7 +103,7 @@ abstract class TaxonomyControllerAbstract extends BackendController
         $rows = $query->get();
 
         foreach ($rows as $row) {
-            $row->edit_url = route("admin.{$this->taxonomy}.edit", [$row->id]);
+            $row->edit_url = route("admin.{$this->setting->get('type')}.{$this->taxonomy}.edit", [$row->id]);
             $row->thumbnail = upload_url($row->thumbnail);
         }
 
@@ -118,8 +118,8 @@ abstract class TaxonomyControllerAbstract extends BackendController
         if (Taxonomy::whereHas('translations', function ($q) use ($request) {
             $q->where('name', '=', $request->name);
         })
-            ->whereType($this->type)
-            ->whereTaxonomy($this->taxonomy)
+            ->whereType($this->setting->get('type'))
+            ->whereTaxonomy($this->setting->get('singular'))
             ->exists()
         ) {
             return $this->error(
@@ -130,8 +130,8 @@ abstract class TaxonomyControllerAbstract extends BackendController
         }
 
         $this->taxonomyRepository->create(array_merge($request->all(), [
-            'type' => $this->type,
-            'taxonomy' => $this->taxonomySingular
+            'type' => $this->setting->get('type'),
+            'taxonomy' => $this->setting->get('singular')
         ]));
 
         return $this->success(trans('tadcms::app.successfully'));
@@ -140,8 +140,8 @@ abstract class TaxonomyControllerAbstract extends BackendController
     public function update($id, TaxonomyRequest $request)
     {
         $this->taxonomyRepository->update($id, array_merge($request->all(), [
-            'type' => $this->type,
-            'taxonomy' => $this->taxonomySingular
+            'type' => $this->setting->get('type'),
+            'taxonomy' => $this->setting->get('singular')
         ]));
 
         return $this->success(trans('tadcms::app.successfully'));
