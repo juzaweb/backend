@@ -3,48 +3,37 @@
 namespace Tadcms\Backend\Livewire\Component;
 
 use Livewire\Component;
-use Tadcms\System\Models\Taxonomy;
+use Tadcms\System\Models\Post;
 
 class FormTaxonomyTag extends Component
 {
     public $items = [];
+    /**
+     * @var \Illuminate\Support\Collection $taxonomy
+     **/
     protected $taxonomy;
-    
-    public function mount($taxonomy)
+    protected $value;
+
+    public function mount($taxonomy, $value = null)
     {
         $this->taxonomy = $taxonomy;
+        $this->value = $value;
     }
-    
-    public function add()
+
+    public function loadItems()
     {
-        $this->validate([
-            'name' => 'required',
-        ]);
-
-        if (Taxonomy::whereHas('translations', function ($q) {
-            $q->where('name', '=', $this->name);
-        })
-            ->whereType($this->type)
-            ->whereTaxonomy($this->taxonomy)
-            ->exists()
-        ) {
-            return $this->addError('name', trans('validation.exists', [
-                'attribute' => trans('tadcms::app.name')
-            ]));
+        if ($this->value) {
+            $post = is_numeric($this->value) ? Post::find($this->value) : $this->value;
+            $this->items = $post->taxonomies()->with(['translations'])
+                ->where('type', '=', $this->taxonomy->get('type'))
+                ->where('taxonomy', '=', $this->taxonomy->get('singular'))
+                ->get(['id', 'taxonomy']);
         }
-
-        $model = Taxonomy::create([
-            'name' => $this->name,
-            'type' => $this->type,
-            'taxonomy' => $this->taxonomy,
-        ]);
-        
-        $this->resetForm();
-        $this->value->push($model);
     }
     
     public function render()
     {
+        $this->loadItems();
         return view('tadcms::livewire.components.form-tag', [
             'taxonomy' => $this->taxonomy
         ]);

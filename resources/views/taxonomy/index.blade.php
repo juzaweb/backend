@@ -43,9 +43,6 @@
                     <thead>
                         <tr>
                             <th data-width="3%" data-field="state" data-checkbox="true"></th>
-                            @if(in_array('thumbnail', $setting->get('supports', [])))
-                                <th data-width="10%" data-field="thumbnail" data-formatter="thumbnail_formatter" data-sortable="true">@lang('tadcms::app.thumbnail')</th>
-                            @endif
                             <th data-field="name" data-formatter="name_formatter" data-sortable="true">@lang('tadcms::app.name')</th>
                             <th data-width="15%" data-field="created_at" data-sortable="true">@lang('tadcms::app.created-at')</th>
                         </tr>

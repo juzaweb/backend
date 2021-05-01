@@ -52,6 +52,7 @@
                 @foreach($taxonomies as $taxonomy)
                     @component('tadcms::components.form_taxonomies', [
                         'taxonomy' => $taxonomy,
+                        'value' => $model
                     ])@endcomponent
                 @endforeach
 
