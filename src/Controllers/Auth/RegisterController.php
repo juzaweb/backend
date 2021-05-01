@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 use Tadcms\System\Models\User;
 use Tadcms\EmailTemplate\EmailService;
-use Tadcms\Lararepo\Controller;
+use Tadcms\System\Controllers\Controller;
 
 class RegisterController extends Controller
 {

@@ -2,7 +2,7 @@
     <label class="col-form-label w-100">
         {{ $taxonomy->get('label') }}
         <span>
-            <a href="javascript:void(0)" class="float-right"><i class="fa fa-plus"></i> @lang('tadcms::app.add-new')</a>
+            <a href="javascript:void(0)" class="float-right add-new"><i class="fa fa-plus"></i> @lang('tadcms::app.add-new')</a>
         </span>
     </label>
 

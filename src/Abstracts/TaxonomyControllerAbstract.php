@@ -116,7 +116,7 @@ abstract class TaxonomyControllerAbstract extends BackendController
     public function store(TaxonomyRequest $request)
     {
         if (Taxonomy::whereHas('translations', function ($q) use ($request) {
-            $q->where('name', '=', $request->name);
+            $q->where('name', '=', $request->post('name'));
         })
             ->whereType($this->setting->get('type'))
             ->whereTaxonomy($this->setting->get('singular'))
@@ -129,12 +129,18 @@ abstract class TaxonomyControllerAbstract extends BackendController
             );
         }
 
-        $this->taxonomyRepository->create(array_merge($request->all(), [
+        $model = $this->taxonomyRepository->create(array_merge($request->all(), [
             'type' => $this->setting->get('type'),
             'taxonomy' => $this->setting->get('singular')
         ]));
 
-        return $this->success(trans('tadcms::app.successfully'));
+        return $this->success([
+            'message' => trans('tadcms::app.successfully'),
+            'html' => view('tadcms::components.category-item', [
+                'item' => $model,
+                'taxonomy' => $this->setting,
+            ])->render()
+        ]);
     }
 
     public function update($id, TaxonomyRequest $request)

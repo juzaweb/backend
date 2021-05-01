@@ -44,13 +44,13 @@ class LoadDataController extends BackendController
         $query->where('taxonomy', '=', $taxonomy);
         
         if ($search) {
-            $query->whereTranslation('name', 'like', '%'. $search .'%');
+            $query->whereTranslationLike('name', '%'. $search .'%');
         }
         
         if ($explodes) {
             $query->whereNotIn('id', $explodes);
         }
-        
+
         $paginate = $query->paginate(10);
         $data['results'] = $query->get();
         foreach ($data['results'] as $item) {

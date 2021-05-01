@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 use Tadcms\System\Models\PasswordReset;
 use Tadcms\System\Models\User;
 use Tadcms\EmailTemplate\EmailService;
-use Tadcms\Lararepo\Controller;
+use Tadcms\System\Controllers\Controller;
 use Illuminate\Http\Request;
 
 class ForgotPasswordController extends Controller
