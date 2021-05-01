@@ -44,6 +44,8 @@
                         <tr>
                             <th data-width="3%" data-field="state" data-checkbox="true"></th>
                             <th data-field="name" data-formatter="name_formatter" data-sortable="true">@lang('tadcms::app.name')</th>
+                            <th data-field="description" data-width="25%" data-sortable="true">@lang('tadcms::app.description')</th>
+                            <th data-field="total_post" data-width="10%" data-sortable="true" data-align="center">@lang('tadcms::app.total-posts')</th>
                             <th data-width="15%" data-field="created_at" data-sortable="true">@lang('tadcms::app.created-at')</th>
                         </tr>
                     </thead>
@@ -53,12 +55,6 @@
     </div>
 
     <script type="text/javascript">
-        @if(in_array('thumbnail', $setting->get('supports', [])))
-            function thumbnail_formatter(value, row, index) {
-                return `<img src="${row.thumbnail}" class="w-100">`;
-            }
-        @endif
-
         function name_formatter(value, row, index) {
             return '<a href="'+ row.edit_url +'">'+ value +'</a>';
         }

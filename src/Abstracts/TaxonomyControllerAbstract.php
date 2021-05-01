@@ -5,6 +5,7 @@ namespace Tadcms\Backend\Abstracts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 use Tadcms\System\Repositories\TaxonomyRepository;
 use Tadcms\Backend\Controllers\BackendController;
 use Tadcms\Backend\Requests\TaxonomyRequest;
@@ -30,7 +31,7 @@ abstract class TaxonomyControllerAbstract extends BackendController
 
     public function index()
     {
-        $model = $this->taxonomyRepository->firstOrNew(['id' => null]);
+        $model = new Taxonomy();
 
         return view('tadcms::taxonomy.index', [
             'title' => $this->setting->get('label'),
@@ -43,7 +44,7 @@ abstract class TaxonomyControllerAbstract extends BackendController
 
     public function create()
     {
-        $model = $this->taxonomyRepository->newModel();
+        $model = new Taxonomy();
         $this->addBreadcrumb([
             'title' => $this->setting->get('label'),
             'url' => route('admin.'. $this->setting->get('type') .'.'. $this->taxonomy .'.index')
@@ -60,7 +61,7 @@ abstract class TaxonomyControllerAbstract extends BackendController
 
     public function edit($id)
     {
-        $model = $this->taxonomyRepository->findOrFail($id);
+        $model = $this->taxonomyRepository->find($id);
         $model->load('parent');
 
         $this->addBreadcrumb([
@@ -105,6 +106,7 @@ abstract class TaxonomyControllerAbstract extends BackendController
         foreach ($rows as $row) {
             $row->edit_url = route("admin.{$this->setting->get('type')}.{$this->taxonomy}.edit", [$row->id]);
             $row->thumbnail = upload_url($row->thumbnail);
+            $row->description = Str::words($row->description, 20);
         }
 
         return response()->json([
@@ -145,10 +147,10 @@ abstract class TaxonomyControllerAbstract extends BackendController
 
     public function update($id, TaxonomyRequest $request)
     {
-        $this->taxonomyRepository->update($id, array_merge($request->all(), [
+        $this->taxonomyRepository->update(array_merge($request->all(), [
             'type' => $this->setting->get('type'),
             'taxonomy' => $this->setting->get('singular')
-        ]));
+        ]), $id);
 
         return $this->success(trans('tadcms::app.successfully'));
     }

@@ -65,7 +65,7 @@ abstract class PostControllerAbstract extends BackendController
             'url' => route("admin.{$this->postType}.index"),
         ]);
 
-        $model = $this->postRepository->findOrFail($id);
+        $model = $this->postRepository->find($id);
         $model->load(['translations']);
         $taxonomies = $this->getTaxonomies();
 
@@ -97,7 +97,7 @@ abstract class PostControllerAbstract extends BackendController
             });
         }
 
-        $query->where('type', '=', $this->postTypeSingular);
+        $query->where('type', '=', $this->setting->get('singular'));
 
         if ($status) {
             $query->where('status', '=', $status);
@@ -126,7 +126,7 @@ abstract class PostControllerAbstract extends BackendController
         DB::beginTransaction();
         try {
             $this->postRepository->create(array_merge($request->all(), [
-                'type' => $this->postTypeSingular
+                'type' => $this->setting->get('singular')
             ]));
 
             DB::commit();
@@ -144,9 +144,9 @@ abstract class PostControllerAbstract extends BackendController
     {
         DB::beginTransaction();
         try {
-            $this->postRepository->update($id, array_merge($request->all(), [
-                'type' => $this->postTypeSingular
-            ]));
+            $this->postRepository->update(array_merge($request->all(), [
+                'type' => $this->setting->get('singular')
+            ]), $id);
 
             DB::commit();
         } catch (\Exception $exception) {
@@ -171,7 +171,6 @@ abstract class PostControllerAbstract extends BackendController
 
         try {
             DB::beginTransaction();
-
             switch ($action) {
                 case 'delete':
                     foreach ($ids as $id) {

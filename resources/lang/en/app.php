@@ -123,6 +123,7 @@ return [
     'public' => 'Public',
     'private' => 'Private',
     'or' => 'or',
+    'total-posts' => 'Total posts',
     'custom-links' => 'Custom Links',
     'link-text' => 'Link Text',
     'menu-structure' => 'Menu structure',
