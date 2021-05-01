@@ -47,6 +47,8 @@ return [
     'bulk-actions' => 'Bulk actions',
     'successfully' => 'Successfully',
     'save-successfully' => 'Save successfully',
+    'create-successfully' => 'Create successfully',
+    'update-successfully' => 'Update successfully',
     'deleted-successfully' => 'Deleted successfully',
     'menu-name' => 'Menu name',
     'delete-menu' => 'Delete Menu',

@@ -138,15 +138,17 @@ abstract class TaxonomyControllerAbstract extends BackendController
 
         return $this->success([
             'message' => trans('tadcms::app.successfully'),
-            'html' => view('tadcms::components.category-item', [
+            'html' => view('tadcms::components.tag-item', [
                 'item' => $model,
-                'taxonomy' => $this->setting,
             ])->render()
         ]);
     }
 
     public function update($id, TaxonomyRequest $request)
     {
+        DB::beginTransaction();
+
+
         $this->taxonomyRepository->update(array_merge($request->all(), [
             'type' => $this->setting->get('type'),
             'taxonomy' => $this->setting->get('singular')

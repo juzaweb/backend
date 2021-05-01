@@ -24,15 +24,21 @@
     <div class="form-add mt-2 form-add-taxonomy box-hidden">
         <div class="form-group mb-1">
             <label class="col-form-label">@lang('tadcms::app.name')</label>
-            <input type="text" class="form-control" autocomplete="off">
+            <input type="text" class="form-control taxonomy-name" autocomplete="off">
         </div>
-
+        @if(in_array('hierarchical', $taxonomy->get('supports', [])))
         <div class="form-group mb-1">
             <label class="col-form-label">@lang('tadcms::app.parent')</label>
             <select type="text" class="form-control taxonomy-parent load-taxonomies" autocomplete="off" data-type="{{ $taxonomy->get('type') }}" data-taxonomy="{{ $taxonomy->get('singular') }}">
             </select>
         </div>
+        @endif
 
-        <button type="button" class="btn btn-primary"><i class="fa fa-plus-circle"></i> @lang('tadcms::app.add-tag')</button>
+        <button
+                type="button"
+                class="btn btn-primary"
+                data-type="{{ $taxonomy->get('type') }}"
+                data-taxonomy="{{ $taxonomy->get('taxonomy') }}"
+        ><i class="fa fa-plus-circle"></i> @lang('tadcms::app.add-tag')</button>
     </div>
 </div>
