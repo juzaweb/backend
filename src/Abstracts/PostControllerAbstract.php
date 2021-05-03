@@ -82,7 +82,7 @@ abstract class PostControllerAbstract extends ResourceControllerAbstract
         return view($this->viewPrefix . '.form', [
             'model' => $model,
             'lang' => app()->getLocale(),
-            'title' => $model->title,
+            'title' => $model->title ?? $model->name,
             'postType' => $this->postType,
             'taxonomies' => $taxonomies,
             'setting' => $this->setting,
