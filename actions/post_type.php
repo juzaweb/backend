@@ -11,6 +11,7 @@ HookAction::registerPostType('posts', [
 
 HookAction::registerPostType('pages', [
     'label' => trans('tadcms::app.pages'),
+    'repository' => 'Tadcms\\System\\Repositories\\PageRepository',
     'menu_icon' => 'fa fa-edit',
     'menu_position' => 15,
     'supports' => ['tag'],
