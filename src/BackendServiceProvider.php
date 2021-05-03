@@ -9,7 +9,6 @@ use Tadcms\Backend\Macros\RouterMacros;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Routing\Router;
 use Tadcms\Backend\Providers\DbConfigServiceProvider;
-use Tadcms\Backend\Supports\HookAction;
 
 class BackendServiceProvider extends ServiceProvider
 {
@@ -27,10 +26,6 @@ class BackendServiceProvider extends ServiceProvider
         $this->app->register(BladeServiceProvider::class);
         $this->app->register(DbConfigServiceProvider::class);
         $this->app->register(LivewireServiceProvider::class);
-    
-        $this->app->singleton('tadcms.hook', function () {
-            return new HookAction();
-        });
     }
     
     protected function registerRouteMacros()

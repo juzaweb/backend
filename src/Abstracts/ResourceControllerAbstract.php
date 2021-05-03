@@ -14,18 +14,17 @@ namespace Tadcms\Backend\Abstracts;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Tadcms\Backend\Contracts\ResourceControllerInterface;
 use Tadcms\Backend\Controllers\BackendController;
 
-abstract class ResourceControllerAbstract extends BackendController
+abstract class ResourceControllerAbstract extends BackendController implements ResourceControllerInterface
 {
-    /**
-     * @var \Tadcms\Repository\Eloquent\BaseRepository
-     * */
-    protected $repository;
     /**
      * @return \Tadcms\Repository\Eloquent\BaseRepository
      * */
-    abstract protected function repository();
+    abstract protected function mainRepository();
+
+    abstract protected function validateRequest(Request $request);
 
     abstract public function index();
 
@@ -35,9 +34,12 @@ abstract class ResourceControllerAbstract extends BackendController
 
     public function store(Request $request)
     {
+        $this->validateRequest($request);
+
         DB::beginTransaction();
+
         try {
-            $this->repository->create($request->all());
+            $this->mainRepository()->create($request->all());
         } catch (\Exception $exception) {
             DB::rollBack();
             throw $exception;
@@ -50,9 +52,12 @@ abstract class ResourceControllerAbstract extends BackendController
 
     public function update($id, Request $request)
     {
+        $this->validateRequest($request);
+
         DB::beginTransaction();
+
         try {
-            $this->repository->update($request->all(), $id);
+            $this->mainRepository()->update($request->all(), $id);
         } catch (\Exception $exception) {
             DB::rollBack();
             throw $exception;
@@ -63,5 +68,25 @@ abstract class ResourceControllerAbstract extends BackendController
         ]);
     }
 
-    abstract public function getDataTable(Request $request);
+    public function getDataTable(Request $request)
+    {
+        //$search = $request->get('search');
+        $sort = $request->get('sort', 'id');
+        $order = $request->get('order', 'desc');
+        $offset = $request->get('offset', 0);
+        $limit = $request->get('limit', 20);
+
+        $query = $this->mainRepository();
+
+        $count = $query->count();
+        $query->orderBy($sort, $order);
+        $query->offset($offset);
+        $query->limit($limit);
+        $rows = $query->get();
+
+        return response()->json([
+            'total' => $count,
+            'rows' => $rows
+        ]);
+    }
 }

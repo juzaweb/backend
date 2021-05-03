@@ -1,6 +1,6 @@
 <?php
 
-use Tadcms\Backend\Facades\HookAction;
+use Tadcms\System\Facades\HookAction;
 
 HookAction::registerMenuItem('tadcms.custom_links', [
     'label' => trans('tadcms::app.custom-links'),
