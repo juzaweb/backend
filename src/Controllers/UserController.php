@@ -4,6 +4,7 @@ namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Http\Request;
 use Tadcms\Backend\Requests\UserRequest;
+use Tadcms\System\Models\User;
 use Tadcms\System\Repositories\UserRepository;
 
 class UserController extends BackendController
@@ -69,7 +70,7 @@ class UserController extends BackendController
             'url' => route('admin.users.index'),
         ]);
     
-        $model = $this->userRepository->newModel();
+        $model = new User();
         return view('tadcms::user.form', [
             'model' => $model,
             'title' => trans('tadcms::app.add-new')
@@ -82,7 +83,7 @@ class UserController extends BackendController
             'url' => route('admin.users.index'),
         ]);
         
-        $model = $this->userRepository->findOrFail($id);
+        $model = $this->userRepository->find($id);
         return view('tadcms::user.form', [
             'model' => $model,
             'title' => $model->name
@@ -108,8 +109,7 @@ class UserController extends BackendController
         }
         
         return $this->success(
-            trans('tadcms::app.save-successfully'),
-            route('admin.users.index')
+            trans('tadcms::app.create-successfully')
         );
     }
     
@@ -132,8 +132,7 @@ class UserController extends BackendController
         }
     
         return $this->success(
-            trans('tadcms::app.save-successfully'),
-            route('admin.users.index')
+            trans('tadcms::app.update-successfully')
         );
     }
     

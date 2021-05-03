@@ -6,6 +6,7 @@ return [
     'categories' => 'Categories',
     'post' => 'Post',
     'posts' => 'Posts',
+    'base' => 'base',
     'all-posts' => 'All Posts',
     'page' => 'Page',
     'pages' => 'Pages',

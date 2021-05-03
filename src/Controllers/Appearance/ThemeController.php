@@ -3,7 +3,7 @@
 namespace Tadcms\Backend\Controllers\Appearance;
 
 use Illuminate\Http\Request;
-use Tadcms\MultiTheme\Facades\Theme;
+use Tadcms\Frontend\Facades\Theme;
 use Tadcms\Backend\Controllers\BackendController;
 use Tadcms\System\Traits\ArrayPagination;
 

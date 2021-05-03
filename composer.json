@@ -4,6 +4,7 @@
     "description": "TAD CMS backend.",
     "keywords": [],
     "license": "MIT",
+    "homepage": "https://github.com/tadcms/tadcms",
     "authors": [
         {
           "name": "The Anh Dang",

@@ -33,9 +33,11 @@ abstract class PostControllerAbstract extends BackendController
 
     public function index()
     {
+        $taxonomies = $this->getTaxonomies();
         return view('tadcms::post.index', [
             'title' => $this->setting->get('label'),
             'postType' => $this->postType,
+            'taxonomies' => $taxonomies,
         ]);
     }
 
@@ -82,6 +84,7 @@ abstract class PostControllerAbstract extends BackendController
     {
         $search = $request->get('search');
         $status = $request->get('status');
+        $taxonomies = $request->get('taxonomies');
 
         $sort = $request->get('sort', 'id');
         $order = $request->get('order', 'desc');
@@ -89,6 +92,7 @@ abstract class PostControllerAbstract extends BackendController
         $limit = $request->get('limit', 20);
 
         $query = Post::query()->with(['translations']);
+        $query->where('type', '=', $this->setting->get('singular'));
 
         if ($search) {
             $query->where(function ($subQuery) use ($search) {
@@ -97,7 +101,14 @@ abstract class PostControllerAbstract extends BackendController
             });
         }
 
-        $query->where('type', '=', $this->setting->get('singular'));
+        if ($taxonomies) {
+            $taxonomies = explode(',', $taxonomies);
+            foreach ($taxonomies as $taxonomy) {
+                $query->whereHas('taxonomies', function ($q) use ($taxonomy) {
+                    $q->where('id', '=', $taxonomy);
+                });
+            }
+        }
 
         if ($status) {
             $query->where('status', '=', $status);
@@ -216,6 +227,8 @@ abstract class PostControllerAbstract extends BackendController
             return [$item['taxonomy'] => $item['object_types'][$this->postType]];
         });
 
-        return $taxonomies ?? [];
+        $taxonomies = $taxonomies ? $taxonomies->sortBy('menu_position') : [];
+
+        return $taxonomies;
     }
 }

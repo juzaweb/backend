@@ -52,7 +52,7 @@
                 <tr>
                     <th data-width="3%" data-field="state" data-checkbox="true"></th>
                     <th data-field="name" data-formatter="nameFormatter">@lang('tadcms::app.name')</th>
-                    <th data-field="description" data-width="25%">@lang('tadcms::app.description')</th>
+                    <th data-field="description" data-width="35%">@lang('tadcms::app.description')</th>
                     <th data-width="15%" data-field="status" data-formatter="statusFormatter">@lang('tadcms::app.status')</th>
                 </tr>
             </thead>

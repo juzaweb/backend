@@ -26,6 +26,7 @@
             <label class="col-form-label">@lang('tadcms::app.name')</label>
             <input type="text" class="form-control taxonomy-name" autocomplete="off">
         </div>
+
         @if(in_array('hierarchical', $taxonomy->get('supports', [])))
         <div class="form-group mb-1">
             <label class="col-form-label">@lang('tadcms::app.parent')</label>
@@ -36,9 +37,9 @@
 
         <button
                 type="button"
-                class="btn btn-primary"
+                class="btn btn-primary mt-2"
                 data-type="{{ $taxonomy->get('type') }}"
                 data-taxonomy="{{ $taxonomy->get('taxonomy') }}"
-        ><i class="fa fa-plus-circle"></i> @lang('tadcms::app.add-tag')</button>
+        ><i class="fa fa-plus-circle"></i> @lang('tadcms::app.add')</button>
     </div>
 </div>

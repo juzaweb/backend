@@ -85,7 +85,9 @@ class HookAction
      * @param string $objectType
      * @param array $args (Optional) Array of arguments for registering a post type.
      * @return void
-     * */
+     *
+     * @throws \Exception
+     */
     public function registerTaxonomy($taxonomy, $objectType, $args = [])
     {
         $type = Str::singular($objectType);
@@ -114,7 +116,7 @@ class HookAction
             } else {
                 $items[$taxonomy] = [
                     'taxonomy' => $taxonomy,
-                    'singular' => Str::singular($taxonomy),
+                    'singular' => $args->get('singular'),
                     'object_types' => [
                         $objectType => $args
                     ]
@@ -132,13 +134,21 @@ class HookAction
                 'position' => $args->get('menu_position')
             ]
         );
+
+        $this->registerPermalink($taxonomy, [
+            'label' => $args->get('label'),
+            'base' => $args->get('singular'),
+            'callback' => 'Tadcms\Frontend\Controllers\TaxonomyController'
+        ]);
     }
 
     /**
      * TAD CMS: Registers a post type.
      * @param string $key (Required) Post type key. Must not exceed 20 characters
      * @param array $args Array of arguments for registering a post type.
-     * */
+     *
+     * @throws \Exception
+     */
     public function registerPostType($key, $args = [])
     {
         $args = array_merge([
@@ -200,6 +210,12 @@ class HookAction
                 'supports' => []
             ]);
         }
+
+        $this->registerPermalink($key, [
+            'label' => $args->get('label'),
+            'base' => $args->get('singular'),
+            'callback' => 'Tadcms\Frontend\Controllers\PostController'
+        ]);
     }
 
     /**
@@ -233,4 +249,33 @@ class HookAction
         });
     }
 
+    /**
+     * TAD CMS: Registers menu item in menu builder.
+     * @param string $key
+     * @param array $args
+     * @throws \Exception
+     * */
+    public function registerPermalink($key, $args = [])
+    {
+        if (empty($args['label'])) {
+            throw new \Exception('Permalink args label is required');
+        }
+
+        if (empty($args['base'])) {
+            throw new \Exception('Permalink args default_base is required');
+        }
+
+        add_filters('tadcms.permalinks', function ($items) use ($key, $args) {
+            array_merge([
+                'label' => '',
+                'base' => '',
+                'callback' => '',
+                'position' => 20,
+            ], $args);
+
+            $args['key'] = $key;
+            $items[$key] = collect($args);
+            return $items;
+        });
+    }
 }

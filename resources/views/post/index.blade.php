@@ -27,24 +27,41 @@
         </div>
 
         <div class="col-md-9">
-            <form method="get" class="form-inline" id="form-search">
+            <form method="get" id="form-search">
 
-                <div class="form-group mb-2 mr-1">
-                    <label for="search" class="sr-only">@lang('tadcms::app.search')</label>
-                    <input name="search" type="text" id="search" class="form-control" placeholder="@lang('tadcms::app.search')" autocomplete="off">
+                <div class="row search-filter">
+                    @foreach($taxonomies as $key => $taxonomy)
+                        <div class="col-md-3">
+                            <select name="taxonomies" id="taxonomy-{{ $key }}" class="form-control w-100 load-taxonomies" data-type="{{ $taxonomy->get('type') }}" data-taxonomy="{{ $taxonomy->get('singular') }}" data-placeholder="{{ $taxonomy->get('label') }}">
+                            </select>
+                        </div>
+                    @endforeach
+
+                    <div class="col-md-3">
+                        <div class="form-group w-100">
+                            <label for="status" class="sr-only">@lang('tadcms::app.status')</label>
+                            <select name="status" id="status" class="form-control">
+                                <option value="">@lang('tadcms::app.all-status')</option>
+                                <option value="public">@lang('tadcms::app.public')</option>
+                                <option value="private">@lang('tadcms::app.private')</option>
+                                <option value="draft">@lang('tadcms::app.draft')</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="form-group w-25 mb-2 mr-1">
-                    <label for="status" class="sr-only">@lang('tadcms::app.status')</label>
-                    <select name="status" id="status" class="form-control">
-                        <option value="">@lang('tadcms::app.all-status')</option>
-                        <option value="public">@lang('tadcms::app.public')</option>
-                        <option value="private">@lang('tadcms::app.private')</option>
-                        <option value="draft">@lang('tadcms::app.draft')</option>
-                    </select>
+                <div class="row mb-2">
+                    <div class="col-md-12 form-inline">
+                        <div class="form-group w-25 mr-1">
+                            <label for="search" class="sr-only">@lang('tadcms::app.search')</label>
+                            <input name="search" type="text" id="search" class="form-control" placeholder="@lang('tadcms::app.search')" autocomplete="off">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary">@lang('tadcms::app.search')</button>
+
+                    </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary mb-2">@lang('tadcms::app.search')</button>
             </form>
         </div>
     </div>

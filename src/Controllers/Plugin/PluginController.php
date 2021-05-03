@@ -34,12 +34,13 @@ class PluginController extends BackendController
         $results = [];
         $plugins = Plugin::all();
         foreach ($plugins as $plugin) {
-            $item = array_merge($plugin->json()->getAttributes(), [
+            $item = [
                 'id' => $plugin->get('name'),
+                'name' => $plugin->getDisplayName(),
+                'description' => $plugin->get('description'),
                 'status' => $plugin->isEnabled() ?
                     'active' : 'inactive',
-            ]);
-            unset($item['providers']);
+            ];
             $results[] = $item;
         }
         
