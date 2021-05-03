@@ -9,7 +9,7 @@
         </div>
     </div>
 
-    <div class="card-body box-hidden">
+    <div class="card-body @if($hidden ?? true) box-hidden @endif">
         <form action="{{ route('admin.menu.add-item') }}" method="post" class="form-menu-block">
             {{ ($menuBlock->get('component'))::formAdd() }}
 

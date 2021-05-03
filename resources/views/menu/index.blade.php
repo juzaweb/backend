@@ -29,13 +29,20 @@
     <div class="row mt-5">
         <div class="col-md-4">
             <h5 class="mb-2 font-weight-bold">@lang('tadcms::app.add-menu-items')</h5>
-
+            @php
+            $index = 1;
+            @endphp
             @foreach($menuBlocks as $key => $menuBlock)
                 @component('tadcms::items.menu_block', [
                     'menuBlock' => $menuBlock,
-                    'key' => $key
+                    'key' => $key,
+                    'hidden' => ($index == 1 ? false : true)
                 ])
                 @endcomponent
+
+                @php
+                    $index += 1;
+                @endphp
             @endforeach
 
         </div>
