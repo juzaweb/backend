@@ -22,7 +22,7 @@ class CustomLinkMenuItem extends MenuItemAbstract
     {
         return [
             'text' => 'required',
-            'url' => 'string|url'
+            'url' => 'string'
         ];
     }
 

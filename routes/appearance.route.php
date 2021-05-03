@@ -17,7 +17,7 @@ Route::group(['prefix' => 'themes'], function () {
 Route::group(['prefix' => 'menus'], function () {
     Route::get('/', 'Appearance\MenuController@index')->name('admin.menu');
     
-    Route::get('/{id}', 'Appearance\MenuController@index')->name('admin.menu.id');
+    Route::get('/{id}', 'Appearance\MenuController@edit')->name('admin.menu.id');
 
     Route::post('/save', 'Appearance\MenuController@save')->name('admin.menu.save');
 
