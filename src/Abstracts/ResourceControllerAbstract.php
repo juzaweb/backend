@@ -64,7 +64,7 @@ abstract class ResourceControllerAbstract extends BackendController implements R
         }
 
         return $this->success([
-            'message' => trans('tadcms::app.create-successfully')
+            'message' => trans('tadcms::app.update-successfully')
         ]);
     }
 

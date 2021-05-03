@@ -42,18 +42,13 @@
                 </div>
             </div>
 
-            <div class="col-md-1"></div>
-            <div class="col-md-3">
-                <div class="form-thumbnail text-center">
-                    <input id="avatar" type="file" name="avatar" class="d-none" accept="image/jpeg,image/png,image/gif">
-                    <div id="holder">
-                        <img src="{{ $model->getAvatar() }}" class="w-100">
-                    </div>
-
-                    <a href="javascript:void(0)" class="btn btn-primary text-capitalize choose-avatar">
-                        <i class="fa fa-picture-o"></i> @lang('tadcms::app.choose-avatar')
-                    </a>
-                </div>
+            <div class="col-md-4">
+                @component('tadcms::components.form_image', [
+                    'label' => trans('tadcms::validation.attributes.avatar'),
+                    'name' => 'avatar',
+                    'value' => $model->avatar
+                ])
+                @endcomponent
 
                 <div class="form-group">
                     <label class="col-form-label" for="status">@lang('tadcms::app.status')</label>
@@ -68,26 +63,4 @@
             <input type="hidden" name="id" value="{{ $model->id }}">
         </div>
     @endcomponent
-
-    <script type="text/javascript">
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                var reader = new FileReader();
-
-                reader.onload = function(e) {
-                    $('#holder img').attr('src', e.target.result);
-                };
-
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        $("#avatar").change(function() {
-            readURL(this);
-        });
-
-        $('.choose-avatar').on('click', function () {
-            $("#avatar").trigger('click');
-        });
-    </script>
 @endsection

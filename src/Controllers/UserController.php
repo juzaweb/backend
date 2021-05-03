@@ -3,11 +3,12 @@
 namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Http\Request;
+use Tadcms\Backend\Abstracts\ResourceControllerAbstract;
 use Tadcms\Backend\Requests\UserRequest;
 use Tadcms\System\Models\User;
 use Tadcms\System\Repositories\UserRepository;
 
-class UserController extends BackendController
+class UserController extends ResourceControllerAbstract
 {
     protected $userRepository;
     
@@ -15,6 +16,23 @@ class UserController extends BackendController
         UserRepository $userRepository
     ) {
         $this->userRepository = $userRepository;
+    }
+
+    protected function mainRepository()
+    {
+        return $this->userRepository;
+    }
+
+    protected function validateRequest(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:250',
+            'password' => 'required_if:id,==,|nullable|string|max:32|min:6|confirmed',
+            'avatar' => 'nullable|mimetypes:image/jpeg,image/png,image/gif',
+            'email' => 'required_if:id,==,|email|unique:users,email',
+            'status' => 'required|in:active,inactive,trash',
+            'password_confirmation' => 'required_if:password,!=,null|nullable|string|max:32|min:6'
+        ]);
     }
     
     public function index()
@@ -34,7 +52,7 @@ class UserController extends BackendController
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', 20);
         
-        $query = $this->userRepository->query()
+        $query = $this->mainRepository()
             ->select(['id', 'name', 'email', 'status', 'created_at']);
         
         if ($search) {
@@ -77,7 +95,8 @@ class UserController extends BackendController
         ]);
     }
     
-    public function edit($id) {
+    public function edit($id)
+    {
         $this->addBreadcrumb([
             'title' => trans('tadcms::app.users'),
             'url' => route('admin.users.index'),
@@ -90,46 +109,26 @@ class UserController extends BackendController
         ]);
     }
     
-    public function store(UserRequest $request)
+    public function store(Request $request)
     {
+        $this->validateRequest($request);
+
         $user = $this->userRepository->create($request->all());
-        $this->userRepository
-            ->setAdmin($user, $request->post('is_admin'));
-        
-        if ($request->hasFile('avatar')) {
-            $avatar = $request->file('avatar');
-            $extention = $avatar->getClientOriginalExtension();
-            $newname = $user->id . '.' . $extention;
-            $upload = $avatar->storeAs('avatars', $newname, config('file-manager.upload_disk'));
-            
-            if ($upload) {
-                $this->userRepository
-                    ->setAvatar($user, $newname);
-            }
-        }
+        $user->setAttribute('is_admin', $request->post('is_admin'))
+            ->save();
         
         return $this->success(
             trans('tadcms::app.create-successfully')
         );
     }
     
-    public function update($id, UserRequest $request)
+    public function update($id, Request $request)
     {
-        $user = $this->userRepository->update($id, $request->all());
-        $this->userRepository
-            ->setAdmin($user, $request->post('is_admin'));
-    
-        if ($request->hasFile('avatar')) {
-            $avatar = $request->file('avatar');
-            $extention = $avatar->getClientOriginalExtension();
-            $newname = $user->id . '.' . $extention;
-            $upload = $avatar->storeAs('avatars', $newname, config('file-manager.upload_disk'));
-        
-            if ($upload) {
-                $this->userRepository
-                    ->setAvatar($user, $newname);
-            }
-        }
+        $this->validateRequest($request);
+
+        $user = $this->userRepository->update($request->all(), $id);
+        $user->setAttribute('is_admin', $request->post('is_admin'))
+            ->save();
     
         return $this->success(
             trans('tadcms::app.update-successfully')
@@ -157,13 +156,13 @@ class UserController extends BackendController
             case 'active':
             case 'inactive':
                 foreach ($ids as $id) {
-                    $this->userRepository->update($id, ['status' => $action]);
+                    $this->userRepository->update(['status' => $action], $id);
                 }
                 break;
         }
     
         return $this->success(
-            trans('tadcms::app.successfully')
+            trans('tadcms::app.update-successfully')
         );
     }
 }
