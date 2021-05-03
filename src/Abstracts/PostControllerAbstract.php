@@ -5,25 +5,16 @@ namespace Tadcms\Backend\Abstracts;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
-use Tadcms\Backend\Controllers\BackendController;
-use Tadcms\Backend\Requests\PostRequest;
 use Tadcms\System\Models\Post;
-use Tadcms\System\Repositories\PostRepository;
-use Tadcms\System\Repositories\TaxonomyRepository;
 
-abstract class PostControllerAbstract extends BackendController
+abstract class PostControllerAbstract extends ResourceControllerAbstract
 {
-    protected $postRepository;
-    protected $taxonomyRepository;
     protected $postType = 'posts';
+    protected $viewPrefix = 'tadcms::post';
     protected $setting;
 
-    public function __construct(
-        PostRepository $postRepository,
-        TaxonomyRepository $taxonomyRepository
-    ) {
-        $this->postRepository = $postRepository;
-        $this->taxonomyRepository = $taxonomyRepository;
+    public function __construct()
+    {
         $this->setting = $this->getSetting();
 
         if (empty($this->setting)) {
@@ -31,13 +22,29 @@ abstract class PostControllerAbstract extends BackendController
         }
     }
 
+    protected function mainRepository()
+    {
+        return app($this->setting->get('repository'));
+    }
+
+    protected function validateRequest(Request $request)
+    {
+        $lang = app()->getLocale();
+        $request->validate([
+            $lang . '.title' => 'required|string|max:250',
+            'status' => 'required|string|in:public,private,draft,trash',
+            $lang . 'thumbnail' => 'nullable|string|max:150',
+        ]);
+    }
+
     public function index()
     {
         $taxonomies = $this->getTaxonomies();
-        return view('tadcms::post.index', [
+        return view($this->viewPrefix . '.index', [
             'title' => $this->setting->get('label'),
             'postType' => $this->postType,
             'taxonomies' => $taxonomies,
+            'setting' => $this->setting,
         ]);
     }
 
@@ -51,12 +58,13 @@ abstract class PostControllerAbstract extends BackendController
         $model = new Post();
         $taxonomies = $this->getTaxonomies();
 
-        return view('tadcms::post.form', [
+        return view($this->viewPrefix . '.form', [
             'model' => $model,
             'lang' => app()->getLocale(),
             'title' => trans('tadcms::app.add-new'),
             'postType' => $this->postType,
             'taxonomies' => $taxonomies,
+            'setting' => $this->setting,
         ]);
     }
 
@@ -67,16 +75,17 @@ abstract class PostControllerAbstract extends BackendController
             'url' => route("admin.{$this->postType}.index"),
         ]);
 
-        $model = $this->postRepository->find($id);
+        $model = $this->mainRepository()->find($id);
         $model->load(['translations']);
         $taxonomies = $this->getTaxonomies();
 
-        return view('tadcms::post.form', [
+        return view($this->viewPrefix . '.form', [
             'model' => $model,
             'lang' => app()->getLocale(),
             'title' => $model->title,
             'postType' => $this->postType,
             'taxonomies' => $taxonomies,
+            'setting' => $this->setting,
         ]);
     }
 
@@ -84,6 +93,7 @@ abstract class PostControllerAbstract extends BackendController
     {
         $search = $request->get('search');
         $status = $request->get('status');
+        $singular = $this->setting->get('singular');
         $taxonomies = $request->get('taxonomies');
 
         $sort = $request->get('sort', 'id');
@@ -91,8 +101,9 @@ abstract class PostControllerAbstract extends BackendController
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', 20);
 
-        $query = Post::query()->with(['translations']);
-        $query->where('type', '=', $this->setting->get('singular'));
+        $query = $this->mainRepository()->query()
+            ->with(['translations'])
+            ->where('type', '=', $singular);
 
         if ($search) {
             $query->where(function ($subQuery) use ($search) {
@@ -132,11 +143,13 @@ abstract class PostControllerAbstract extends BackendController
         ]);
     }
 
-    public function store(PostRequest $request)
+    public function store(Request $request)
     {
+        $this->validateRequest($request);
+
         DB::beginTransaction();
         try {
-            $this->postRepository->create(array_merge($request->all(), [
+            $this->mainRepository()->create(array_merge($request->all(), [
                 'type' => $this->setting->get('singular')
             ]));
 
@@ -151,11 +164,13 @@ abstract class PostControllerAbstract extends BackendController
         );
     }
 
-    public function update($id, PostRequest $request)
+    public function update($id, Request $request)
     {
+        $this->validateRequest($request);
+
         DB::beginTransaction();
         try {
-            $this->postRepository->update(array_merge($request->all(), [
+            $this->mainRepository()->update(array_merge($request->all(), [
                 'type' => $this->setting->get('singular')
             ]), $id);
 
@@ -185,16 +200,16 @@ abstract class PostControllerAbstract extends BackendController
             switch ($action) {
                 case 'delete':
                     foreach ($ids as $id) {
-                        $this->postRepository->delete($id);
+                        $this->mainRepository()->delete($id);
                     }
                     break;
                 case 'public':
                 case 'private':
                 case 'draft':
                     foreach ($ids as $id) {
-                        $this->postRepository->update($id, [
+                        $this->mainRepository()->update([
                             'status' => $action
-                        ]);
+                        ], $id);
                     }
                     break;
             }

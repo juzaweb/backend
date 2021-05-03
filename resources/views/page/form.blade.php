@@ -13,9 +13,9 @@
                 <input type="hidden" name="redirect" value="{{ path_url(route('admin.'.$postType.'.index')) }}">
 
                 @component('tadcms::components.form_input', [
-                    'name' => $lang . "[title]",
-                    'label' => trans('tadcms::app.title'),
-                    'value' => $model->title,
+                    'name' => 'name',
+                    'label' => trans('tadcms::app.name'),
+                    'value' => $model->name,
                 ])
                 @endcomponent
 
@@ -25,8 +25,6 @@
                     'value' => $model->content,
                 ])
                 @endcomponent
-
-                <input type="hidden" name="type" value="{{ $setting->get('singular') }}">
 
                 @do_action('post_type.' . $postType . '.form.left')
             </div>
@@ -61,6 +59,5 @@
                 @do_action('post_type.' . $postType . '.form.right')
             </div>
         </div>
-
     @endcomponent
 @endsection

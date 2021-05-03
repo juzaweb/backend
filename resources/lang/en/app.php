@@ -137,4 +137,5 @@ return [
     'send-email-test' => 'Send email test',
     'click-here-to-select-file' => 'Click here to select file',
     'select-menu-to-edit' => 'Select a menu to edit',
+    'remove_question' => 'Are you sure you want to delete the selected items?',
 ];

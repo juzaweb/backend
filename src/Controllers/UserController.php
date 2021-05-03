@@ -4,7 +4,6 @@ namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Http\Request;
 use Tadcms\Backend\Abstracts\ResourceControllerAbstract;
-use Tadcms\Backend\Requests\UserRequest;
 use Tadcms\System\Models\User;
 use Tadcms\System\Repositories\UserRepository;
 
