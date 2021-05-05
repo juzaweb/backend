@@ -1,8 +1,8 @@
 <li
-        class="dd-item"
-        @foreach($data as $key => $item)
-            data-{{ $key }}="{{ $item }}"
-        @endforeach
+    class="dd-item"
+    @foreach($data as $key => $item)
+        data-{{ $key }}="{{ $item }}"
+    @endforeach
 >
     <div class="dd-handle">
         {{ $data['text'] }}
@@ -14,7 +14,7 @@
     <div class="form-item-edit box-hidden">
         {{ ($menuBlock->get('component'))::formEdit(collect($data)) }}
 
-        <a href="" class="text-danger">Delete</a>
-        <a href="" class="text-info">Cancel</a>
+        <a href="javasctipt:void(0)" class="text-danger">Delete</a>
+        <a href="javasctipt:void(0)" class="text-info">Cancel</a>
     </div>
 </li>

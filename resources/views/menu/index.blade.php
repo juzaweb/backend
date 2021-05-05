@@ -144,8 +144,13 @@
                         return false;
                     }
 
-                    $('#nestable .dd-list').append(response.data.html);
+                    let items = response.data.items;
+                    $.each(items, function (index, item) {
+                        $('#nestable .dd-list').append(item);
+                    });
+
                     updateOutput($('#nestable'));
+                    form.find('.reset-after-add').val('');
 
                     return false;
                 }).fail(function(response) {

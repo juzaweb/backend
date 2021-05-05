@@ -82,17 +82,25 @@ class MenuController extends BackendController
         $blockComponent = $menuBlock->get('component');
 
         $request->validate($blockComponent::validateData());
-
         $data = $blockComponent::addData($request);
+        $items = [];
 
-        $itemView = view('tadcms::items.menu_item', [
-            'menuKey' => $menuKey,
-            'menuBlock' => $menuBlock,
-            'data' => $data,
-        ]);
+        if (is_array(reset($data))) {
+            foreach ($data as $item) {
+                $items[] = view('tadcms::items.menu_item', [
+                    'menuBlock' => $menuBlock,
+                    'data' => $item,
+                ])->render();
+            }
+        } else {
+            $items[] = view('tadcms::items.menu_item', [
+                'menuBlock' => $menuBlock,
+                'data' => $data,
+            ])->render();
+        }
 
         return $this->response([
-            'html' => $itemView->render()
+            'items' => $items
         ], true);
     }
 

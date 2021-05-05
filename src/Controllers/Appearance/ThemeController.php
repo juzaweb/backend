@@ -44,8 +44,8 @@ class ThemeController extends BackendController
         }
         
         set_config('activated_theme', $theme);
-        return $this->redirect(
-            route('admin.themes')
-        );
+        return $this->success([
+            'redirect' => route('admin.themes'),
+        ]);
     }
 }
