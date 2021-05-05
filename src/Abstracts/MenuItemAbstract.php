@@ -6,12 +6,15 @@ abstract class MenuItemAbstract
 {
     /**
      * Render component view form items
+     *
      * @return \Illuminate\View\View
      * */
     abstract public static function formAdd();
 
     /**
      * Render component view form items
+     *
+     * @param mixed $data
      * @return \Illuminate\View\View
      * */
     abstract public static function formEdit($data);
@@ -28,6 +31,7 @@ abstract class MenuItemAbstract
 
     /**
      * Render component view form items
+     *
      * @param \Illuminate\Support\Collection $data
      * @return string
      * */

@@ -29,11 +29,10 @@ abstract class PostControllerAbstract extends ResourceControllerAbstract
 
     protected function validateRequest(Request $request)
     {
-        $lang = app()->getLocale();
         $request->validate([
-            $lang . '.title' => 'required|string|max:250',
+            'title' => 'required|string|max:250',
             'status' => 'required|string|in:public,private,draft,trash',
-            $lang . 'thumbnail' => 'nullable|string|max:150',
+            'thumbnail' => 'nullable|string|max:150',
         ]);
     }
 
