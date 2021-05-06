@@ -9,24 +9,37 @@ class TaxonomyMenuItem extends MenuItemAbstract
 {
     public static function formAdd()
     {
-        $items = [];
-
-        return view('tadcms::menu_items.taxonomy.form_add', [
-            'items' => $items
-        ]);
+        return view('tadcms::menu_items.taxonomy.form_add');
     }
 
     public static function formEdit($data)
     {
-        return view('tadcms::menu_items.taxonomy.form_edit');
+        return view('tadcms::menu_items.taxonomy.form_edit', [
+            'data' => $data
+        ]);
     }
 
+    /**
+     * @param \Illuminate\Http\Request $request
+     * @return array
+     * */
     public static function addData($request)
     {
-        return [
-            'text' => $request->input('text'),
-            'id' => $request->input('id'),
-        ];
+        $taxonomyIds = $request->input('taxonomy_ids');
+        $taxonomies = Taxonomy::with('translations')
+            ->whereIn('id', $taxonomyIds)
+            ->get(['id']);
+
+        $result = [];
+        foreach ($taxonomies as $taxonomy) {
+            $result[] = [
+                'text' => $taxonomy->name,
+                'id' => $taxonomy->id,
+                'model' => Taxonomy::class,
+            ];
+        }
+
+        return $result;
     }
 
     public static function getLink($data)

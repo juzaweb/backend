@@ -26,6 +26,7 @@ abstract class MenuItemAbstract
 
     /**
      * @param \Illuminate\Http\Request $request
+     * @return array
      * */
     abstract public static function addData($request);
 

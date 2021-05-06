@@ -129,7 +129,7 @@ class MenuController extends BackendController
         foreach ($postTypes as $postType) {
             HookAction::registerMenuItem('tadcms.post_type.' . $postType->get('singular'), [
                 'label' => $postType->get('label'),
-                'component' => 'Tadcms\Backend\MenuItems\TaxonomyMenuItem',
+                'component' => 'Tadcms\Backend\MenuItems\PostTypeMenuItem',
             ]);
         }
     }

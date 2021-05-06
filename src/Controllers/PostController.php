@@ -5,6 +5,7 @@ namespace Tadcms\Backend\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
+use Tadcms\Backend\Requests\PostRequest;
 use Tadcms\Repository\Eloquent\BaseRepository;
 use Tadcms\System\Models\Post;
 
@@ -31,15 +32,6 @@ class PostController extends BackendController
     protected function mainRepository()
     {
         return app($this->setting->get('repository'));
-    }
-
-    protected function validateRequest(Request $request)
-    {
-        $request->validate([
-            'title' => 'required|string|max:250',
-            'status' => 'required|string|in:public,private,draft,trash',
-            'thumbnail' => 'nullable|string|max:150',
-        ]);
     }
 
     public function index()
@@ -148,10 +140,8 @@ class PostController extends BackendController
         ]);
     }
 
-    public function store(Request $request)
+    public function store(PostRequest $request)
     {
-        $this->validateRequest($request);
-
         DB::beginTransaction();
         try {
             $this->mainRepository()->create(array_merge($request->all(), [
@@ -169,10 +159,8 @@ class PostController extends BackendController
         );
     }
 
-    public function update($id, Request $request)
+    public function update($id, PostRequest $request)
     {
-        $this->validateRequest($request);
-
         DB::beginTransaction();
         try {
             $this->mainRepository()->update(array_merge($request->all(), [
@@ -247,7 +235,9 @@ class PostController extends BackendController
             return [$item['taxonomy'] => $item['object_types'][$this->postType]];
         });
 
-        $taxonomies = $taxonomies ? $taxonomies->sortBy('menu_position') : [];
+        $taxonomies = $taxonomies ?
+            $taxonomies->sortBy('menu_position')
+                : [];
 
         return $taxonomies;
     }
