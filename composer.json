@@ -18,7 +18,7 @@
     },
     "require": {
         "php": ">=7.2",
-        "tadcms/system": "1.0.*"
+        "tadcms/system": "dev-master"
     },
     "require-dev": {
       "laravel/laravel": "^6.0 | ^7.0 | ^8.0",
