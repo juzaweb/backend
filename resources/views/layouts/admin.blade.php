@@ -6,11 +6,11 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="turbolinks-cache-control" content="no-cache">
-    <link rel="icon" type="image/png" href="{{ asset('tadcms/images/icon.png') }}" />
+    <link rel="icon" type="image/png" href="{{ asset('tadcms/assets/images/icon.png') }}" />
     <title>{{ $title }}</title>
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Mukta:400,700,800&display=swap">
-    <link rel="stylesheet" href="{{ asset('tadcms/css/vendor.css') }}">
+    <link rel="stylesheet" href="{{ asset('tadcms/assets/css/vendor.css') }}">
 
     <!-- Tadcms Vendor -->
     <script type="text/javascript">
@@ -21,9 +21,9 @@
         };
     </script>
 
-    <script src="{{ asset('tadcms/js/app.min.js') }}"></script>
-    <script src="{{ asset('tadcms/js/vendor.js') }}" type="text/javascript"></script>
-    <script src="{{ asset('tadcms/ckeditor/ckeditor.js') }}"></script>
+    <script src="{{ asset('tadcms/assets/js/app.min.js') }}"></script>
+    <script src="{{ asset('tadcms/assets/js/vendor.js') }}" type="text/javascript"></script>
+    <script src="{{ asset('tadcms/assets/ckeditor/ckeditor.js') }}"></script>
 
     @yield('header')
 
@@ -43,7 +43,7 @@
         <div class="cui__menuLeft__outer">
             <div class="cui__menuLeft__logo__container">
                 <div class="cui__menuLeft__logo">
-                    <img src="{{ asset('tadcms/images/logo.png') }}" class="mr-2" alt="TAD Logo" />
+                    <img src="{{ asset('tadcms/assets/images/logo.png') }}" class="mr-2" alt="TAD Logo" />
                 </div>
             </div>
 

@@ -14,6 +14,7 @@ class BackendServiceProvider extends ServiceProvider
 {
     public function boot()
     {
+        $this->bootPublishes();
         $this->bootViews();
         $this->bootMiddlewares();
         $this->bootTranslations();
@@ -46,5 +47,16 @@ class BackendServiceProvider extends ServiceProvider
     protected function bootMiddlewares()
     {
         $this->app['router']->aliasMiddleware('admin', \Tadcms\Backend\Middleware\Admin::class);
+    }
+
+    protected function bootPublishes()
+    {
+        $this->publishes([
+            __DIR__.'/../assets' => public_path('tadcms/assets'),
+        ], 'tadcms_assets');
+
+        $this->publishes([
+            __DIR__.'/../resources/lang' => resource_path('lang/tadcms'),
+        ], 'tadcms_lang');
     }
 }

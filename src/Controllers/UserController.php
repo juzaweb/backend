@@ -3,6 +3,7 @@
 namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Tadcms\Backend\Abstracts\ResourceControllerAbstract;
 use Tadcms\System\Models\User;
 use Tadcms\System\Repositories\UserRepository;
@@ -36,6 +37,7 @@ class UserController extends ResourceControllerAbstract
     
     public function index()
     {
+
         return view('tadcms::user.index', [
             'title' => trans('tadcms::app.users')
         ]);

@@ -85,7 +85,7 @@
                             </use>
                         </span>--}}
                         <span class="te-brand-logo">
-                            <img src="{{ asset('tadcms/images/icon.png') }}" alt="" style="margin-top: 15px;">
+                            <img src="{{ asset('tadcms/assets/images/icon.png') }}" alt="" style="margin-top: 15px;">
                         </span>
                     </a>
                 </div>
