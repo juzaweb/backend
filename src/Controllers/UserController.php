@@ -3,12 +3,11 @@
 namespace Tadcms\Backend\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Tadcms\Backend\Abstracts\ResourceControllerAbstract;
+use Tadcms\Backend\Requests\UserRequest;
 use Tadcms\System\Models\User;
 use Tadcms\System\Repositories\UserRepository;
 
-class UserController extends ResourceControllerAbstract
+class UserController extends BackendController
 {
     protected $userRepository;
     
@@ -16,23 +15,6 @@ class UserController extends ResourceControllerAbstract
         UserRepository $userRepository
     ) {
         $this->userRepository = $userRepository;
-    }
-
-    protected function mainRepository()
-    {
-        return $this->userRepository;
-    }
-
-    protected function validateRequest(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string|max:250',
-            'password' => 'required_if:id,==,|nullable|string|max:32|min:6|confirmed',
-            'avatar' => 'nullable|mimetypes:image/jpeg,image/png,image/gif',
-            'email' => 'required_if:id,==,|email|unique:users,email',
-            'status' => 'required|in:active,inactive,trash',
-            'password_confirmation' => 'required_if:password,!=,null|nullable|string|max:32|min:6'
-        ]);
     }
     
     public function index()
@@ -53,7 +35,7 @@ class UserController extends ResourceControllerAbstract
         $offset = $request->get('offset', 0);
         $limit = $request->get('limit', 20);
         
-        $query = $this->mainRepository()
+        $query = $this->userRepository
             ->select(['id', 'name', 'email', 'status', 'created_at']);
         
         if ($search) {
@@ -110,10 +92,8 @@ class UserController extends ResourceControllerAbstract
         ]);
     }
     
-    public function store(Request $request)
+    public function store(UserRequest $request)
     {
-        $this->validateRequest($request);
-
         $user = $this->userRepository->create($request->all());
         $user->setAttribute('is_admin', $request->post('is_admin'))
             ->save();
@@ -123,10 +103,8 @@ class UserController extends ResourceControllerAbstract
         );
     }
     
-    public function update($id, Request $request)
+    public function update($id, UserRequest $request)
     {
-        $this->validateRequest($request);
-
         $user = $this->userRepository->update($request->all(), $id);
         $user->setAttribute('is_admin', $request->post('is_admin'))
             ->save();

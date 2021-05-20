@@ -32,15 +32,6 @@ HookAction::addAdminMenu(
 );*/
 
 HookAction::addAdminMenu(
-    trans('tadcms::app.comments'),
-    'comments',
-    [
-        'icon' => 'fa fa-comments',
-        'position' => 30
-    ]
-);
-
-HookAction::addAdminMenu(
     trans('tadcms::app.media'),
     'media',
     [
@@ -74,13 +65,13 @@ HookAction::addAdminMenu(
     100
 );*/
 
-HookAction::addAdminMenu(
+/*HookAction::addAdminMenu(
     trans('tadcms::app.notification'),
     'notification',
     [
         'icon' => 'fa fa-bell',
         'position' => 100
     ]
-);
+);*/
 
 

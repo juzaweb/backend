@@ -9,6 +9,14 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.googleapis.com/css?family=Mukta:400,700,800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('tadcms/assets/css/vendor.css') }}">
+
+    <script type="text/javascript">
+        var tadcms = {
+            'adminPrefix': "{{ config('tadcms.admin-prefix') }}",
+            'adminUrl': '{{ url(config('tadcms.admin-prefix')) }}',
+            'lang': @json(trans('tadcms::app'))
+        };
+    </script>
     <script type="text/javascript" src="{{ asset('tadcms/assets/js/app.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('tadcms/assets/js/vendor.js') }}"></script>
 </head>

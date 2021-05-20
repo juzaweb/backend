@@ -1,6 +1,15 @@
 <?php
 
-use Tadcms\System\Facades\HookAction;
+/*use Tadcms\System\Facades\HookAction;
+
+HookAction::addAdminMenu(
+    trans('tadcms::app.comments'),
+    'comments',
+    [
+        'icon' => 'fa fa-comments',
+        'position' => 30
+    ]
+);
 
 HookAction::registerPostType('posts', [
     'label' => trans('tadcms::app.posts'),
@@ -15,4 +24,4 @@ HookAction::registerPostType('pages', [
     'menu_icon' => 'fa fa-edit',
     'menu_position' => 15,
     'supports' => ['tag'],
-]);
+]);*/

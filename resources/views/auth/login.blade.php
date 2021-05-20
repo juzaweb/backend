@@ -29,7 +29,7 @@
                             </div>
 
                             <div class="form-group mb-4">
-                                <input type="password" name="password" class="form-control" placeholder="@lang('app.password')" />
+                                <input type="password" name="password" class="form-control" placeholder="@lang('tadcms::app.password')" />
                             </div>
 
                             <button type="submit" class="btn btn-primary text-center w-100 mb-2" data-loading-text="@lang('tadcms::app.please-wait')"><i class="fa fa-sign-in"></i> @lang('tadcms::app.log-in')</button>
